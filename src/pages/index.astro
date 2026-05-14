@@ -1,0 +1,122 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ServiceTabs from "../components/ServiceTabs.astro";
+import LeadForm from "../components/LeadForm.astro";
+---
+
+<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)">
+  <header class="site-header">
+    <div class="wrap inner">
+      <a class="logo" href="/">Solution <span>Play</span></a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#servicos-heading">Serviços</a>
+        <a href="#comercial-heading">Contratos</a>
+        <a href="/servicos">Página Serviços</a>
+        <a href="#contato-heading">Contato</a>
+      </nav>
+      <a class="btn btn-primary" href="#contato-heading">Solicitar proposta</a>
+    </div>
+  </header>
+
+  <main id="conteudo-principal">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="hero-badge">Amostra front-end · Vercel</p>
+          <h1 id="hero-heading">TI e telecom com foco em resultado</h1>
+          <p class="hero-lead">
+            Landing de demonstração para <strong>leads</strong> e <strong>novas contratações</strong>: implantação,
+            redes, monitoramento e contratos sob medida — texto e valores conforme briefing (revisar antes de
+            publicação oficial).
+          </p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#contato-heading">Quero conversar</a>
+            <a class="btn btn-ghost" href="#servicos-heading">Ver serviços</a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-labelledby="painel-resumo">
+          <h2 id="painel-resumo">O que esta amostra mostra</h2>
+          <div class="stat-row">
+            <div>
+              <strong>TI</strong>
+              <span>Servidores, AD, proxy, VPN…</span>
+            </div>
+            <div>
+              <strong>Net</strong>
+              <span>OSPF, BGP, MPLS, VLANs…</span>
+            </div>
+            <div>
+              <strong>Lead</strong>
+              <span>Formulário → WhatsApp</span>
+            </div>
+          </div>
+          <div class="monitor-block">
+            <strong>Monitoramento</strong>
+            — menção a <strong>Zabbix</strong> e <strong>Grafana</strong> em texto (evita uso indevido de marcas
+            sem licença).
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <ServiceTabs />
+
+    <section class="section commercial" aria-labelledby="comercial-heading">
+      <div class="wrap commercial-inner">
+        <div>
+          <h2 id="comercial-heading">Comercial e contratos</h2>
+          <p class="price-tag">A partir de R$ 300<span style="font-size: 0.45em; font-weight: 700">/mês</span></p>
+          <p class="price-note">
+            Valor indicativo — consulte conforme a <strong>quantidade de equipamentos</strong> incluídos no contrato.
+            Prazos comuns de contrato:
+          </p>
+          <ul class="term-list">
+            <li>6 meses</li>
+            <li>1 ano</li>
+            <li>2 anos</li>
+          </ul>
+        </div>
+        <div class="note-box">
+          <p style="margin: 0">
+            Esta faixa é <strong>apresentação comercial do briefing</strong>. Condições finais, SLAs e escopo
+            detalhado ficam no contato institucional oficial do cliente — não reproduzimos aqui CNPJ nem canais
+            reais.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section lead-section" aria-labelledby="contato-heading">
+      <div class="wrap lead-grid">
+        <div>
+          <h2 id="contato-heading">Próximo passo</h2>
+          <p style="color: var(--text-muted); max-width: 48ch">
+            Use o formulário ao lado para simular o envio. Na versão final, substitua o número de WhatsApp de exemplo
+            e alinhe os textos legais com o site publicado.
+          </p>
+        </div>
+        <LeadForm />
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap cols">
+      <div>
+        <h2>Sobre esta amostra</h2>
+        <p>
+          Projeto estático para <strong>Vercel</strong>, independente do repositório Wix <code>Solution-Play</code>.
+          Não utiliza Velo nem backend próprio.
+        </p>
+      </div>
+      <div>
+        <h2>Documentação</h2>
+        <p>
+          <a href="https://vercel.com/docs">Vercel Docs</a>
+          ·
+          <a href="https://docs.astro.build/">Astro</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+</BaseLayout>

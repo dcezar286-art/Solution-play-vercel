@@ -1,0 +1,71 @@
+---
+const tiServices = [
+  { title: "Implantação de servidores", desc: "Planejamento, hardening e entrega documentada." },
+  { title: "Active Directory", desc: "Identidade, políticas e integração com o ecossistema Microsoft." },
+  { title: "File Server", desc: "Compartilhamentos seguros, quotas e recuperação." },
+  { title: "Proxy Web", desc: "Controle de saída, políticas e visibilidade de tráfego." },
+  { title: "Proxy Squid", desc: "Cache e políticas avançadas para redes corporativas." },
+  {
+    title: "Monitoramento",
+    desc: "Operação com Zabbix e Grafana (menção textual; logos conforme licença de marca).",
+  },
+  { title: "DNS recursivo", desc: "Resolução confiável com boas práticas de segurança." },
+  { title: "VPNs", desc: "Conectividade remota e site-to-site com foco em segurança." },
+];
+
+const telecomServices = [
+  { title: "Implantação de roteadores", desc: "Homologação, baseline e documentação de borda." },
+  {
+    title: "Camada 3 — OSPF, BGP, MPLS",
+    desc: "Roteamento e transporte para redes de provedores e empresas.",
+  },
+  {
+    title: "Switches camada 2",
+    desc: "VLANs de serviço e transporte, QinQ, translation e cenários correlatos.",
+  },
+];
+---
+
+<section class="section" aria-labelledby="servicos-heading">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="servicos-heading">Serviços por perfil</h2>
+      <p>
+        Escolha abaixo o foco da sua operação. Os escopos refletem o briefing comercial — esta página é
+        amostra para revisão de conteúdo e layout.
+      </p>
+    </div>
+
+    <div class="tabs">
+      <input class="tab-radio" type="radio" name="segmento" id="tab-ti" checked />
+      <input class="tab-radio" type="radio" name="segmento" id="tab-telecom" />
+      <div class="tab-labels" role="tablist" aria-label="Segmento de interesse">
+        <label class="tab-label" role="tab" for="tab-ti" id="label-ti">Empresas / TI</label>
+        <label class="tab-label" role="tab" for="tab-telecom" id="label-telecom">Provedores / Telecom</label>
+      </div>
+
+      <div class="panels" role="presentation">
+        <div class="panel panel-ti" role="tabpanel" aria-labelledby="label-ti">
+          <div class="card-grid">
+            {tiServices.map((s) => (
+              <article class="card">
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div class="panel panel-telecom" role="tabpanel" aria-labelledby="label-telecom">
+          <div class="card-grid">
+            {telecomServices.map((s) => (
+              <article class="card">
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
