@@ -1,0 +1,27 @@
+---
+const items = [
+  "Active Directory",
+  "BGP",
+  "MPLS",
+  "OSPF",
+  "Zabbix",
+  "Grafana",
+  "VPN",
+  "DNS recursivo",
+  "Proxy",
+  "VLAN / QinQ",
+  "File Server",
+  "Contratos sob medida",
+];
+const doubled = [...items, ...items];
+---
+
+<div class="marquee-strip" role="presentation" aria-hidden="true">
+  <div class="marquee-strip__inner">
+    {
+      doubled.map((t) => (
+        <span class="marquee-strip__item">{t}</span>
+      ))
+    }
+  </div>
+</div>

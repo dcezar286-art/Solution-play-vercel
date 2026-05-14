@@ -1,0 +1,24 @@
+<script>
+  function initReveal() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const els = document.querySelectorAll("[data-reveal]");
+    if (reduce) {
+      els.forEach((el) => el.classList.add("reveal--in-view"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          e.target.classList.add("reveal--in-view");
+          io.unobserve(e.target);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.06 }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+
+  initReveal();
+  document.addEventListener("astro:page-load", initReveal);
+</script>

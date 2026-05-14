@@ -1,41 +1,55 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
 ---
 
 <BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)">
-  <header class="site-header">
+  <header class="site-header site-header--studio">
     <div class="wrap inner">
-      <a class="logo" href="/">Solution <span>Play</span></a>
-      <nav class="nav" aria-label="Principal">
+      <a class="logo logo--studio" href="/">Solution <span>Play</span></a>
+      <nav class="nav nav--studio" aria-label="Principal">
         <a href="#servicos-heading">Serviços</a>
         <a href="#comercial-heading">Contratos</a>
-        <a href="/servicos">Página Serviços</a>
+        <a href="/servicos">Serviços (página)</a>
         <a href="#contato-heading">Contato</a>
       </nav>
-      <a class="btn btn-primary" href="#contato-heading">Solicitar proposta</a>
+      <a class="btn btn-primary btn--studio" href="#contato-heading">Proposta</a>
     </div>
   </header>
 
   <main id="conteudo-principal">
-    <section class="hero" aria-labelledby="hero-heading">
-      <div class="wrap hero-grid">
-        <div>
-          <p class="hero-badge">Amostra front-end · Vercel</p>
-          <h1 id="hero-heading">TI e telecom com foco em resultado</h1>
-          <p class="hero-lead">
-            Landing de demonstração para <strong>leads</strong> e <strong>novas contratações</strong>: implantação,
-            redes, monitoramento e contratos sob medida — texto e valores conforme briefing (revisar antes de
-            publicação oficial).
+    <section class="hero hero--studio" aria-labelledby="hero-heading">
+      <div class="hero-studio-atmos" aria-hidden="true">
+        <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
+        <span class="hero-studio-deco hero-studio-deco--trace">BGP · MPLS · AD</span>
+      </div>
+      <div class="wrap hero-studio-grid">
+        <div class="hero-studio-copy">
+          <p class="hero-kicker">Amostra front-end · Vercel</p>
+          <h1 id="hero-heading" class="hero-mega" transition:animate="fade">
+            <span class="hero-mega__line">Infra que impulsiona</span>
+            <span class="hero-mega__line hero-mega__line--outline">operações críticas</span>
+            <span class="hero-mega__line hero-mega__line--accent">com precisão.</span>
+          </h1>
+          <p class="hero-lead hero-lead--studio">
+            Demonstração para <strong>leads</strong> e <strong>contratações</strong> em TI e telecom — implantação,
+            redes, monitoramento e planos comerciais alinhados ao briefing (revisar antes do go-live).
           </p>
-          <div class="hero-ctas">
-            <a class="btn btn-primary" href="#contato-heading">Quero conversar</a>
-            <a class="btn btn-ghost" href="#servicos-heading">Ver serviços</a>
+          <div class="hero-studio-foot">
+              <div class="hero-ctas">
+                <a class="btn btn-primary" href="#contato-heading">Explorar contato</a>
+                <a class="btn btn-ghost" href="#servicos-heading">Ver escopos</a>
+              </div>
+            <p class="hero-scroll-hint">
+              <span class="hero-scroll-hint__icon" aria-hidden="true"></span>
+              Role para explorar
+            </p>
           </div>
         </div>
-        <aside class="hero-panel" aria-labelledby="painel-resumo">
-          <h2 id="painel-resumo">O que esta amostra mostra</h2>
+        <aside class="hero-panel hero-studio-panel hero-stagger hero-stagger--aside" aria-labelledby="painel-resumo">
+          <h2 id="painel-resumo">Stack de confiança</h2>
           <div class="stat-row">
             <div>
               <strong>TI</strong>
@@ -47,24 +61,26 @@ import LeadForm from "../components/LeadForm.astro";
             </div>
             <div>
               <strong>Lead</strong>
-              <span>Formulário → WhatsApp</span>
+              <span>WhatsApp (demo)</span>
             </div>
           </div>
           <div class="monitor-block">
             <strong>Monitoramento</strong>
-            — menção a <strong>Zabbix</strong> e <strong>Grafana</strong> em texto (evita uso indevido de marcas
-            sem licença).
+            — Zabbix e Grafana em texto (marcas conforme licença).
           </div>
         </aside>
       </div>
     </section>
 
+    <MarqueeStrip />
+
     <ServiceTabs />
 
-    <section class="section commercial" aria-labelledby="comercial-heading">
-      <div class="wrap commercial-inner">
+    <section class="section commercial commercial--studio" aria-labelledby="comercial-heading">
+      <div class="wrap commercial-inner" data-reveal>
         <div>
-          <h2 id="comercial-heading">Comercial e contratos</h2>
+          <p class="section-eyebrow">Contratos</p>
+          <h2 id="comercial-heading">Comercial</h2>
           <p class="price-tag">A partir de R$ 300<span style="font-size: 0.45em; font-weight: 700">/mês</span></p>
           <p class="price-note">
             Valor indicativo — consulte conforme a <strong>quantidade de equipamentos</strong> incluídos no contrato.
@@ -86,9 +102,10 @@ import LeadForm from "../components/LeadForm.astro";
       </div>
     </section>
 
-    <section class="section lead-section" aria-labelledby="contato-heading">
+    <section class="section lead-section lead-section--studio" aria-labelledby="contato-heading">
       <div class="wrap lead-grid">
-        <div>
+        <div data-reveal style="--reveal-delay: 60ms">
+          <p class="section-eyebrow">Contato</p>
           <h2 id="contato-heading">Próximo passo</h2>
           <p style="color: var(--text-muted); max-width: 48ch">
             Use o formulário ao lado para simular o envio. Na versão final, substitua o número de WhatsApp de exemplo
@@ -100,7 +117,7 @@ import LeadForm from "../components/LeadForm.astro";
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer site-footer--studio" data-reveal style="--reveal-delay: 80ms">
     <div class="wrap cols">
       <div>
         <h2>Sobre esta amostra</h2>
@@ -110,7 +127,7 @@ import LeadForm from "../components/LeadForm.astro";
         </p>
       </div>
       <div>
-        <h2>Documentação</h2>
+        <h2>Docs</h2>
         <p>
           <a href="https://vercel.com/docs">Vercel Docs</a>
           ·

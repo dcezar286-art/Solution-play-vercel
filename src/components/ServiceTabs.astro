@@ -28,15 +28,17 @@ const telecomServices = [
 
 <section class="section" aria-labelledby="servicos-heading">
   <div class="wrap">
-    <div class="section-head">
-      <h2 id="servicos-heading">Serviços por perfil</h2>
-      <p>
-        Escolha abaixo o foco da sua operação. Os escopos refletem o briefing comercial — esta página é
-        amostra para revisão de conteúdo e layout.
-      </p>
-    </div>
+    <div data-reveal>
+      <div class="section-head">
+        <p class="section-eyebrow">Escopos</p>
+        <h2 id="servicos-heading">Serviços por perfil</h2>
+        <p>
+          Escolha abaixo o foco da sua operação. Os escopos refletem o briefing comercial — esta página é amostra
+          para revisão de conteúdo e layout.
+        </p>
+      </div>
 
-    <div class="tabs">
+      <div class="tabs">
       <input class="tab-radio" type="radio" name="segmento" id="tab-ti" checked />
       <input class="tab-radio" type="radio" name="segmento" id="tab-telecom" />
       <div class="tab-labels" role="tablist" aria-label="Segmento de interesse">
@@ -47,8 +49,8 @@ const telecomServices = [
       <div class="panels" role="presentation">
         <div class="panel panel-ti" role="tabpanel" aria-labelledby="label-ti">
           <div class="card-grid">
-            {tiServices.map((s) => (
-              <article class="card">
+            {tiServices.map((s, i) => (
+              <article class="card" style={`--stagger: ${i}`}>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
               </article>
@@ -57,8 +59,8 @@ const telecomServices = [
         </div>
         <div class="panel panel-telecom" role="tabpanel" aria-labelledby="label-telecom">
           <div class="card-grid">
-            {telecomServices.map((s) => (
-              <article class="card">
+            {telecomServices.map((s, i) => (
+              <article class="card" style={`--stagger: ${i}`}>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
               </article>
@@ -66,6 +68,7 @@ const telecomServices = [
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </section>
