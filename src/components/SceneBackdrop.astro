@@ -10,6 +10,17 @@ const scenes = [
 ---
 
 <div class="scene-backdrop" aria-hidden="true">
+  <div class="scene-backdrop__video-wrap">
+    <video
+      class="scene-backdrop__video"
+      data-cube-video
+      src="/media/cubo-loop-clean.mp4"
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"></video>
+    <div class="scene-backdrop__wm-shield" aria-hidden="true"></div>
+  </div>
   {
     scenes.map((s, i) => (
       <div

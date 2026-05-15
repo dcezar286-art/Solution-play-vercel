@@ -94,6 +94,37 @@ function registerFromanotherScenes() {
   });
 }
 
+/** Vídeo do cubo (Pippit): currentTime segue o scroll da página (opção A). */
+function registerCubeVideoScroll() {
+  const video = document.querySelector<HTMLVideoElement>("[data-cube-video]");
+  if (!video) return;
+
+  video.muted = true;
+  video.pause();
+
+  const wire = () => {
+    const duration = video.duration;
+    if (!duration || !Number.isFinite(duration)) return;
+
+    ScrollTrigger.create({
+      id: "cube-video-scrub",
+      trigger: document.body,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.35,
+      onUpdate: (self) => {
+        const target = self.progress * Math.max(0, duration - 0.04);
+        if (Math.abs(video.currentTime - target) > 0.04) {
+          video.currentTime = target;
+        }
+      },
+    });
+  };
+
+  if (video.readyState >= 1) wire();
+  else video.addEventListener("loadedmetadata", wire, { once: true });
+}
+
 /** Parallax com scrub (acoplado ao scroll, estilo editorial / motion sites). */
 function registerHomeParallax() {
   const hero = document.querySelector<HTMLElement>(".hero.hero--studio.snap-section");
@@ -315,6 +346,11 @@ export function initHomeMotion() {
     gsap.set(".snap-section .scene-enter", {
       clearProps: "opacity,filter,transform,visibility",
     });
+    const video = document.querySelector<HTMLVideoElement>("[data-cube-video]");
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
     return;
   }
 
@@ -335,6 +371,7 @@ export function initHomeMotion() {
   gsap.ticker.lagSmoothing(0);
 
   ctx = gsap.context(() => {
+    registerCubeVideoScroll();
     registerFromanotherScenes();
     registerHomeParallax();
     requestAnimationFrame(() => ScrollTrigger.refresh());
