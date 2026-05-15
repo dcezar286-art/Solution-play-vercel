@@ -666,6 +666,8 @@ a:hover {
   width: 34px;
   height: 34px;
   border-radius: 8px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(94, 234, 212, 0.28));
 }
 
 .nav--studio a {
@@ -974,7 +976,6 @@ a:hover {
   }
 }
 
-.site-header,
 main,
 .site-footer {
   position: relative;
@@ -1149,8 +1150,17 @@ html.home-motion footer.snap-section .scene-enter {
 }
 
 /* Stack editorial (fromanother: margin-top -100lvh + fundo em camadas) */
+html.home-motion .site-header--studio {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
 html.home-motion .home-main {
   position: relative;
+  padding-top: 4.25rem;
 }
 
 html.home-motion .scene-backdrop {
