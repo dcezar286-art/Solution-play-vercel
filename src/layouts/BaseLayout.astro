@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import RevealInit from "../components/RevealInit.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
-import EntropyBackdrop from "../components/EntropyBackdrop.astro";
+import SpaBackground from "../components/SpaBackground.astro";
 
 interface Props {
   title: string;
@@ -55,6 +55,12 @@ const useHomeFx = homeMotion || homeSpa;
         if (!document.documentElement.classList.contains("home-spa")) {
           window.__solutionPlaySpaDestroy?.();
           window.__solutionPlayEntropyDestroy?.();
+          window.__solutionPlayBeamsDestroy?.();
+          window.__solutionPlayHeroShaderDestroy?.();
+          window.__solutionPlayCommercialDottedDestroy?.();
+          window.__solutionPlayNeuralDestroy?.();
+          window.__solutionPlayServicesPathsDestroy?.();
+          window.__solutionPlayEquipeHillsDestroy?.();
         }
         if (!document.documentElement.classList.contains("home-motion")) {
           window.__solutionPlayLenisDestroy?.();
@@ -63,7 +69,7 @@ const useHomeFx = homeMotion || homeSpa;
     </script>
     <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <div class="grain-overlay" aria-hidden="true"></div>
-    {homeSpa ? <EntropyBackdrop /> : <NetworkBackdrop />}
+    {homeSpa ? <SpaBackground /> : <NetworkBackdrop />}
     <slot />
     <RevealInit />
   </body>

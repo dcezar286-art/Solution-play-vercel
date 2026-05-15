@@ -1,0 +1,29 @@
+---
+import { benefits } from "../data/marketingContent";
+
+const icons: Record<string, string> = {
+  shield: "M12 2L4 5v6c0 5.25 3.4 10.15 8 11.35C16.6 21.15 20 16.25 20 11V5l-8-3zm-1 10.2l-3.5-3.4 1.4-1.4 2.1 2 4.6-4.5 1.4 1.4-6 5.9z",
+  chart: "M3 17h2v-4H3v4zm4 0h2V7H7v10zm4 0h2v-6h-2v6zm4 0h2V3h-2v14zm4 0h2v-8h-2v8z",
+  headset:
+    "M12 2a7 7 0 0 0-7 7v4a4 4 0 0 0 4 4h1v-4H7V9a5 5 0 0 1 10 0v4h-3v4h1a4 4 0 0 0 4-4V9a7 7 0 0 0-7-7zm-1 14h2v3h-2v-3z",
+  gear: "M19.14 12.94a7.43 7.43 0 0 0 .05-.94 7.43 7.43 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.94 2h-3.88a.5.5 0 0 0-.49.42l-.36 2.54a7.28 7.28 0 0 0-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.48a.5.5 0 0 0 .12.64l2.03 1.58c-.03.31-.05.63-.05.94s.02.63.05.94L2.79 13.66a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.39 1.05.71 1.63.94l.36 2.54a.5.5 0 0 0 .49.42h3.88a.5.5 0 0 0 .49-.42l.36-2.54c.58-.23 1.13-.55 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z",
+};
+---
+
+<ul class="benefits-row" aria-label="Principais benefícios">
+  {
+    benefits.map((b) => (
+      <li class="benefits-row__item">
+        <span class="benefits-row__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+            <path d={icons[b.icon]} />
+          </svg>
+        </span>
+        <div>
+          <strong>{b.title}</strong>
+          <span>{b.desc}</span>
+        </div>
+      </li>
+    ))
+  }
+</ul>

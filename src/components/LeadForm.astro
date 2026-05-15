@@ -1,9 +1,10 @@
 ---
+import { brand } from "../data/marketingContent";
 ---
 
 <form id="lead-form" class="form-card" novalidate data-reveal style="--reveal-delay: 100ms">
   <h2>Fale com a equipe</h2>
-  <p>Preencha os campos. Ao enviar, abrimos o WhatsApp com a mensagem pronta para o número comercial.</p>
+  <p>Informe seu nome e perfil. Ao enviar, abrimos o WhatsApp com a mensagem pronta.</p>
 
   <div class="field">
     <label for="nome">Nome</label>
@@ -20,61 +21,22 @@
     </select>
   </div>
 
-  <div class="field">
-    <label for="telefone">Telefone (com DDD)</label>
-    <input
-      id="telefone"
-      name="telefone"
-      type="tel"
-      autocomplete="tel"
-      required
-      maxlength="20"
-      placeholder="(__) _____-____"
-    />
-  </div>
-
-  <div class="field">
-    <label for="mensagem">Mensagem</label>
-    <textarea id="mensagem" name="mensagem" required maxlength="2000" placeholder="Conte brevemente a necessidade…"
-    ></textarea>
-  </div>
-
   <div class="form-actions">
     <button class="btn btn-primary" type="submit">Abrir no WhatsApp</button>
-    <button class="btn btn-ghost" type="button" id="lead-copy">Copiar mensagem</button>
   </div>
-
-  <p class="note-box" style="margin-top: 1rem">
-    <strong>Institucional:</strong> CNPJ e demais dados legais seguem o <strong>site oficial</strong> publicado. O
-    WhatsApp deste formulário é o canal comercial usado nesta amostra.
-  </p>
 </form>
 
-<script>
-  const WHATSAPP_E164 = "5511937415034";
-
+<script define:vars={{ whatsapp: brand.whatsapp }}>
   function buildMessage() {
     const form = document.getElementById("lead-form");
     if (!(form instanceof HTMLFormElement)) return "";
     const fd = new FormData(form);
     const nome = String(fd.get("nome") || "").trim();
     const perfil = String(fd.get("perfil") || "").trim();
-    const telefone = String(fd.get("telefone") || "").trim();
-    const mensagem = String(fd.get("mensagem") || "").trim();
-    return [
-      "Olá, Solution Play — contato pelo site.",
-      "",
-      `Nome: ${nome}`,
-      `Perfil: ${perfil}`,
-      `Telefone: ${telefone}`,
-      "",
-      "Mensagem:",
-      mensagem,
-    ].join("\n");
+    return ["Olá, Solution Play — contato pelo site.", "", `Nome: ${nome}`, `Perfil: ${perfil}`].join("\n");
   }
 
   const form = document.getElementById("lead-form");
-  const copyBtn = document.getElementById("lead-copy");
 
   if (form instanceof HTMLFormElement) {
     form.addEventListener("submit", (e) => {
@@ -84,30 +46,8 @@
         return;
       }
       const text = encodeURIComponent(buildMessage());
-      const url = `https://wa.me/${WHATSAPP_E164}?text=${text}`;
+      const url = `https://wa.me/${whatsapp}?text=${text}`;
       window.open(url, "_blank", "noopener,noreferrer");
     });
   }
-
-  copyBtn?.addEventListener("click", async () => {
-    const formEl = document.getElementById("lead-form");
-    if (!(formEl instanceof HTMLFormElement)) return;
-    if (!formEl.checkValidity()) {
-      formEl.reportValidity();
-      return;
-    }
-    const msg = buildMessage();
-    try {
-      await navigator.clipboard.writeText(msg);
-      copyBtn.textContent = "Copiado!";
-      setTimeout(() => {
-        copyBtn.textContent = "Copiar mensagem";
-      }, 2200);
-    } catch {
-      copyBtn.textContent = "Não foi possível copiar";
-      setTimeout(() => {
-        copyBtn.textContent = "Copiar mensagem";
-      }, 2200);
-    }
-  });
 </script>

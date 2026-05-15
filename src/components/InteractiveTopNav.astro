@@ -1,0 +1,50 @@
+---
+import logoUrl from "../../LOGO/SolutionPlay-removebg-preview.png?url";
+
+const items = [
+  { id: "hero", label: "Início" },
+  { id: "services", label: "Serviços" },
+  { id: "commercial", label: "Contratos" },
+  { id: "contact", label: "Contato" },
+  { id: "dono", label: "Equipe" },
+];
+---
+
+<header class="spa-topbar spa-topbar--glass">
+  <a class="spa-topbar__logo" href="/" data-slide-jump="hero" aria-label="Solution Play — início">
+    <img class="spa-topbar__logo-mark" src={logoUrl} alt="" width="36" height="36" decoding="async" />
+    <span class="spa-topbar__logo-text">Solution <span class="logo__accent">Play</span></span>
+  </a>
+
+  <nav class="interactive-menu" data-interactive-menu role="navigation" aria-label="Secções">
+    <span class="interactive-menu__cursor" aria-hidden="true">
+      <span class="interactive-menu__cursor-glass"></span>
+      <span class="interactive-menu__cursor-ripple" aria-hidden="true"></span>
+    </span>
+    <ul class="interactive-menu__list">
+      {
+        items.map((item, i) => (
+          <li class="interactive-menu__cell">
+            <button
+              type="button"
+              class:list={["interactive-menu__item", { active: i === 0 }]}
+              data-slide-jump={item.id}
+              data-menu-index={i}
+              aria-current={i === 0 ? "page" : undefined}
+            >
+              {item.label}
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <button type="button" class="btn btn-primary spa-topbar__cta" data-slide-jump="contact">
+    Contato
+  </button>
+</header>
+
+<script>
+  import "../scripts/interactiveMenuBoot.ts";
+</script>

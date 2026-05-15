@@ -6,8 +6,7 @@ const items = [
   { id: "services", num: "02", label: "Serviços", from: "#5eead4", to: "#6366f1" },
   { id: "commercial", num: "03", label: "Contratos", from: "#2dd4bf", to: "#22d3ee" },
   { id: "contact", num: "04", label: "Contato", from: "#22d3ee", to: "#38bdf8" },
-  { id: "dono", num: "05", label: "Equipa", from: "#a855f7", to: "#6366f1" },
-  { id: "footer", num: "06", label: "Rodapé", from: "#0ea5e9", to: "#2dd4bf" },
+  { id: "dono", num: "05", label: "Equipe", from: "#a855f7", to: "#6366f1" },
 ];
 ---
 
@@ -46,11 +45,8 @@ const items = [
   </nav>
 
   <div class="spa-sidebar__footer">
-    <a class="spa-sidebar__ext-link" href="/servicos">Serviços (página completa)</a>
-    <a
-      class="btn btn-primary spa-sidebar__whatsapp"
-      href="https://wa.me/5511937415034"
-      target="_blank"
-      rel="noopener noreferrer">WhatsApp</a>
+    <button type="button" class="btn btn-primary spa-sidebar__cta" data-slide-jump="contact">
+      Contato
+    </button>
   </div>
 </aside>

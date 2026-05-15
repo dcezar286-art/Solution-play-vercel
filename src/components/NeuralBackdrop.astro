@@ -1,0 +1,22 @@
+---
+interface Props {
+  slide: "services" | "contact";
+  color?: string;
+}
+
+const { slide, color = "#5eead4" } = Astro.props;
+---
+
+<div
+  class="neural-backdrop-host"
+  data-neural-backdrop
+  data-neural-slide={slide}
+  data-neural-color={color}
+  aria-hidden="true"
+>
+  <canvas class="neural-backdrop-canvas" data-neural-canvas></canvas>
+</div>
+
+<script>
+  import "../scripts/neuralBackdropBoot.ts";
+</script>

@@ -6,56 +6,25 @@ declare global {
 }
 
 import gsap from "gsap";
+import { syncMenuCursor } from "./interactiveMenuBoot";
+import { emitSpaSlideChange } from "./spaSlideEvents";
 
-const SLIDE_IDS = ["hero", "services", "commercial", "contact", "dono", "footer"] as const;
+const SLIDE_IDS = ["hero", "services", "commercial", "contact", "dono"] as const;
 
 type SlideId = (typeof SLIDE_IDS)[number];
-
-/** Posição do cubo por slide (%, scale, rotate, opacity). */
-const CUBE_BY_SLIDE: Record<
-  SlideId,
-  { x: number; y: number; scale: number; rotate: number; opacity: number }
-> = {
-  hero: { x: 50, y: 46, scale: 1.12, rotate: 0, opacity: 0.88 },
-  services: { x: 82, y: 16, scale: 0.5, rotate: 14, opacity: 0.78 },
-  commercial: { x: 18, y: 68, scale: 0.48, rotate: -10, opacity: 0.7 },
-  contact: { x: 74, y: 52, scale: 0.56, rotate: 8, opacity: 0.65 },
-  dono: { x: 50, y: 36, scale: 0.68, rotate: -18, opacity: 0.72 },
-  footer: { x: 86, y: 78, scale: 0.38, rotate: 0, opacity: 0.4 },
-};
 
 let currentIndex = 0;
 let isAnimating = false;
 let ctx: gsap.Context | null = null;
 
-function setActiveScene(sceneId: SlideId) {
-  document.querySelectorAll<HTMLElement>("[data-scene-backdrop]").forEach((el) => {
-    el.classList.toggle("is-active", el.dataset.sceneBackdrop === sceneId);
-  });
-}
-
-function setSidebarActive(index: number) {
-  document.querySelectorAll<HTMLElement>(".spa-sidebar__item").forEach((btn, i) => {
+function setMenuActive(index: number) {
+  document.querySelectorAll<HTMLElement>(".interactive-menu__item").forEach((btn, i) => {
     const active = i === index;
-    btn.classList.toggle("is-active", active);
+    btn.classList.toggle("active", active);
     if (active) btn.setAttribute("aria-current", "page");
     else btn.removeAttribute("aria-current");
   });
-}
-
-function animateCube(sceneId: SlideId, duration = 0.85) {
-  const wrap = document.querySelector<HTMLElement>("[data-cube-wrap]");
-  if (!wrap) return;
-  const cfg = CUBE_BY_SLIDE[sceneId];
-  gsap.to(wrap, {
-    duration,
-    ease: "power3.inOut",
-    "--cube-x": `${cfg.x}%`,
-    "--cube-y": `${cfg.y}%`,
-    "--cube-scale": cfg.scale,
-    "--cube-rotate": cfg.rotate,
-    "--cube-opacity": cfg.opacity,
-  });
+  requestAnimationFrame(() => syncMenuCursor());
 }
 
 function goToSlide(index: number) {
@@ -71,9 +40,7 @@ function goToSlide(index: number) {
   isAnimating = true;
 
   document.documentElement.dataset.spaSlide = sceneId;
-  setSidebarActive(index);
-  setActiveScene(sceneId);
-  animateCube(sceneId);
+  setMenuActive(index);
 
   const xFrom = direction * 56;
   const xTo = direction * -56;
@@ -95,6 +62,7 @@ function goToSlide(index: number) {
         incoming.style.zIndex = "";
         currentIndex = index;
         isAnimating = false;
+        emitSpaSlideChange(SLIDE_IDS[index]);
       },
     })
     .to(outgoing, { autoAlpha: 0, x: xTo, duration: 0.45 }, 0)
@@ -125,33 +93,6 @@ function bindNavigation() {
   });
 }
 
-function initCubeHover() {
-  const wrap = document.querySelector<HTMLElement>("[data-cube-wrap]");
-  if (!wrap) return;
-
-  wrap.addEventListener("pointerenter", () => wrap.classList.add("is-hover"));
-  wrap.addEventListener("pointerleave", () => wrap.classList.remove("is-hover"));
-
-  wrap.addEventListener("pointermove", (e) => {
-    const r = wrap.getBoundingClientRect();
-    const px = ((e.clientX - r.left) / r.width) * 100;
-    const py = ((e.clientY - r.top) / r.height) * 100;
-    wrap.style.setProperty("--beam-x", `${px}%`);
-    wrap.style.setProperty("--beam-y", `${py}%`);
-  });
-}
-
-function initCubeDefaults() {
-  const wrap = document.querySelector<HTMLElement>("[data-cube-wrap]");
-  if (!wrap) return;
-  const hero = CUBE_BY_SLIDE.hero;
-  wrap.style.setProperty("--cube-x", `${hero.x}%`);
-  wrap.style.setProperty("--cube-y", `${hero.y}%`);
-  wrap.style.setProperty("--cube-scale", String(hero.scale));
-  wrap.style.setProperty("--cube-rotate", String(hero.rotate));
-  wrap.style.setProperty("--cube-opacity", String(hero.opacity));
-}
-
 export function destroySpaSlides() {
   ctx?.revert();
   ctx = null;
@@ -171,17 +112,25 @@ export function initSpaSlides() {
   const slides = document.querySelectorAll<HTMLElement>(".spa-slide");
   if (!slides.length) return;
 
-  currentIndex = 0;
+  const params = new URLSearchParams(window.location.search);
+  const slideParam = params.get("slide") as SlideId | null;
+  const startIndex =
+    slideParam && SLIDE_IDS.includes(slideParam) ? SLIDE_IDS.indexOf(slideParam) : 0;
+
+  currentIndex = startIndex;
   isAnimating = false;
-  document.documentElement.dataset.spaSlide = "hero";
+  const startScene = SLIDE_IDS[startIndex];
+  document.documentElement.dataset.spaSlide = startScene;
 
   slides.forEach((slide, i) => {
-    slide.classList.toggle("is-active", i === 0);
-    slide.setAttribute("aria-hidden", i === 0 ? "false" : "true");
+    const active = i === startIndex;
+    slide.classList.toggle("is-active", active);
+    slide.setAttribute("aria-hidden", active ? "false" : "true");
+    gsap.set(slide, { autoAlpha: active ? 1 : 0, x: 0 });
   });
 
-  initCubeDefaults();
-  initCubeHover();
+  setMenuActive(startIndex);
+  emitSpaSlideChange(startScene);
   bindNavigation();
 
   ctx = gsap.context(() => {});

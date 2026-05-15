@@ -1,4 +1,6 @@
 ---
+import { basicServices, advancedServices } from "../data/marketingContent";
+
 const tiServices = [
   { title: "Implantação de servidores", desc: "Planejamento, hardening e entrega documentada." },
   { title: "Active Directory", desc: "Identidade, políticas e integração com o ecossistema Microsoft." },
@@ -31,23 +33,47 @@ const telecomServices = [
 <section class="section section--spa-services" aria-labelledby="servicos-heading">
   <div class="wrap">
     <div class="section-head">
-      <p class="section-eyebrow">Escopos</p>
-      <h2 id="servicos-heading">Serviços por perfil</h2>
+      <p class="section-eyebrow">Nossos serviços</p>
+      <h2 id="servicos-heading">Do básico ao avançado</h2>
       <p>
-        Escolha abaixo o foco da sua operação. Os escopos refletem o briefing comercial — esta página é amostra
-        para revisão de conteúdo e layout.
+        Suporte no dia a dia, infraestrutura corporativa e escopos técnicos para empresas e provedores — conforme o
+        portfólio Solution Play.
       </p>
     </div>
 
     <div class="tabs tabs--spa">
-      <input class="tab-radio" type="radio" name="segmento" id="tab-ti" checked />
+      <input class="tab-radio" type="radio" name="segmento" id="tab-basicos" checked />
+      <input class="tab-radio" type="radio" name="segmento" id="tab-avancados" />
+      <input class="tab-radio" type="radio" name="segmento" id="tab-ti" />
       <input class="tab-radio" type="radio" name="segmento" id="tab-telecom" />
-      <div class="tab-labels" role="tablist" aria-label="Segmento de interesse">
+      <div class="tab-labels tab-labels--wrap" role="tablist" aria-label="Categoria de serviços">
+        <label class="tab-label" role="tab" for="tab-basicos" id="label-basicos">Básicos</label>
+        <label class="tab-label" role="tab" for="tab-avancados" id="label-avancados">Avançados</label>
         <label class="tab-label" role="tab" for="tab-ti" id="label-ti">Empresas / TI</label>
-        <label class="tab-label" role="tab" for="tab-telecom" id="label-telecom">Provedores / Telecom</label>
+        <label class="tab-label" role="tab" for="tab-telecom" id="label-telecom">Provedores</label>
       </div>
 
       <div class="panels" role="presentation">
+        <div class="panel panel-basicos" role="tabpanel" aria-labelledby="label-basicos">
+          <div class="card-grid card-grid--spa">
+            {basicServices.map((s) => (
+              <article class="card">
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+        <div class="panel panel-avancados" role="tabpanel" aria-labelledby="label-avancados">
+          <div class="card-grid card-grid--spa">
+            {advancedServices.map((s) => (
+              <article class="card">
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
         <div class="panel panel-ti" role="tabpanel" aria-labelledby="label-ti">
           <div class="service-pages" data-service-pages>
             {
@@ -89,6 +115,41 @@ const telecomServices = [
             ))}
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="service-scope-lists service-scope-lists--four" data-reveal style="--reveal-delay: 120ms">
+      <div class="service-scope-list">
+        <h3>Serviços básicos</h3>
+        <ul>
+          {basicServices.map((s) => <li>{s.title}</li>)}
+        </ul>
+      </div>
+      <div class="service-scope-list">
+        <h3>Serviços avançados</h3>
+        <ul>
+          {advancedServices.map((s) => <li>{s.title}</li>)}
+        </ul>
+      </div>
+      <div class="service-scope-list">
+        <h3>TI — empresas</h3>
+        <ul>
+          <li>Implantação de servidores</li>
+          <li>Active Directory</li>
+          <li>File Server</li>
+          <li>Proxy Web e Squid</li>
+          <li>Monitoramento (Zabbix, Grafana)</li>
+          <li>DNS recursivo</li>
+          <li>VPNs</li>
+        </ul>
+      </div>
+      <div class="service-scope-list">
+        <h3>Telecom — provedores</h3>
+        <ul>
+          <li>Implantação de roteadores</li>
+          <li>Camada 3: OSPF, BGP, MPLS</li>
+          <li>Switches L2: VLANs, QinQ, translation</li>
+        </ul>
       </div>
     </div>
   </div>
