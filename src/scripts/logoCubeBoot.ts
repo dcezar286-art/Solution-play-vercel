@@ -13,6 +13,7 @@ async function start() {
   const THREE = await import("three");
   const src = root.dataset.logoSrc;
   const canvas = root.querySelector(".logo-cube__canvas");
+  if (!src || !canvas || !(canvas instanceof HTMLCanvasElement)) return;
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let disposed = false;
@@ -30,14 +31,6 @@ async function start() {
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-  const key = new THREE.DirectionalLight(0xffffff, 1.2);
-  key.position.set(5, 8, 7);
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0x2dd4bf, 0.42);
-  rim.position.set(-6, -3, -2);
-  scene.add(rim);
 
   const pivot = new THREE.Group();
   scene.add(pivot);
@@ -102,23 +95,44 @@ async function start() {
       texture.colorSpace = THREE.SRGBColorSpace;
       texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy?.() ?? 4);
 
-      const geo = new THREE.BoxGeometry(2.25, 2.25, 2.25);
-      const mat = new THREE.MeshStandardMaterial({
-        map: texture,
-        metalness: 0.26,
-        roughness: 0.4,
-      });
-      const cube = new THREE.Mesh(geo, mat);
+      const size = 2.38;
+      const boxGeo = new THREE.BoxGeometry(size, size, size);
 
-      const edgeGeo = new THREE.EdgesGeometry(geo);
-      const edgeMat = new THREE.LineBasicMaterial({
-        color: 0x5eead4,
+      const innerGeo = new THREE.BoxGeometry(size * 0.94, size * 0.94, size * 0.94);
+      const innerMat = new THREE.MeshBasicMaterial({
+        color: 0x02040a,
         transparent: true,
         opacity: 0.22,
+        depthWrite: true,
       });
-      const edges = new THREE.LineSegments(edgeGeo, edgeMat);
-      pivot.add(cube);
-      pivot.add(edges);
+      const innerShell = new THREE.Mesh(innerGeo, innerMat);
+      pivot.add(innerShell);
+
+      const edgeGeo = new THREE.EdgesGeometry(boxGeo);
+      const wireMat = new THREE.LineBasicMaterial({
+        color: 0x5eead4,
+        transparent: true,
+        opacity: 0.88,
+      });
+      const wireCube = new THREE.LineSegments(edgeGeo, wireMat);
+      pivot.add(wireCube);
+
+      const img = texture.image as HTMLImageElement;
+      const asp = (img?.width ?? 1) / Math.max(1, img?.height ?? 1);
+      const planeH = 1.22;
+      const planeW = planeH * asp;
+      const planeGeo = new THREE.PlaneGeometry(planeW, planeH);
+      const planeMat = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        toneMapped: false,
+        depthTest: true,
+        depthWrite: true,
+        side: THREE.DoubleSide,
+        opacity: 1,
+      });
+      const logoPlane = new THREE.Mesh(planeGeo, planeMat);
+      pivot.add(logoPlane);
 
       const spin = reduce ? 0.0028 : 0.0068;
 
@@ -137,9 +151,12 @@ async function start() {
 
       meshDispose = () => {
         edgeGeo.dispose();
-        edgeMat.dispose();
-        geo.dispose();
-        mat.dispose();
+        wireMat.dispose();
+        boxGeo.dispose();
+        innerGeo.dispose();
+        innerMat.dispose();
+        planeGeo.dispose();
+        planeMat.dispose();
         texture.dispose();
         pivot.clear();
       };

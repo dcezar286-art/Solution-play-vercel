@@ -108,6 +108,9 @@ a:hover {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
@@ -116,7 +119,20 @@ a:hover {
   letter-spacing: -0.03em;
 }
 
-.logo span {
+.logo__mark {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 10px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 14px rgba(94, 234, 212, 0.22));
+}
+
+.logo__text {
+  line-height: 1.1;
+}
+
+.logo__accent {
   color: var(--accent);
 }
 
@@ -624,10 +640,20 @@ a:hover {
 
 .logo--studio {
   font-family: var(--font-mega);
+  gap: 0.55rem;
+}
+
+.logo--studio .logo__text {
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.2em;
   text-transform: uppercase;
+}
+
+.logo--studio .logo__mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
 }
 
 .nav--studio a {

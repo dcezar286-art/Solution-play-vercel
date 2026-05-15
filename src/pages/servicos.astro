@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import logoUrl from "../../LOGO/SolutionPlay.png?url";
 ---
 
 <BaseLayout
@@ -8,7 +9,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 >
   <header class="site-header site-header--studio">
     <div class="wrap inner">
-      <a class="logo logo--studio" href="/">Solution <span>Play</span></a>
+      <a class="logo logo--studio" href="/" aria-label="Solution Play — início">
+        <img class="logo__mark" src={logoUrl} alt="" width="40" height="40" decoding="async" />
+        <span class="logo__text">Solution <span class="logo__accent">Play</span></span>
+      </a>
       <nav class="nav nav--studio" aria-label="Principal">
         <a href="/">Início</a>
         <a href="/#servicos-heading">Serviços (abas)</a>

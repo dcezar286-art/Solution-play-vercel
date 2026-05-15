@@ -4,12 +4,16 @@ import LogoCube from "../components/LogoCube.astro";
 import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
+import logoUrl from "../../LOGO/SolutionPlay.png?url";
 ---
 
 <BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)">
   <header class="site-header site-header--studio">
     <div class="wrap inner">
-      <a class="logo logo--studio" href="/">Solution <span>Play</span></a>
+      <a class="logo logo--studio" href="/" aria-label="Solution Play — início">
+        <img class="logo__mark" src={logoUrl} alt="" width="40" height="40" decoding="async" />
+        <span class="logo__text">Solution <span class="logo__accent">Play</span></span>
+      </a>
       <nav class="nav nav--studio" aria-label="Principal">
         <a href="#servicos-heading">Serviços</a>
         <a href="#comercial-heading">Contratos</a>
