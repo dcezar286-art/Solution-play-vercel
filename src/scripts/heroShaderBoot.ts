@@ -1,3 +1,4 @@
+import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
 import { heroShaderSource } from "../data/heroShaderSource";
 
 const VERTEX_SRC = `#version 300 es
@@ -226,6 +227,8 @@ let raf = 0;
 let renderer: WebGLRenderer | null = null;
 let pointers: PointerHandler | null = null;
 let resizeObserver: ResizeObserver | null = null;
+let loopActive = false;
+let unsubSlide: (() => void) | null = null;
 
 function measure(canvas: HTMLCanvasElement, host: HTMLElement) {
   const rect = host.getBoundingClientRect();
@@ -240,6 +243,9 @@ function measure(canvas: HTMLCanvasElement, host: HTMLElement) {
 function destroyHeroShader() {
   cancelAnimationFrame(raf);
   raf = 0;
+  loopActive = false;
+  unsubSlide?.();
+  unsubSlide = null;
   resizeObserver?.disconnect();
   resizeObserver = null;
   renderer?.reset();
@@ -249,13 +255,23 @@ function destroyHeroShader() {
 }
 
 function loop(now: number) {
-  if (!renderer || !pointers) return;
+  if (!loopActive || !renderer || !pointers) return;
   renderer.updateMouse(pointers.first);
   renderer.updatePointerCount(pointers.count);
   renderer.updatePointerCoords(pointers.coords);
   renderer.updateMove(pointers.move);
   renderer.render(now);
   raf = requestAnimationFrame(loop);
+}
+
+function setHeroLoop(active: boolean) {
+  loopActive = active;
+  if (active) {
+    if (renderer && pointers && !raf) raf = requestAnimationFrame(loop);
+  } else {
+    cancelAnimationFrame(raf);
+    raf = 0;
+  }
 }
 
 function initHeroShader() {
@@ -294,7 +310,11 @@ function initHeroShader() {
     resizeObserver.observe(host);
     onResize();
 
-    raf = requestAnimationFrame(loop);
+    unsubSlide = onSpaSlideChange((id) => {
+      setHeroLoop(id === "hero");
+    });
+    setHeroLoop(getActiveSpaSlide() === "hero");
+
     window.__solutionPlayHeroShaderDestroy = destroyHeroShader;
   } catch (err) {
     console.warn("Hero shader desativado:", err);
@@ -307,5 +327,14 @@ declare global {
   }
 }
 
-void initHeroShader();
-document.addEventListener("astro:page-load", initHeroShader);
+function scheduleHeroShaderInit() {
+  const run = () => initHeroShader();
+  if (typeof requestIdleCallback === "function") {
+    requestIdleCallback(run, { timeout: 1800 });
+  } else {
+    requestAnimationFrame(run);
+  }
+}
+
+void scheduleHeroShaderInit();
+document.addEventListener("astro:page-load", scheduleHeroShaderInit);

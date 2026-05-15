@@ -3,7 +3,9 @@ import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
 
 const PATH_COUNT = 36;
 let timelines: gsap.core.Timeline[] = [];
+let opacityTweens: gsap.core.Tween[] = [];
 let unsubSlide: (() => void) | null = null;
+let built = false;
 
 function isServicesSlide() {
   return getActiveSpaSlide() === "services";
@@ -12,8 +14,11 @@ function isServicesSlide() {
 function destroyServicesPaths() {
   timelines.forEach((tl) => tl.kill());
   timelines = [];
+  opacityTweens.forEach((tw) => tw.kill());
+  opacityTweens = [];
   unsubSlide?.();
   unsubSlide = null;
+  built = false;
   delete window.__solutionPlayServicesPathsDestroy;
 }
 
@@ -37,7 +42,7 @@ function animatePath(path: SVGPathElement, index: number) {
     ease: "none",
   });
 
-  gsap.to(path, {
+  const tw = gsap.to(path, {
     opacity: baseOpacity + 0.25,
     duration: duration * 0.22,
     repeat: -1,
@@ -46,6 +51,16 @@ function animatePath(path: SVGPathElement, index: number) {
   });
 
   timelines.push(tl);
+  opacityTweens.push(tw);
+}
+
+function buildPathsIfNeeded(host: HTMLElement) {
+  if (built) return;
+  const paths = host.querySelectorAll<SVGPathElement>("[data-services-path]");
+  paths.forEach((path, i) => {
+    animatePath(path, i % PATH_COUNT);
+  });
+  built = true;
 }
 
 function playAll() {
@@ -53,6 +68,10 @@ function playAll() {
     tl.pause(0);
     if (isServicesSlide()) tl.play();
     else tl.pause();
+  });
+  opacityTweens.forEach((tw) => {
+    if (isServicesSlide()) tw.resume();
+    else tw.pause();
   });
 }
 
@@ -69,13 +88,15 @@ function initServicesPaths() {
 
   destroyServicesPaths();
 
-  const paths = host.querySelectorAll<SVGPathElement>("[data-services-path]");
-  paths.forEach((path, i) => {
-    animatePath(path, i % PATH_COUNT);
+  unsubSlide = onSpaSlideChange((id) => {
+    if (id === "services") buildPathsIfNeeded(host);
+    playAll();
   });
 
-  unsubSlide = onSpaSlideChange(() => playAll());
-  playAll();
+  if (isServicesSlide()) {
+    buildPathsIfNeeded(host);
+    playAll();
+  }
 
   window.__solutionPlayServicesPathsDestroy = destroyServicesPaths;
 }

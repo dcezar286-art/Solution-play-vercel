@@ -1,7 +1,7 @@
 import { getActiveSpaSlide, onSpaSlideChange, type SpaSlideId } from "./spaSlideEvents";
 
 const TRAIL_OPACITY = 0.14;
-const PARTICLE_COUNT = 550;
+const PARTICLE_COUNT = 360;
 const SPEED = 1;
 
 type HostState = {
@@ -31,6 +31,20 @@ type ParticleInst = {
 const hosts = new Map<HTMLElement, HostState>();
 let raf = 0;
 let resizeObserver: ResizeObserver | null = null;
+let unsubSlide: (() => void) | null = null;
+
+function animationNeeded() {
+  const slide = getActiveSpaSlide();
+  for (const state of hosts.values()) {
+    if (state.slideId === slide) return true;
+  }
+  return false;
+}
+
+function ensureAnimateLoop() {
+  if (raf || !hosts.size) return;
+  raf = requestAnimationFrame(animate);
+}
 
 function isActive(state: HostState) {
   return getActiveSpaSlide() === state.slideId;
@@ -117,7 +131,8 @@ function wakeSlide(slideId: SpaSlideId) {
 }
 
 function animate() {
-  raf = requestAnimationFrame(animate);
+  raf = 0;
+  if (!animationNeeded()) return;
 
   hosts.forEach((state) => {
     if (!isActive(state)) return;
@@ -131,13 +146,17 @@ function animate() {
     });
     ctx.globalAlpha = 1;
   });
+
+  raf = requestAnimationFrame(animate);
 }
 
 function destroyNeuralBackdrop() {
-  cancelAnimationFrame(raf);
+  if (raf) cancelAnimationFrame(raf);
   raf = 0;
   resizeObserver?.disconnect();
   resizeObserver = null;
+  unsubSlide?.();
+  unsubSlide = null;
   hosts.clear();
   delete window.__solutionPlayNeuralDestroy;
 }
@@ -201,12 +220,13 @@ function initNeuralBackdrop() {
   });
   hosts.forEach((state) => resizeObserver!.observe(state.container));
 
-  onSpaSlideChange((slideId) => {
+  unsubSlide = onSpaSlideChange((slideId) => {
     requestAnimationFrame(() => wakeSlide(slideId));
+    ensureAnimateLoop();
   });
 
   wakeSlide(getActiveSpaSlide());
-  raf = requestAnimationFrame(animate);
+  ensureAnimateLoop();
   window.__solutionPlayNeuralDestroy = destroyNeuralBackdrop;
 }
 

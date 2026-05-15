@@ -4,7 +4,7 @@ declare global {
   }
 }
 
-const BEAM_COUNT = 28;
+const BEAM_COUNT = 18;
 
 function destroyBackgroundBeams() {
   document.querySelector(".light-beams-stream")?.replaceChildren();

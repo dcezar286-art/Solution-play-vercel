@@ -1,25 +1,32 @@
-import * as THREE from "three";
-import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
+import { getActiveSpaSlide, onSpaSlideChange, type SpaSlideId } from "./spaSlideEvents";
+
+type ThreeModule = typeof import("three");
+type SceneBundle = {
+  scene: InstanceType<ThreeModule["Scene"]>;
+  camera: InstanceType<ThreeModule["PerspectiveCamera"]>;
+  renderer: InstanceType<ThreeModule["WebGLRenderer"]>;
+  geometry: InstanceType<ThreeModule["BufferGeometry"]>;
+  count: number;
+};
 
 const SEPARATION = 150;
 const AMOUNTX = 40;
 const AMOUNTY = 60;
 
-type SceneBundle = {
-  scene: THREE.Scene;
-  camera: THREE.PerspectiveCamera;
-  renderer: THREE.WebGLRenderer;
-  geometry: THREE.BufferGeometry;
-  count: number;
-};
-
 let raf = 0;
 let bundle: SceneBundle | null = null;
 let hostEl: HTMLElement | null = null;
 let resizeObserver: ResizeObserver | null = null;
+let threeLoader: Promise<ThreeModule> | null = null;
+let unsubSlide: (() => void) | null = null;
 
 function isCommercialSlide() {
   return getActiveSpaSlide() === "commercial";
+}
+
+function loadThree(): Promise<ThreeModule> {
+  if (!threeLoader) threeLoader = import("three");
+  return threeLoader;
 }
 
 function measure(host: HTMLElement) {
@@ -37,10 +44,13 @@ function destroyCommercialDotted() {
   hostEl = null;
   resizeObserver?.disconnect();
   resizeObserver = null;
+  unsubSlide?.();
+  unsubSlide = null;
 
   if (bundle) {
     bundle.geometry.dispose();
-    (bundle.scene.children[0] as THREE.Points).material.dispose();
+    const pts = bundle.scene.children[0] as import("three").Points;
+    (pts.material as import("three").Material).dispose();
     bundle.renderer.dispose();
     bundle.renderer.domElement.remove();
     bundle = null;
@@ -81,6 +91,16 @@ function animate() {
   if (bundle && isCommercialSlide()) renderFrame();
 }
 
+function startLoop() {
+  if (raf) return;
+  raf = requestAnimationFrame(animate);
+}
+
+function stopLoop() {
+  cancelAnimationFrame(raf);
+  raf = 0;
+}
+
 function wake() {
   if (!bundle) return;
   onResize();
@@ -88,7 +108,7 @@ function wake() {
   requestAnimationFrame(renderFrame);
 }
 
-function buildScene(host: HTMLElement) {
+function buildScene(THREE: ThreeModule, host: HTMLElement) {
   const { w, h, dpr } = measure(host);
 
   const scene = new THREE.Scene();
@@ -97,7 +117,7 @@ function buildScene(host: HTMLElement) {
   const camera = new THREE.PerspectiveCamera(60, w / h, 1, 10000);
   camera.position.set(0, 355, 1220);
 
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(dpr);
   renderer.setSize(w, h);
   renderer.setClearColor(0x000000, 0);
@@ -136,6 +156,36 @@ function buildScene(host: HTMLElement) {
   bundle = { scene, camera, renderer, geometry, count: 0 };
 }
 
+async function ensureCommercialScene() {
+  const host = hostEl;
+  if (!host || bundle) return;
+
+  const THREE = await loadThree();
+  buildScene(THREE, host);
+
+  resizeObserver = new ResizeObserver(onResize);
+  resizeObserver.observe(host);
+  onResize();
+
+  if (isCommercialSlide()) {
+    wake();
+    startLoop();
+  }
+}
+
+function onSlideChange(id: SpaSlideId) {
+  if (id === "commercial") {
+    void ensureCommercialScene().then(() => {
+      if (bundle && isCommercialSlide()) {
+        wake();
+        startLoop();
+      }
+    });
+  } else {
+    stopLoop();
+  }
+}
+
 function initCommercialDotted() {
   if (!document.documentElement.classList.contains("home-spa")) {
     destroyCommercialDotted();
@@ -149,17 +199,12 @@ function initCommercialDotted() {
 
   destroyCommercialDotted();
   hostEl = host;
-  buildScene(host);
 
-  resizeObserver = new ResizeObserver(onResize);
-  resizeObserver.observe(host);
+  unsubSlide = onSpaSlideChange(onSlideChange);
 
-  onSpaSlideChange((id) => {
-    if (id === "commercial") wake();
-  });
-
-  raf = requestAnimationFrame(animate);
-  if (isCommercialSlide()) wake();
+  if (isCommercialSlide()) {
+    void ensureCommercialScene();
+  }
 
   window.__solutionPlayCommercialDottedDestroy = destroyCommercialDotted;
 }
