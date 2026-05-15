@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import RevealInit from "../components/RevealInit.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
+import EntropyBackdrop from "../components/EntropyBackdrop.astro";
 
 interface Props {
   title: string;
@@ -53,6 +54,7 @@ const useHomeFx = homeMotion || homeSpa;
       document.addEventListener("astro:page-load", () => {
         if (!document.documentElement.classList.contains("home-spa")) {
           window.__solutionPlaySpaDestroy?.();
+          window.__solutionPlayEntropyDestroy?.();
         }
         if (!document.documentElement.classList.contains("home-motion")) {
           window.__solutionPlayLenisDestroy?.();
@@ -61,7 +63,7 @@ const useHomeFx = homeMotion || homeSpa;
     </script>
     <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <div class="grain-overlay" aria-hidden="true"></div>
-    <NetworkBackdrop />
+    {homeSpa ? <EntropyBackdrop /> : <NetworkBackdrop />}
     <slot />
     <RevealInit />
   </body>

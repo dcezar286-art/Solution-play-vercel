@@ -1678,6 +1678,10 @@ html.snap-site-html .hero.hero--studio.snap-section {
   html.home-spa .scene-backdrop__cube-wrap.is-hover .scene-backdrop__cube-beams {
     opacity: 0;
   }
+
+  .entropy-backdrop {
+    display: none;
+  }
 }
 
 /* --- SPA: slides + sidebar + cubo de fundo --- */
@@ -1693,7 +1697,15 @@ html.home-spa body {
 
 html.home-spa {
   --spa-sidebar-w: min(280px, 30vw);
-  --spa-header-h: 4.25rem;
+  --spa-header-h: 0px;
+}
+
+.entropy-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #030308;
 }
 
 .spa-layout {
@@ -1707,23 +1719,15 @@ html.home-spa {
   flex-direction: column;
 }
 
-html.home-spa .site-header--studio {
-  position: fixed;
-  top: 0;
-  left: var(--spa-sidebar-w);
-  right: 0;
-  z-index: 100;
-}
-
 .spa-sidebar {
   position: fixed;
   inset: 0 auto 0 0;
   z-index: 110;
   width: var(--spa-sidebar-w);
-  padding: calc(var(--spa-header-h) + 1rem) 1.1rem 1.5rem;
+  padding: 1.35rem 1.1rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   background: rgba(6, 14, 22, 0.42);
   backdrop-filter: blur(28px) saturate(1.35);
   -webkit-backdrop-filter: blur(28px) saturate(1.35);
@@ -1731,23 +1735,64 @@ html.home-spa .site-header--studio {
   box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04);
 }
 
-.spa-sidebar__brand-kicker {
-  display: block;
+.spa-sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  color: var(--text);
+  padding: 0.25rem 0.35rem;
+  border-radius: 12px;
+  transition: background 0.25s ease;
+}
+
+.spa-sidebar__logo:hover {
+  background: rgba(94, 234, 212, 0.06);
+}
+
+.spa-sidebar__logo-mark {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: brightness(1.15) drop-shadow(0 0 12px rgba(94, 234, 212, 0.3));
+}
+
+.spa-sidebar__logo-text {
   font-family: var(--font-mega);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.spa-sidebar__footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(94, 234, 212, 0.12);
+}
+
+.spa-sidebar__ext-link {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.65);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.spa-sidebar__ext-link:hover {
   color: var(--accent);
 }
 
-.spa-sidebar__brand-sub {
-  display: block;
-  margin-top: 0.35rem;
-  font-size: 0.75rem;
-  color: rgba(148, 163, 184, 0.55);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.spa-sidebar__whatsapp {
+  width: 100%;
+  justify-content: center;
+  font-size: 0.72rem;
 }
 
 .spa-sidebar__nav {
@@ -1907,8 +1952,8 @@ html.home-spa .site-header--studio {
 .spa-main {
   flex: 1;
   position: relative;
-  padding-top: var(--spa-header-h);
   overflow: hidden;
+  z-index: 2;
 }
 
 html.home-spa .scene-backdrop {
@@ -1991,7 +2036,7 @@ html.home-spa .scene-backdrop__cube-wrap.is-hover .scene-backdrop__cube {
 .spa-viewport {
   position: relative;
   z-index: 2;
-  height: calc(100dvh - var(--spa-header-h));
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -2164,10 +2209,6 @@ html.home-spa .spa-slide__inner {
   .spa-stage {
     margin-left: 0;
     padding-bottom: 4.5rem;
-  }
-
-  html.home-spa .site-header--studio {
-    left: 0;
   }
 
   html.home-spa .scene-backdrop {

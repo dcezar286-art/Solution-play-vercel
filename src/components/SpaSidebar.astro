@@ -1,4 +1,6 @@
 ---
+import logoUrl from "../../LOGO/SolutionPlay-removebg-preview.png?url";
+
 const items = [
   { id: "hero", num: "01", label: "Início", from: "#22d3ee", to: "#5eead4" },
   { id: "services", num: "02", label: "Serviços", from: "#5eead4", to: "#6366f1" },
@@ -10,11 +12,14 @@ const items = [
 ---
 
 <aside class="spa-sidebar" aria-label="Navegação principal">
-  <div class="spa-sidebar__brand">
-    <span class="spa-sidebar__brand-kicker">Solution Play</span>
-    <span class="spa-sidebar__brand-sub">Navegação</span>
-  </div>
-  <nav class="spa-sidebar__nav">
+  <a class="spa-sidebar__logo" href="/" data-slide-jump="hero" aria-label="Solution Play — início">
+    <img class="spa-sidebar__logo-mark" src={logoUrl} alt="" width="44" height="44" decoding="async" />
+    <span class="spa-sidebar__logo-text">
+      Solution <span class="logo__accent">Play</span>
+    </span>
+  </a>
+
+  <nav class="spa-sidebar__nav" aria-label="Secções">
     <ul class="spa-sidebar__menu">
       {
         items.map((item, i) => (
@@ -39,4 +44,13 @@ const items = [
       }
     </ul>
   </nav>
+
+  <div class="spa-sidebar__footer">
+    <a class="spa-sidebar__ext-link" href="/servicos">Serviços (página completa)</a>
+    <a
+      class="btn btn-primary spa-sidebar__whatsapp"
+      href="https://wa.me/5511937415034"
+      target="_blank"
+      rel="noopener noreferrer">WhatsApp</a>
+  </div>
 </aside>
