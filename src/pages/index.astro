@@ -6,7 +6,7 @@ import LeadForm from "../components/LeadForm.astro";
 import logoUrl from "../../LOGO/PNG.png?url";
 ---
 
-<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)">
+<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)" snapSections={true}>
   <header class="site-header site-header--studio">
     <div class="wrap inner">
       <a class="logo logo--studio" href="/" aria-label="Solution Play — início">
@@ -28,7 +28,7 @@ import logoUrl from "../../LOGO/PNG.png?url";
   </header>
 
   <main id="conteudo-principal">
-    <section class="hero hero--studio" aria-labelledby="hero-heading">
+    <section class="hero hero--studio snap-section" aria-labelledby="hero-heading">
       <div class="hero-studio-atmos" aria-hidden="true">
         <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
         <span class="hero-studio-deco hero-studio-deco--trace">BGP · MPLS · AD</span>
@@ -60,7 +60,7 @@ import logoUrl from "../../LOGO/PNG.png?url";
             </div>
             <p class="hero-scroll-hint">
               <span class="hero-scroll-hint__icon" aria-hidden="true"></span>
-              Role para explorar
+              Próximo ecrã: rodinha ou deslizar
             </p>
           </div>
         </div>
@@ -88,11 +88,14 @@ import logoUrl from "../../LOGO/PNG.png?url";
       </div>
     </section>
 
-    <MarqueeStrip />
+    <div class="snap-panel-stack snap-section" role="region" aria-label="Destaques e serviços">
+      <MarqueeStrip />
+      <div class="snap-panel-stack__scroll">
+        <ServiceTabs />
+      </div>
+    </div>
 
-    <ServiceTabs />
-
-    <section class="section commercial commercial--studio" aria-labelledby="comercial-heading">
+    <section class="section commercial commercial--studio snap-section" aria-labelledby="comercial-heading">
       <div class="wrap commercial-inner" data-reveal>
         <div>
           <p class="section-eyebrow">Contratos</p>
@@ -118,14 +121,13 @@ import logoUrl from "../../LOGO/PNG.png?url";
       </div>
     </section>
 
-    <section class="section lead-section lead-section--studio" aria-labelledby="contato-heading">
+    <section class="section lead-section lead-section--studio snap-section" aria-labelledby="contato-heading">
       <div class="wrap lead-grid">
         <div data-reveal style="--reveal-delay: 60ms">
           <p class="section-eyebrow">Contato</p>
           <h2 id="contato-heading">Próximo passo</h2>
           <p style="color: var(--text-muted); max-width: 48ch">
-            Use o formulário ao lado para simular o envio. Na versão final, substitua o número de WhatsApp de exemplo
-            e alinhe os textos legais com o site publicado.
+            Use o formulário ao lado. A mensagem abre no WhatsApp comercial já configurado para este site.
           </p>
         </div>
         <LeadForm />
@@ -133,7 +135,7 @@ import logoUrl from "../../LOGO/PNG.png?url";
     </section>
   </main>
 
-  <footer class="site-footer site-footer--studio" data-reveal style="--reveal-delay: 80ms">
+  <footer class="site-footer site-footer--studio snap-section snap-section--footer" data-reveal style="--reveal-delay: 80ms">
     <div class="wrap cols">
       <div>
         <h2>Sobre esta amostra</h2>

@@ -1128,9 +1128,69 @@ main,
   transform: translateY(0);
 }
 
+/* --- Scroll em “ecrãs” (home): troca de cena com scroll-snap --- */
+html.snap-site-html {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 5.25rem;
+}
+
+.snap-section {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  box-sizing: border-box;
+}
+
+html.snap-site-html .hero.hero--studio.snap-section {
+  min-height: 100dvh;
+}
+
+.snap-panel-stack {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.snap-panel-stack .marquee-strip {
+  flex-shrink: 0;
+}
+
+.snap-panel-stack__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.snap-section--footer {
+  min-height: min(72dvh, 640px);
+  display: flex;
+  align-items: center;
+}
+
+.commercial.snap-section,
+.lead-section.snap-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(1rem, 3vh, 2rem);
+}
+
+.lead-section.snap-section {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  html.snap-site-html {
+    scroll-snap-type: proximity;
   }
 
   .page-shell::before,

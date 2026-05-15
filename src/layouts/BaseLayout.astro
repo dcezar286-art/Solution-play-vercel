@@ -7,14 +7,19 @@ import NetworkBackdrop from "../components/NetworkBackdrop.astro";
 interface Props {
   title: string;
   description?: string;
+  /** Ativa secções em ecrã completo com scroll-snap (ex.: home). */
+  snapSections?: boolean;
 }
 
-const { title, description = "Amostra visual — Solution Play (TI e telecom). Demonstração para Vercel." } =
-  Astro.props;
+const {
+  title,
+  description = "Amostra visual — Solution Play (TI e telecom). Demonstração para Vercel.",
+  snapSections = false,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class:list={[{ "snap-site-html": snapSections }]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,7 +35,7 @@ const { title, description = "Amostra visual — Solution Play (TI e telecom). D
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body class="page-shell">
+  <body class:list={["page-shell", { "snap-site-body": snapSections }]}>
     <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <div class="grain-overlay" aria-hidden="true"></div>
     <NetworkBackdrop />
