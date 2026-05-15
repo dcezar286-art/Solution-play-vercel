@@ -37,7 +37,7 @@ npx vercel --prod
 ## O que o cliente deve revisar antes de ir ao ar
 
 - Textos legais, política de privacidade e termos (se aplicável).
-- **WhatsApp:** no código, substituir o número de exemplo (`LeadForm.astro`, constante `WHATSAPP_E164`) pelo número publicado no site oficial.
+- **WhatsApp:** número comercial em `LeadForm.astro` (`WHATSAPP_E164`) e nos botões do hero/header; altere se mudar o canal.
 - **CNPJ, telefone fixo e demais dados institucionais:** conferir com o site publicado; esta amostra usa placeholders explícitos.
 - Fotos, logotipos e menção a marcas de terceiros (ex.: Zabbix/Grafana) conforme licença.
 

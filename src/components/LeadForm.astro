@@ -3,7 +3,7 @@
 
 <form id="lead-form" class="form-card" novalidate data-reveal style="--reveal-delay: 100ms">
   <h2>Fale com a equipe</h2>
-  <p>Preencha os campos. Você será direcionado ao WhatsApp com a mensagem montada — número de exemplo nesta amostra.</p>
+  <p>Preencha os campos. Ao enviar, abrimos o WhatsApp com a mensagem pronta para o número comercial.</p>
 
   <div class="field">
     <label for="nome">Nome</label>
@@ -45,14 +45,13 @@
   </div>
 
   <p class="note-box" style="margin-top: 1rem">
-    <strong>Institucional (demo):</strong> número comercial, WhatsApp corporativo e CNPJ seguem o
-    <strong>site oficial publicado</strong> — aqui não há dados reais, apenas fluxo de contato para revisão de UX.
+    <strong>Institucional:</strong> CNPJ e demais dados legais seguem o <strong>site oficial</strong> publicado. O
+    WhatsApp deste formulário é o canal comercial usado nesta amostra.
   </p>
 </form>
 
 <script>
-  // TODO: substituir pelo número publicado no site do cliente (E.164, apenas dígitos após wa.me/)
-  const WHATSAPP_E164 = "5511999999999";
+  const WHATSAPP_E164 = "5511937415034";
 
   function buildMessage() {
     const form = document.getElementById("lead-form");
@@ -63,7 +62,7 @@
     const telefone = String(fd.get("telefone") || "").trim();
     const mensagem = String(fd.get("mensagem") || "").trim();
     return [
-      "Olá, Solution Play — contato pelo site (amostra Vercel).",
+      "Olá, Solution Play — contato pelo site.",
       "",
       `Nome: ${nome}`,
       `Perfil: ${perfil}`,

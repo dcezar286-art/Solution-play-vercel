@@ -1,10 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import LogoCube from "../components/LogoCube.astro";
 import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
-import logoUrl from "../../LOGO/SolutionPlay.png?url";
+import logoUrl from "../../LOGO/PNG.png?url";
 ---
 
 <BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)">
@@ -20,7 +19,11 @@ import logoUrl from "../../LOGO/SolutionPlay.png?url";
         <a href="/servicos">Serviços (página)</a>
         <a href="#contato-heading">Contato</a>
       </nav>
-      <a class="btn btn-primary btn--studio" href="#contato-heading">Proposta</a>
+      <a
+        class="btn btn-primary btn--studio"
+        href="https://wa.me/5511937415034"
+        target="_blank"
+        rel="noopener noreferrer">WhatsApp</a>
     </div>
   </header>
 
@@ -32,7 +35,10 @@ import logoUrl from "../../LOGO/SolutionPlay.png?url";
       </div>
       <div class="wrap hero-studio-grid">
         <div class="hero-studio-copy">
-          <p class="hero-kicker">Amostra front-end · Vercel</p>
+          <div class="hero-brand-row">
+            <img class="hero-brand-mark" src={logoUrl} alt="" width="64" height="64" decoding="async" />
+            <p class="hero-kicker">Amostra front-end · Vercel</p>
+          </div>
           <h1 id="hero-heading" class="hero-mega" transition:animate="fade">
             <span class="hero-mega__line">Infra que impulsiona</span>
             <span class="hero-mega__line hero-mega__line--outline">operações críticas</span>
@@ -43,19 +49,22 @@ import logoUrl from "../../LOGO/SolutionPlay.png?url";
             redes, monitoramento e planos comerciais alinhados ao briefing (revisar antes do go-live).
           </p>
           <div class="hero-studio-foot">
-              <div class="hero-ctas">
-                <a class="btn btn-primary" href="#contato-heading">Explorar contato</a>
-                <a class="btn btn-ghost" href="#servicos-heading">Ver escopos</a>
-              </div>
+            <div class="hero-ctas">
+              <a
+                class="btn btn-primary"
+                href="https://wa.me/5511937415034"
+                target="_blank"
+                rel="noopener noreferrer">WhatsApp · (11) 93741-5034</a>
+              <a class="btn btn-ghost" href="#contato-heading">Formulário</a>
+              <a class="btn btn-ghost" href="#servicos-heading">Ver escopos</a>
+            </div>
             <p class="hero-scroll-hint">
               <span class="hero-scroll-hint__icon" aria-hidden="true"></span>
               Role para explorar
             </p>
           </div>
         </div>
-        <div class="hero-studio-visual">
-          <LogoCube />
-          <aside class="hero-panel hero-studio-panel hero-studio-panel--below hero-stagger hero-stagger--aside" aria-labelledby="painel-resumo">
+        <aside class="hero-panel hero-studio-panel hero-stagger hero-stagger--aside" aria-labelledby="painel-resumo">
           <h2 id="painel-resumo">Stack de confiança</h2>
           <div class="stat-row">
             <div>
@@ -68,7 +77,7 @@ import logoUrl from "../../LOGO/SolutionPlay.png?url";
             </div>
             <div>
               <strong>Lead</strong>
-              <span>WhatsApp (demo)</span>
+              <span>WhatsApp comercial</span>
             </div>
           </div>
           <div class="monitor-block">
@@ -76,7 +85,6 @@ import logoUrl from "../../LOGO/SolutionPlay.png?url";
             — Zabbix e Grafana em texto (marcas conforme licença).
           </div>
         </aside>
-        </div>
       </div>
     </section>
 

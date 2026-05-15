@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import RevealInit from "../components/RevealInit.astro";
+import NetworkBackdrop from "../components/NetworkBackdrop.astro";
 
 interface Props {
   title: string;
@@ -32,6 +33,7 @@ const { title, description = "Amostra visual — Solution Play (TI e telecom). D
   <body class="page-shell">
     <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <div class="grain-overlay" aria-hidden="true"></div>
+    <NetworkBackdrop />
     <slot />
     <RevealInit />
   </body>
