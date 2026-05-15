@@ -1,0 +1,37 @@
+---
+const items = [
+  { id: "hero", num: "01", label: "Início" },
+  { id: "services", num: "02", label: "Serviços" },
+  { id: "commercial", num: "03", label: "Contratos" },
+  { id: "contact", num: "04", label: "Contato" },
+  { id: "dono", num: "05", label: "Equipa" },
+  { id: "footer", num: "06", label: "Rodapé" },
+];
+---
+
+<nav class="scene-indicator" aria-label="Secções da página">
+  <div class="scene-indicator__nums">
+    {
+      items.map((item, i) => (
+        <button
+          type="button"
+          class:list={["scene-indicator__btn", { "is-active": i === 0 }]}
+          data-scene-jump={item.id}
+          aria-label={`Ir para: ${item.label}`}
+        >
+          {item.num}
+        </button>
+      ))
+    }
+  </div>
+  <div class="scene-indicator__line" aria-hidden="true"></div>
+  <div class="scene-indicator__names">
+    {
+      items.map((item, i) => (
+        <p class:list={["scene-indicator__name", { "is-active": i === 0 }]} data-scene-name={item.id}>
+          {item.label}
+        </p>
+      ))
+    }
+  </div>
+</nav>

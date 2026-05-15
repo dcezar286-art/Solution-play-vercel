@@ -10,6 +10,90 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+function setActiveScene(sceneId: string) {
+  document.querySelectorAll<HTMLElement>("[data-scene-backdrop]").forEach((el) => {
+    el.classList.toggle("is-active", el.dataset.sceneBackdrop === sceneId);
+  });
+  document.querySelectorAll<HTMLElement>(".scene-indicator__btn").forEach((el) => {
+    el.classList.toggle("is-active", el.dataset.sceneJump === sceneId);
+  });
+  document.querySelectorAll<HTMLElement>(".scene-indicator__name").forEach((el) => {
+    el.classList.toggle("is-active", el.dataset.sceneName === sceneId);
+  });
+}
+
+/** Transições por secção: blur 10px + scrub (modelo fromanother, via ScrollTrigger). */
+function registerFromanotherScenes() {
+  const sections = gsap.utils.toArray<HTMLElement>(".scene-detector");
+
+  const progressBar = document.querySelector<HTMLElement>(".scroll-progress__bar");
+  if (progressBar) {
+    gsap.to(progressBar, {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: document.body,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 0.2,
+      },
+    });
+  }
+
+  sections.forEach((section, index) => {
+    const sceneId = section.dataset.scene ?? "";
+    const target = section.querySelector<HTMLElement>(".scene-enter");
+    if (!target) return;
+
+    if (index === 0) {
+      gsap.set(target, { autoAlpha: 1, filter: "blur(0px)", y: 0 });
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top 60%",
+        end: "bottom 20%",
+        onEnter: () => sceneId && setActiveScene(sceneId),
+        onEnterBack: () => sceneId && setActiveScene(sceneId),
+      });
+      return;
+    }
+
+    gsap.fromTo(
+      target,
+      { autoAlpha: 0, filter: "blur(10px)", y: 32 },
+      {
+        autoAlpha: 1,
+        filter: "blur(0px)",
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 88%",
+          end: "top 42%",
+          scrub: 0.5,
+        },
+      }
+    );
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top 55%",
+      end: "bottom 35%",
+      onEnter: () => sceneId && setActiveScene(sceneId),
+      onEnterBack: () => sceneId && setActiveScene(sceneId),
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>(".scene-indicator__btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.sceneJump;
+      if (!id) return;
+      const section = document.querySelector<HTMLElement>(`[data-scene="${id}"]`);
+      if (!section) return;
+      lenis?.scrollTo(section, { offset: -72 });
+    });
+  });
+}
+
 /** Parallax com scrub (acoplado ao scroll, estilo editorial / motion sites). */
 function registerHomeParallax() {
   const hero = document.querySelector<HTMLElement>(".hero.hero--studio.snap-section");
@@ -251,38 +335,8 @@ export function initHomeMotion() {
   gsap.ticker.lagSmoothing(0);
 
   ctx = gsap.context(() => {
-    const blocks = gsap.utils.toArray<HTMLElement>(".snap-section");
-
-    blocks.forEach((section, index) => {
-      const target = section.querySelector<HTMLElement>(".scene-enter");
-      if (!target) return;
-
-      if (index === 0) {
-        gsap.set(target, { autoAlpha: 1, filter: "blur(0px)", y: 0 });
-        return;
-      }
-
-      gsap.fromTo(
-        target,
-        { autoAlpha: 0, filter: "blur(12px)", y: 36 },
-        {
-          autoAlpha: 1,
-          filter: "blur(0px)",
-          y: 0,
-          duration: 0.88,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 82%",
-            end: "top 50%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    });
-
+    registerFromanotherScenes();
     registerHomeParallax();
-
     requestAnimationFrame(() => ScrollTrigger.refresh());
   });
 

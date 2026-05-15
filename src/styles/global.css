@@ -1143,9 +1143,143 @@ html.home-motion {
 html.home-motion main > *:not(:first-child) .scene-enter,
 html.home-motion footer.snap-section .scene-enter {
   opacity: 0;
-  filter: blur(12px);
-  transform: translate3d(0, 36px, 0);
+  filter: blur(10px);
+  transform: translate3d(0, 28px, 0);
   will-change: opacity, filter, transform;
+}
+
+/* Stack editorial (fromanother: margin-top -100lvh + fundo em camadas) */
+html.home-motion .home-main {
+  position: relative;
+}
+
+html.home-motion .scene-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+html.home-motion .scene-backdrop__layer {
+  position: absolute;
+  inset: 0;
+  background: var(--scene-tone), var(--bg-deep);
+  opacity: 0;
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.home-motion .scene-backdrop__layer.is-active {
+  opacity: 1;
+}
+
+html.home-motion .scene-backdrop__noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+html.home-motion .home-scene-lift {
+  position: relative;
+  z-index: 2;
+  margin-top: -100dvh;
+}
+
+html.home-motion .scene-detector .scene-shell {
+  background: linear-gradient(
+    180deg,
+    rgba(3, 3, 8, 0.55) 0%,
+    rgba(3, 3, 8, 0.82) 42%,
+    rgba(3, 3, 8, 0.92) 100%
+  );
+}
+
+html.home-motion .scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  pointer-events: none;
+  background: rgba(94, 234, 212, 0.08);
+}
+
+html.home-motion .scroll-progress__bar {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--accent), var(--neon));
+}
+
+html.home-motion .scene-indicator {
+  position: fixed;
+  left: clamp(0.75rem, 2vw, 1.5rem);
+  top: 50%;
+  z-index: 55;
+  transform: translateY(-50%);
+  display: none;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  html.home-motion .scene-indicator {
+    display: grid;
+    grid-template-columns: auto 1px 1fr;
+    align-items: start;
+    column-gap: 0.75rem;
+  }
+}
+
+html.home-motion .scene-indicator__nums {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+html.home-motion .scene-indicator__btn {
+  pointer-events: auto;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mega);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: rgba(148, 163, 184, 0.45);
+  cursor: pointer;
+  padding: 0.15rem 0;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+html.home-motion .scene-indicator__btn.is-active {
+  color: var(--accent);
+  opacity: 1;
+}
+
+html.home-motion .scene-indicator__line {
+  width: 1px;
+  min-height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(94, 234, 212, 0.35), transparent);
+}
+
+html.home-motion .scene-indicator__name {
+  margin: 0;
+  font-family: var(--font-mega);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.28);
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+html.home-motion .scene-indicator__name.is-active {
+  color: rgba(232, 237, 245, 0.88);
+  opacity: 1;
 }
 
 .snap-section {

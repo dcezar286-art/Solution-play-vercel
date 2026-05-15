@@ -4,6 +4,9 @@ import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
 import HomeMotion from "../components/HomeMotion.astro";
+import SceneBackdrop from "../components/SceneBackdrop.astro";
+import SceneIndicator from "../components/SceneIndicator.astro";
+import ScrollProgress from "../components/ScrollProgress.astro";
 import logoUrl from "../../LOGO/PNG.png?url";
 import donoUrl from "../../DONO.png?url";
 ---
@@ -29,8 +32,13 @@ import donoUrl from "../../DONO.png?url";
     </div>
   </header>
 
-  <main id="conteudo-principal">
-    <section class="hero hero--studio snap-section" aria-labelledby="hero-heading">
+  <main id="conteudo-principal" class="home-main">
+    <SceneBackdrop />
+    <ScrollProgress />
+    <SceneIndicator />
+
+    <div class="home-scene-lift">
+    <section class="hero hero--studio snap-section scene-detector" data-scene="hero" aria-labelledby="hero-heading">
       <div class="scene-shell scene-enter">
         <div class="hero-studio-atmos" aria-hidden="true">
           <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
@@ -92,7 +100,7 @@ import donoUrl from "../../DONO.png?url";
       </div>
     </section>
 
-    <div class="snap-panel-stack snap-section" role="region" aria-label="Destaques e serviços">
+    <div class="snap-panel-stack snap-section scene-detector" data-scene="services" role="region" aria-label="Destaques e serviços">
       <div class="scene-shell scene-enter">
         <MarqueeStrip />
         <div class="snap-panel-stack__scroll">
@@ -101,7 +109,7 @@ import donoUrl from "../../DONO.png?url";
       </div>
     </div>
 
-    <section class="section commercial commercial--studio snap-section" aria-labelledby="comercial-heading">
+    <section class="section commercial commercial--studio snap-section scene-detector" data-scene="commercial" aria-labelledby="comercial-heading">
       <div class="scene-shell scene-enter">
         <div class="wrap commercial-inner" data-reveal>
           <div>
@@ -129,7 +137,7 @@ import donoUrl from "../../DONO.png?url";
       </div>
     </section>
 
-    <section class="section lead-section lead-section--studio snap-section" aria-labelledby="contato-heading">
+    <section class="section lead-section lead-section--studio snap-section scene-detector" data-scene="contact" aria-labelledby="contato-heading">
       <div class="scene-shell scene-enter">
         <div class="wrap lead-grid">
           <div data-reveal style="--reveal-delay: 60ms">
@@ -144,7 +152,7 @@ import donoUrl from "../../DONO.png?url";
       </div>
     </section>
 
-    <section class="dono-fiber snap-section snap-section--dono" aria-labelledby="dono-heading">
+    <section class="dono-fiber snap-section snap-section--dono scene-detector" data-scene="dono" aria-labelledby="dono-heading">
       <div class="scene-shell scene-enter">
         <div class="wrap dono-fiber__wrap">
           <p class="section-eyebrow">Equipa</p>
@@ -173,9 +181,10 @@ import donoUrl from "../../DONO.png?url";
         </div>
       </div>
     </section>
+    </div>
   </main>
 
-  <footer class="site-footer site-footer--studio snap-section snap-section--footer" data-reveal style="--reveal-delay: 80ms">
+  <footer class="site-footer site-footer--studio snap-section snap-section--footer scene-detector" data-scene="footer" data-reveal style="--reveal-delay: 80ms">
     <div class="scene-shell scene-enter">
       <div class="wrap cols">
         <div>
