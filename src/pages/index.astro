@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import LogoCube from "../components/LogoCube.astro";
 import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
@@ -48,7 +49,9 @@ import LeadForm from "../components/LeadForm.astro";
             </p>
           </div>
         </div>
-        <aside class="hero-panel hero-studio-panel hero-stagger hero-stagger--aside" aria-labelledby="painel-resumo">
+        <div class="hero-studio-visual">
+          <LogoCube />
+          <aside class="hero-panel hero-studio-panel hero-studio-panel--below hero-stagger hero-stagger--aside" aria-labelledby="painel-resumo">
           <h2 id="painel-resumo">Stack de confiança</h2>
           <div class="stat-row">
             <div>
@@ -69,6 +72,7 @@ import LeadForm from "../components/LeadForm.astro";
             — Zabbix e Grafana em texto (marcas conforme licença).
           </div>
         </aside>
+        </div>
       </div>
     </section>
 

@@ -1,0 +1,19 @@
+---
+import logoUrl from "../../LOGO/SolutionPlay.png?url";
+---
+
+<div
+  id="logo-cube-root"
+  class="logo-cube"
+  data-logo-src={logoUrl}
+  role="img"
+  aria-label="Logo Solution Play em cubo 3D. Passe o ponteiro sobre o cubo para inclinar a visualização."
+>
+  <canvas class="logo-cube__canvas" width="600" height="600"></canvas>
+  <img class="logo-cube__fallback" src={logoUrl} alt="Logo Solution Play" loading="lazy" width="512" height="512" />
+  <p class="logo-cube__hint" aria-hidden="true">Cubo 3D · logo da marca</p>
+</div>
+
+<script>
+  import "../scripts/logoCubeBoot.ts";
+</script>
