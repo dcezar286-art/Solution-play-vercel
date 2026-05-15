@@ -1,11 +1,11 @@
 ---
 const items = [
-  { id: "hero", num: "01", label: "Início" },
-  { id: "services", num: "02", label: "Serviços" },
-  { id: "commercial", num: "03", label: "Contratos" },
-  { id: "contact", num: "04", label: "Contato" },
-  { id: "dono", num: "05", label: "Equipa" },
-  { id: "footer", num: "06", label: "Rodapé" },
+  { id: "hero", num: "01", label: "Início", from: "#22d3ee", to: "#5eead4" },
+  { id: "services", num: "02", label: "Serviços", from: "#5eead4", to: "#6366f1" },
+  { id: "commercial", num: "03", label: "Contratos", from: "#2dd4bf", to: "#22d3ee" },
+  { id: "contact", num: "04", label: "Contato", from: "#22d3ee", to: "#38bdf8" },
+  { id: "dono", num: "05", label: "Equipa", from: "#a855f7", to: "#6366f1" },
+  { id: "footer", num: "06", label: "Rodapé", from: "#0ea5e9", to: "#2dd4bf" },
 ];
 ---
 
@@ -15,18 +15,28 @@ const items = [
     <span class="spa-sidebar__brand-sub">Navegação</span>
   </div>
   <nav class="spa-sidebar__nav">
-    {
-      items.map((item, i) => (
-        <button
-          type="button"
-          class:list={["spa-sidebar__item", { "is-active": i === 0 }]}
-          data-slide-jump={item.id}
-          aria-current={i === 0 ? "page" : undefined}
-        >
-          <span class="spa-sidebar__num">{item.num}</span>
-          <span class="spa-sidebar__label">{item.label}</span>
-        </button>
-      ))
-    }
+    <ul class="spa-sidebar__menu">
+      {
+        items.map((item, i) => (
+          <li class="spa-sidebar__menu-item">
+            <button
+              type="button"
+              class:list={["spa-sidebar__item", { "is-active": i === 0 }]}
+              data-slide-jump={item.id}
+              style={`--item-from: ${item.from}; --item-to: ${item.to}`}
+              aria-current={i === 0 ? "page" : undefined}
+              aria-label={`${item.num} ${item.label}`}
+            >
+              <span class="spa-sidebar__glow" aria-hidden="true"></span>
+              <span class="spa-sidebar__glass" aria-hidden="true"></span>
+              <span class="spa-sidebar__content">
+                <span class="spa-sidebar__num">{item.num}</span>
+                <span class="spa-sidebar__label">{item.label}</span>
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
   </nav>
 </aside>
