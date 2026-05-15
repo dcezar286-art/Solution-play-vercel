@@ -11,6 +11,8 @@ interface Props {
   snapSections?: boolean;
   /** Lenis + GSAP ScrollTrigger (incompatível com scroll-snap no html). */
   homeMotion?: boolean;
+  /** SPA por slides — sem scroll vertical global. */
+  homeSpa?: boolean;
 }
 
 const {
@@ -18,13 +20,19 @@ const {
   description = "Amostra visual — Solution Play (TI e telecom). Demonstração para Vercel.",
   snapSections = false,
   homeMotion = false,
+  homeSpa = false,
 } = Astro.props;
 
-const useSnapLayout = snapSections && !homeMotion;
+const useSnapLayout = snapSections && !homeMotion && !homeSpa;
+const useHomeFx = homeMotion || homeSpa;
 ---
 
 <!doctype html>
-<html lang="pt-BR" class:list={[{ "snap-site-html": useSnapLayout, "home-motion": homeMotion }]}>
+<html
+  lang="pt-BR"
+  class:list={[{ "snap-site-html": useSnapLayout, "home-motion": useHomeFx, "home-spa": homeSpa }]}
+  data-spa-slide={homeSpa ? "hero" : undefined}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,6 +51,9 @@ const useSnapLayout = snapSections && !homeMotion;
   <body class:list={["page-shell", { "snap-site-body": useSnapLayout }]}>
     <script is:inline>
       document.addEventListener("astro:page-load", () => {
+        if (!document.documentElement.classList.contains("home-spa")) {
+          window.__solutionPlaySpaDestroy?.();
+        }
         if (!document.documentElement.classList.contains("home-motion")) {
           window.__solutionPlayLenisDestroy?.();
         }

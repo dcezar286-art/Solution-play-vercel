@@ -1,0 +1,32 @@
+---
+const items = [
+  { id: "hero", num: "01", label: "Início" },
+  { id: "services", num: "02", label: "Serviços" },
+  { id: "commercial", num: "03", label: "Contratos" },
+  { id: "contact", num: "04", label: "Contato" },
+  { id: "dono", num: "05", label: "Equipa" },
+  { id: "footer", num: "06", label: "Rodapé" },
+];
+---
+
+<aside class="spa-sidebar" aria-label="Navegação principal">
+  <div class="spa-sidebar__brand">
+    <span class="spa-sidebar__brand-kicker">Solution Play</span>
+    <span class="spa-sidebar__brand-sub">Navegação</span>
+  </div>
+  <nav class="spa-sidebar__nav">
+    {
+      items.map((item, i) => (
+        <button
+          type="button"
+          class:list={["spa-sidebar__item", { "is-active": i === 0 }]}
+          data-slide-jump={item.id}
+          aria-current={i === 0 ? "page" : undefined}
+        >
+          <span class="spa-sidebar__num">{item.num}</span>
+          <span class="spa-sidebar__label">{item.label}</span>
+        </button>
+      ))
+    }
+  </nav>
+</aside>

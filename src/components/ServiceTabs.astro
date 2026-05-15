@@ -13,6 +13,8 @@ const tiServices = [
   { title: "VPNs", desc: "Conectividade remota e site-to-site com foco em segurança." },
 ];
 
+const tiPages = [tiServices.slice(0, 4), tiServices.slice(4, 8)];
+
 const telecomServices = [
   { title: "Implantação de roteadores", desc: "Homologação, baseline e documentação de borda." },
   {
@@ -26,19 +28,18 @@ const telecomServices = [
 ];
 ---
 
-<section class="section" aria-labelledby="servicos-heading">
+<section class="section section--spa-services" aria-labelledby="servicos-heading">
   <div class="wrap">
-    <div data-reveal>
-      <div class="section-head">
-        <p class="section-eyebrow">Escopos</p>
-        <h2 id="servicos-heading">Serviços por perfil</h2>
-        <p>
-          Escolha abaixo o foco da sua operação. Os escopos refletem o briefing comercial — esta página é amostra
-          para revisão de conteúdo e layout.
-        </p>
-      </div>
+    <div class="section-head">
+      <p class="section-eyebrow">Escopos</p>
+      <h2 id="servicos-heading">Serviços por perfil</h2>
+      <p>
+        Escolha abaixo o foco da sua operação. Os escopos refletem o briefing comercial — esta página é amostra
+        para revisão de conteúdo e layout.
+      </p>
+    </div>
 
-      <div class="tabs">
+    <div class="tabs tabs--spa">
       <input class="tab-radio" type="radio" name="segmento" id="tab-ti" checked />
       <input class="tab-radio" type="radio" name="segmento" id="tab-telecom" />
       <div class="tab-labels" role="tablist" aria-label="Segmento de interesse">
@@ -48,19 +49,40 @@ const telecomServices = [
 
       <div class="panels" role="presentation">
         <div class="panel panel-ti" role="tabpanel" aria-labelledby="label-ti">
-          <div class="card-grid">
-            {tiServices.map((s, i) => (
-              <article class="card" style={`--stagger: ${i}`}>
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-              </article>
-            ))}
+          <div class="service-pages" data-service-pages>
+            {
+              tiPages.map((page, pageIndex) => (
+                <div
+                  class:list={["service-page", { "is-active": pageIndex === 0 }]}
+                  data-service-page={pageIndex}
+                  hidden={pageIndex !== 0 ? true : undefined}
+                >
+                  <div class="card-grid card-grid--spa">
+                    {page.map((s) => (
+                      <article class="card">
+                        <h3>{s.title}</h3>
+                        <p>{s.desc}</p>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <div class="service-pages__nav" data-service-pages-nav>
+            <button type="button" class="btn btn-ghost service-pages__btn" data-service-prev disabled>
+              Anterior
+            </button>
+            <span class="service-pages__indicator" data-service-indicator>1 / 2</span>
+            <button type="button" class="btn btn-ghost service-pages__btn" data-service-next>
+              Próximos
+            </button>
           </div>
         </div>
         <div class="panel panel-telecom" role="tabpanel" aria-labelledby="label-telecom">
-          <div class="card-grid">
-            {telecomServices.map((s, i) => (
-              <article class="card" style={`--stagger: ${i}`}>
+          <div class="card-grid card-grid--spa">
+            {telecomServices.map((s) => (
+              <article class="card">
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
               </article>
@@ -69,6 +91,49 @@ const telecomServices = [
         </div>
       </div>
     </div>
-    </div>
   </div>
 </section>
+
+<script>
+  function initServicePages() {
+    const root = document.querySelector("[data-service-pages]");
+    if (!root) return;
+
+    const pages = Array.from(root.querySelectorAll<HTMLElement>("[data-service-page]"));
+    const prev = document.querySelector<HTMLButtonElement>("[data-service-prev]");
+    const next = document.querySelector<HTMLButtonElement>("[data-service-next]");
+    const indicator = document.querySelector("[data-service-indicator]");
+    if (!prev || !next || !indicator || !pages.length) return;
+
+    let idx = 0;
+
+    const render = () => {
+      pages.forEach((p, i) => {
+        const on = i === idx;
+        p.classList.toggle("is-active", on);
+        p.hidden = !on;
+      });
+      indicator.textContent = `${idx + 1} / ${pages.length}`;
+      prev.disabled = idx === 0;
+      next.disabled = idx === pages.length - 1;
+    };
+
+    prev.onclick = () => {
+      if (idx > 0) {
+        idx -= 1;
+        render();
+      }
+    };
+    next.onclick = () => {
+      if (idx < pages.length - 1) {
+        idx += 1;
+        render();
+      }
+    };
+
+    render();
+  }
+
+  initServicePages();
+  document.addEventListener("astro:page-load", initServicePages);
+</script>

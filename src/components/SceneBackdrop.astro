@@ -1,4 +1,6 @@
 ---
+import logoUrl from "../../LOGO/SolutionPlay-removebg-preview.png?url";
+
 const scenes = [
   { id: "hero", tone: "radial-gradient(ellipse 90% 70% at 50% 20%, rgba(34, 211, 238, 0.22), transparent 58%)" },
   { id: "services", tone: "radial-gradient(ellipse 80% 60% at 20% 80%, rgba(99, 102, 241, 0.2), transparent 55%)" },
@@ -10,16 +12,21 @@ const scenes = [
 ---
 
 <div class="scene-backdrop" aria-hidden="true">
-  <div class="scene-backdrop__video-wrap">
-    <video
-      class="scene-backdrop__video"
-      data-cube-video
-      src="/media/cubo-loop-clean.mp4"
-      muted
-      playsinline
-      preload="auto"
-      aria-hidden="true"></video>
-    <div class="scene-backdrop__wm-shield" aria-hidden="true"></div>
+  <div class="scene-backdrop__cube-wrap" data-cube-wrap>
+    <div class="scene-backdrop__cube-beams" aria-hidden="true">
+      <span class="scene-backdrop__beam scene-backdrop__beam--a"></span>
+      <span class="scene-backdrop__beam scene-backdrop__beam--b"></span>
+      <span class="scene-backdrop__beam scene-backdrop__beam--c"></span>
+    </div>
+    <img
+      class="scene-backdrop__cube"
+      data-cube-img
+      src={logoUrl}
+      alt=""
+      width="512"
+      height="512"
+      decoding="async"
+    />
   </div>
   {
     scenes.map((s, i) => (

@@ -3,208 +3,206 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
-import HomeMotion from "../components/HomeMotion.astro";
+import HomeSpaMotion from "../components/HomeSpaMotion.astro";
 import SceneBackdrop from "../components/SceneBackdrop.astro";
-import SceneIndicator from "../components/SceneIndicator.astro";
-import ScrollProgress from "../components/ScrollProgress.astro";
+import SpaSidebar from "../components/SpaSidebar.astro";
 import logoUrl from "../../LOGO/SolutionPlay-removebg-preview.png?url";
 import donoUrl from "../../DONO.png?url";
 ---
 
-<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)" homeMotion={true}>
-  <header class="site-header site-header--studio">
-    <div class="wrap inner">
-      <a class="logo logo--studio" href="/" aria-label="Solution Play — início">
-        <img class="logo__mark" src={logoUrl} alt="" width="40" height="40" decoding="async" />
-        <span class="logo__text">Solution <span class="logo__accent">Play</span></span>
-      </a>
-      <nav class="nav nav--studio" aria-label="Principal">
-        <a href="#servicos-heading">Serviços</a>
-        <a href="#comercial-heading">Contratos</a>
-        <a href="/servicos">Serviços (página)</a>
-        <a href="#contato-heading">Contato</a>
-      </nav>
-      <a
-        class="btn btn-primary btn--studio"
-        href="https://wa.me/5511937415034"
-        target="_blank"
-        rel="noopener noreferrer">WhatsApp</a>
-    </div>
-  </header>
+<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)" homeSpa={true}>
+  <div class="spa-layout">
+    <SpaSidebar />
 
-  <main id="conteudo-principal" class="home-main">
-    <SceneBackdrop />
-    <ScrollProgress />
-    <SceneIndicator />
-
-    <section class="hero hero--studio snap-section scene-detector" data-scene="hero" aria-labelledby="hero-heading">
-      <div class="scene-shell scene-enter">
-        <div class="hero-studio-atmos" aria-hidden="true">
-          <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
-          <span class="hero-studio-deco hero-studio-deco--trace">BGP · MPLS · AD</span>
+    <div class="spa-stage">
+      <header class="site-header site-header--studio">
+        <div class="wrap inner">
+          <a class="logo logo--studio" href="/" aria-label="Solution Play — início">
+            <img class="logo__mark" src={logoUrl} alt="" width="40" height="40" decoding="async" />
+            <span class="logo__text">Solution <span class="logo__accent">Play</span></span>
+          </a>
+          <nav class="nav nav--studio" aria-label="Principal">
+            <a href="#" data-slide-jump="services">Serviços</a>
+            <a href="#" data-slide-jump="commercial">Contratos</a>
+            <a href="/servicos">Serviços (página)</a>
+            <a href="#" data-slide-jump="contact">Contato</a>
+          </nav>
+          <a
+            class="btn btn-primary btn--studio"
+            href="https://wa.me/5511937415034"
+            target="_blank"
+            rel="noopener noreferrer">WhatsApp</a>
         </div>
-        <div class="wrap hero-studio-grid">
-          <div class="hero-studio-copy">
-            <div class="hero-brand-row">
-              <img class="hero-brand-mark" src={logoUrl} alt="" width="64" height="64" decoding="async" />
-              <p class="hero-kicker">Amostra front-end · Vercel</p>
-            </div>
-            <h1 id="hero-heading" class="hero-mega" transition:animate="fade">
-              <span class="hero-mega__line">Infra que impulsiona</span>
-              <span class="hero-mega__line hero-mega__line--outline">operações críticas</span>
-              <span class="hero-mega__line hero-mega__line--accent">com precisão.</span>
-            </h1>
-            <p class="hero-lead hero-lead--studio">
-              Demonstração para <strong>leads</strong> e <strong>contratações</strong> em TI e telecom — implantação,
-              redes, monitoramento e planos comerciais alinhados ao briefing (revisar antes do go-live).
-            </p>
-            <div class="hero-studio-foot">
-              <div class="hero-ctas">
-                <a
-                  class="btn btn-primary"
-                  href="https://wa.me/5511937415034"
-                  target="_blank"
-                  rel="noopener noreferrer">WhatsApp · (11) 93741-5034</a>
-                <a class="btn btn-ghost" href="#contato-heading">Formulário</a>
-                <a class="btn btn-ghost" href="#servicos-heading">Ver escopos</a>
+      </header>
+
+      <main id="conteudo-principal" class="spa-main">
+        <SceneBackdrop />
+
+        <div class="spa-viewport">
+          <div class="spa-track">
+            <article class="spa-slide is-active" data-slide="hero" aria-hidden="false">
+              <div class="spa-slide__inner hero hero--studio" aria-labelledby="hero-heading">
+                <div class="hero-studio-atmos spa-hero-deco" aria-hidden="true">
+                  <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
+                  <span class="hero-studio-deco hero-studio-deco--trace">BGP · MPLS · AD</span>
+                </div>
+                <div class="wrap hero-studio-grid">
+                  <div class="hero-studio-copy">
+                    <div class="hero-brand-row">
+                      <img class="hero-brand-mark" src={logoUrl} alt="" width="64" height="64" decoding="async" />
+                      <p class="hero-kicker">Amostra front-end · Vercel</p>
+                    </div>
+                    <h1 id="hero-heading" class="hero-mega">
+                      <span class="hero-mega__line">Infra que impulsiona</span>
+                      <span class="hero-mega__line hero-mega__line--outline">operações críticas</span>
+                      <span class="hero-mega__line hero-mega__line--accent">com precisão.</span>
+                    </h1>
+                    <p class="hero-lead hero-lead--studio">
+                      Demonstração para <strong>leads</strong> e <strong>contratações</strong> em TI e telecom —
+                      implantação, redes, monitoramento e planos comerciais alinhados ao briefing.
+                    </p>
+                    <div class="hero-studio-foot">
+                      <div class="hero-ctas">
+                        <a
+                          class="btn btn-primary"
+                          href="https://wa.me/5511937415034"
+                          target="_blank"
+                          rel="noopener noreferrer">WhatsApp · (11) 93741-5034</a>
+                        <button type="button" class="btn btn-ghost" data-slide-jump="contact">Formulário</button>
+                        <button type="button" class="btn btn-ghost" data-slide-jump="services">Ver escopos</button>
+                      </div>
+                    </div>
+                  </div>
+                  <aside class="hero-panel hero-studio-panel" aria-labelledby="painel-resumo">
+                    <h2 id="painel-resumo">Stack de confiança</h2>
+                    <div class="stat-row">
+                      <div>
+                        <strong>TI</strong>
+                        <span>Servidores, AD, proxy, VPN…</span>
+                      </div>
+                      <div>
+                        <strong>Net</strong>
+                        <span>OSPF, BGP, MPLS, VLANs…</span>
+                      </div>
+                      <div>
+                        <strong>Lead</strong>
+                        <span>WhatsApp comercial</span>
+                      </div>
+                    </div>
+                    <div class="monitor-block">
+                      <strong>Monitoramento</strong>
+                      — Zabbix e Grafana em texto (marcas conforme licença).
+                    </div>
+                  </aside>
+                </div>
               </div>
-              <p class="hero-scroll-hint">
-                <span class="hero-scroll-hint__icon" aria-hidden="true"></span>
-                Próximo ecrã: rodinha ou deslizar
-              </p>
-            </div>
-          </div>
-          <aside class="hero-panel hero-studio-panel hero-stagger hero-stagger--aside" aria-labelledby="painel-resumo">
-            <h2 id="painel-resumo">Stack de confiança</h2>
-            <div class="stat-row">
-              <div>
-                <strong>TI</strong>
-                <span>Servidores, AD, proxy, VPN…</span>
+            </article>
+
+            <article class="spa-slide" data-slide="services" aria-hidden="true">
+              <div class="spa-slide__inner">
+                <MarqueeStrip />
+                <ServiceTabs />
               </div>
-              <div>
-                <strong>Net</strong>
-                <span>OSPF, BGP, MPLS, VLANs…</span>
+            </article>
+
+            <article class="spa-slide" data-slide="commercial" aria-hidden="true">
+              <div class="spa-slide__inner section commercial commercial--studio" aria-labelledby="comercial-heading">
+                <div class="wrap commercial-inner">
+                  <div>
+                    <p class="section-eyebrow">Contratos</p>
+                    <h2 id="comercial-heading">Comercial</h2>
+                    <p class="price-tag">A partir de R$ 300<span style="font-size: 0.45em; font-weight: 700">/mês</span></p>
+                    <p class="price-note">
+                      Valor indicativo — consulte conforme a <strong>quantidade de equipamentos</strong> incluídos no
+                      contrato. Prazos comuns de contrato:
+                    </p>
+                    <ul class="term-list">
+                      <li>6 meses</li>
+                      <li>1 ano</li>
+                      <li>2 anos</li>
+                    </ul>
+                  </div>
+                  <div class="note-box">
+                    <p style="margin: 0">
+                      Esta faixa é <strong>apresentação comercial do briefing</strong>. Condições finais, SLAs e escopo
+                      detalhado ficam no contato institucional oficial do cliente.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <strong>Lead</strong>
-                <span>WhatsApp comercial</span>
+            </article>
+
+            <article class="spa-slide" data-slide="contact" aria-hidden="true">
+              <div class="spa-slide__inner section lead-section lead-section--studio" aria-labelledby="contato-heading">
+                <div class="wrap lead-grid">
+                  <div>
+                    <p class="section-eyebrow">Contato</p>
+                    <h2 id="contato-heading">Próximo passo</h2>
+                    <p style="color: var(--text-muted); max-width: 48ch">
+                      Use o formulário ao lado. A mensagem abre no WhatsApp comercial já configurado para este site.
+                    </p>
+                  </div>
+                  <LeadForm />
+                </div>
               </div>
-            </div>
-            <div class="monitor-block">
-              <strong>Monitoramento</strong>
-              — Zabbix e Grafana em texto (marcas conforme licença).
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
+            </article>
 
-    <div class="home-scene-lift">
-    <div class="snap-panel-stack snap-section scene-detector" data-scene="services" role="region" aria-label="Destaques e serviços">
-      <div class="scene-shell scene-enter">
-        <MarqueeStrip />
-        <div class="snap-panel-stack__scroll">
-          <ServiceTabs />
-        </div>
-      </div>
-    </div>
+            <article class="spa-slide" data-slide="dono" aria-hidden="true">
+              <div class="spa-slide__inner dono-fiber snap-section--dono" aria-labelledby="dono-heading">
+                <div class="wrap dono-fiber__wrap">
+                  <p class="section-eyebrow">Equipa</p>
+                  <h2 id="dono-heading" class="dono-fiber__title">Operação em rede</h2>
+                  <p class="dono-fiber__lead">
+                    Efeito inspirado em fibras luminosas — silhueta derivada da fotografia.
+                  </p>
+                  <figure class="dono-fiber__figure" style={`--dono-src: url("${donoUrl}")`}>
+                    <div class="dono-fiber__stage" aria-hidden="true">
+                      <div class="dono-fiber__base"></div>
+                      <div class="dono-fiber__glow"></div>
+                      <div class="dono-fiber__fibers"></div>
+                      <div class="dono-fiber__scan"></div>
+                    </div>
+                    <img
+                      class="dono-fiber__photo"
+                      src={donoUrl}
+                      alt="Profissional Solution Play em ambiente de rede e monitorização"
+                      width="960"
+                      height="640"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <figcaption class="dono-fiber__cap">Infraestrutura e equipas em campo</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </article>
 
-    <section class="section commercial commercial--studio snap-section scene-detector" data-scene="commercial" aria-labelledby="comercial-heading">
-      <div class="scene-shell scene-enter">
-        <div class="wrap commercial-inner" data-reveal>
-          <div>
-            <p class="section-eyebrow">Contratos</p>
-            <h2 id="comercial-heading">Comercial</h2>
-            <p class="price-tag">A partir de R$ 300<span style="font-size: 0.45em; font-weight: 700">/mês</span></p>
-            <p class="price-note">
-              Valor indicativo — consulte conforme a <strong>quantidade de equipamentos</strong> incluídos no contrato.
-              Prazos comuns de contrato:
-            </p>
-            <ul class="term-list">
-              <li>6 meses</li>
-              <li>1 ano</li>
-              <li>2 anos</li>
-            </ul>
+            <article class="spa-slide" data-slide="footer" aria-hidden="true">
+              <div class="spa-slide__inner site-footer site-footer--studio site-footer--spa">
+                <div class="wrap cols">
+                  <div>
+                    <h2>Sobre esta amostra</h2>
+                    <p>
+                      Projeto estático para <strong>Vercel</strong>, independente do repositório Wix
+                      <code>Solution-Play</code>. Não utiliza Velo nem backend próprio.
+                    </p>
+                  </div>
+                  <div>
+                    <h2>Docs</h2>
+                    <p>
+                      <a href="https://vercel.com/docs">Vercel Docs</a>
+                      ·
+                      <a href="https://docs.astro.build/">Astro</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
-          <div class="note-box">
-            <p style="margin: 0">
-              Esta faixa é <strong>apresentação comercial do briefing</strong>. Condições finais, SLAs e escopo
-              detalhado ficam no contato institucional oficial do cliente — não reproduzimos aqui CNPJ nem canais
-              reais.
-            </p>
-          </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section lead-section lead-section--studio snap-section scene-detector" data-scene="contact" aria-labelledby="contato-heading">
-      <div class="scene-shell scene-enter">
-        <div class="wrap lead-grid">
-          <div data-reveal style="--reveal-delay: 60ms">
-            <p class="section-eyebrow">Contato</p>
-            <h2 id="contato-heading">Próximo passo</h2>
-            <p style="color: var(--text-muted); max-width: 48ch">
-              Use o formulário ao lado. A mensagem abre no WhatsApp comercial já configurado para este site.
-            </p>
-          </div>
-          <LeadForm />
-        </div>
-      </div>
-    </section>
-
-    <section class="dono-fiber snap-section snap-section--dono scene-detector" data-scene="dono" aria-labelledby="dono-heading">
-      <div class="scene-shell scene-enter">
-        <div class="wrap dono-fiber__wrap">
-          <p class="section-eyebrow">Equipa</p>
-          <h2 id="dono-heading" class="dono-fiber__title">Operação em rede</h2>
-          <p class="dono-fiber__lead">
-            Efeito inspirado em fibras luminosas — silhueta derivada da fotografia (não é traçado vetorial manual).
-          </p>
-          <figure class="dono-fiber__figure" style={`--dono-src: url("${donoUrl}")`}>
-            <div class="dono-fiber__stage" aria-hidden="true">
-              <div class="dono-fiber__base"></div>
-              <div class="dono-fiber__glow"></div>
-              <div class="dono-fiber__fibers"></div>
-              <div class="dono-fiber__scan"></div>
-            </div>
-            <img
-              class="dono-fiber__photo"
-              src={donoUrl}
-              alt="Profissional Solution Play em ambiente de rede e monitorização"
-              width="960"
-              height="640"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption class="dono-fiber__cap">Infraestrutura e equipas em campo</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
+      </main>
     </div>
-  </main>
+  </div>
 
-  <footer class="site-footer site-footer--studio snap-section snap-section--footer scene-detector" data-scene="footer" data-reveal style="--reveal-delay: 80ms">
-    <div class="scene-shell scene-enter">
-      <div class="wrap cols">
-        <div>
-          <h2>Sobre esta amostra</h2>
-          <p>
-            Projeto estático para <strong>Vercel</strong>, independente do repositório Wix <code>Solution-Play</code>.
-            Não utiliza Velo nem backend próprio.
-          </p>
-        </div>
-        <div>
-          <h2>Docs</h2>
-          <p>
-            <a href="https://vercel.com/docs">Vercel Docs</a>
-            ·
-            <a href="https://docs.astro.build/">Astro</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <HomeMotion />
+  <HomeSpaMotion />
 </BaseLayout>
