@@ -1137,19 +1137,20 @@ html.snap-site-html {
 .snap-section {
   min-height: 100dvh;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  /* "always" obriga paragem em cada secção e, com scrollers aninhados, pode parecer que o scroll “morreu” */
+  scroll-snap-stop: normal;
   box-sizing: border-box;
 }
 
-/* Entrada de “cena” (secções com scroll-snap) — inspiração em sites motion-led */
+/* Entrada de cena: blur + opacidade no estilo comum em stacks GSAP/React (ex.: referências motion-led) */
 .snap-section .scene-enter {
   opacity: 0;
-  transform: translate3d(0, 2.25rem, 0) scale(0.985);
-  filter: blur(14px);
+  transform: translate3d(0, 1.75rem, 0) scale(0.992);
+  filter: blur(10px);
   transition:
-    opacity 0.78s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.88s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.68s ease;
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.55s ease;
   will-change: opacity, transform, filter;
 }
 
@@ -1392,7 +1393,8 @@ html.snap-site-html .hero.hero--studio.snap-section {
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+  /* Não usar "contain": bloqueia scroll chaining para o documento e o snap deixa de avançar entre secções. */
+  overscroll-behavior-y: auto;
 }
 
 .snap-section--footer {
@@ -1411,7 +1413,7 @@ html.snap-site-html .hero.hero--studio.snap-section {
 
 .lead-section.snap-section {
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
