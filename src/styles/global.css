@@ -1134,6 +1134,20 @@ html.snap-site-html {
   scroll-padding-top: 5.25rem;
 }
 
+/* Home: Lenis + GSAP — sem snap no documento; estado inicial abaixo da dobra */
+html.home-motion {
+  scroll-behavior: auto !important;
+  scroll-padding-top: 5.25rem;
+}
+
+html.home-motion main > *:not(:first-child) .scene-enter,
+html.home-motion footer.snap-section .scene-enter {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translate3d(0, 36px, 0);
+  will-change: opacity, filter, transform;
+}
+
 .snap-section {
   min-height: 100dvh;
   scroll-snap-align: start;
@@ -1142,8 +1156,8 @@ html.snap-site-html {
   box-sizing: border-box;
 }
 
-/* Entrada de cena: blur + opacidade no estilo comum em stacks GSAP/React (ex.: referências motion-led) */
-.snap-section .scene-enter {
+/* Entrada de cena só no modo scroll-snap (IO + classes .is-scene-active) */
+html.snap-site-html .snap-section .scene-enter {
   opacity: 0;
   transform: translate3d(0, 1.75rem, 0) scale(0.992);
   filter: blur(10px);
@@ -1154,7 +1168,7 @@ html.snap-site-html {
   will-change: opacity, transform, filter;
 }
 
-.snap-section.is-scene-active .scene-enter {
+html.snap-site-html .snap-section.is-scene-active .scene-enter {
   opacity: 1;
   transform: translate3d(0, 0, 0) scale(1);
   filter: blur(0);
@@ -1462,7 +1476,8 @@ html.snap-site-html .hero.hero--studio.snap-section {
     transform: none !important;
   }
 
-  .snap-section .scene-enter {
+  html.snap-site-html .snap-section .scene-enter,
+  html.home-motion .snap-section .scene-enter {
     opacity: 1;
     transform: none;
     filter: none;

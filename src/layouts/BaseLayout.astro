@@ -9,17 +9,22 @@ interface Props {
   description?: string;
   /** Ativa secções em ecrã completo com scroll-snap (ex.: home). */
   snapSections?: boolean;
+  /** Lenis + GSAP ScrollTrigger (incompatível com scroll-snap no html). */
+  homeMotion?: boolean;
 }
 
 const {
   title,
   description = "Amostra visual — Solution Play (TI e telecom). Demonstração para Vercel.",
   snapSections = false,
+  homeMotion = false,
 } = Astro.props;
+
+const useSnapLayout = snapSections && !homeMotion;
 ---
 
 <!doctype html>
-<html lang="pt-BR" class:list={[{ "snap-site-html": snapSections }]}>
+<html lang="pt-BR" class:list={[{ "snap-site-html": useSnapLayout, "home-motion": homeMotion }]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,7 +40,14 @@ const {
     <title>{title}</title>
     <ClientRouter />
   </head>
-  <body class:list={["page-shell", { "snap-site-body": snapSections }]}>
+  <body class:list={["page-shell", { "snap-site-body": useSnapLayout }]}>
+    <script is:inline>
+      document.addEventListener("astro:page-load", () => {
+        if (!document.documentElement.classList.contains("home-motion")) {
+          window.__solutionPlayLenisDestroy?.();
+        }
+      });
+    </script>
     <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <div class="grain-overlay" aria-hidden="true"></div>
     <NetworkBackdrop />

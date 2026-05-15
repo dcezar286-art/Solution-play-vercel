@@ -3,12 +3,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
-import SceneTransitions from "../components/SceneTransitions.astro";
+import HomeMotion from "../components/HomeMotion.astro";
 import logoUrl from "../../LOGO/PNG.png?url";
 import donoUrl from "../../DONO.png?url";
 ---
 
-<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)" snapSections={true}>
+<BaseLayout title="Solution Play — Amostra (TI &amp; Telecom)" homeMotion={true}>
   <header class="site-header site-header--studio">
     <div class="wrap inner">
       <a class="logo logo--studio" href="/" aria-label="Solution Play — início">
@@ -30,7 +30,7 @@ import donoUrl from "../../DONO.png?url";
   </header>
 
   <main id="conteudo-principal">
-    <section class="hero hero--studio snap-section is-scene-active" aria-labelledby="hero-heading">
+    <section class="hero hero--studio snap-section" aria-labelledby="hero-heading">
       <div class="scene-shell scene-enter">
         <div class="hero-studio-atmos" aria-hidden="true">
           <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
@@ -197,5 +197,5 @@ import donoUrl from "../../DONO.png?url";
     </div>
   </footer>
 
-  <SceneTransitions />
+  <HomeMotion />
 </BaseLayout>
