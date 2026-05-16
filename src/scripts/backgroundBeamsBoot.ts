@@ -4,9 +4,8 @@ declare global {
   }
 }
 
+import { backgroundBeamCount, prefersReducedMotion } from "./deviceProfile";
 import { runAfterNextPaint } from "./scheduleFrame";
-
-const BEAM_COUNT = 18;
 
 function destroyBackgroundBeams() {
   document.querySelector(".light-beams-stream")?.replaceChildren();
@@ -19,7 +18,8 @@ function initBackgroundBeams() {
     return;
   }
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const beamCount = backgroundBeamCount();
+  if (prefersReducedMotion() || beamCount === 0) return;
 
   const stream = document.querySelector<HTMLElement>(".light-beams-stream");
   if (!stream) return;
@@ -28,7 +28,7 @@ function initBackgroundBeams() {
 
   const fragment = document.createDocumentFragment();
 
-  for (let i = 0; i < BEAM_COUNT; i++) {
+  for (let i = 0; i < beamCount; i++) {
     const riseDur = Math.random() * 2 + 4;
     const fadeDur = riseDur;
     const dropDur = Math.random() * 3 + 3;

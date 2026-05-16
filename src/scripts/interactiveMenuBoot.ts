@@ -1,17 +1,33 @@
-import gsap from "gsap";
+import { isMobileViewport } from "./deviceProfile";
+import { loadGsap } from "./loadGsap";
 
 let menuEl: HTMLElement | null = null;
 let cursorEl: HTMLElement | null = null;
 let rippleEl: HTMLElement | null = null;
 let firstSync = true;
 
-function moveCursorTo(target: HTMLElement, opacity = 1, instant = false) {
+function moveCursorInstant(left: number, width: number, opacity = 1) {
+  if (!cursorEl) return;
+  cursorEl.style.left = `${left}px`;
+  cursorEl.style.width = `${width}px`;
+  cursorEl.style.opacity = String(opacity);
+  cursorEl.style.transform = "scale(1)";
+}
+
+async function moveCursorTo(target: HTMLElement, opacity = 1, instant = false) {
   if (!menuEl || !cursorEl) return;
 
   const menuRect = menuEl.getBoundingClientRect();
   const rect = target.getBoundingClientRect();
   const left = rect.left - menuRect.left;
   const width = rect.width;
+
+  if (isMobileViewport()) {
+    moveCursorInstant(left, width, opacity);
+    return;
+  }
+
+  const gsap = await loadGsap();
 
   if (!instant) {
     gsap.killTweensOf(rippleEl);
@@ -52,7 +68,7 @@ export function syncMenuCursor(instant = false) {
   if (!menuEl) return;
   const active = menuEl.querySelector<HTMLElement>(".interactive-menu__item.active");
   if (active) {
-    moveCursorTo(active, 1, instant || firstSync);
+    void moveCursorTo(active, 1, instant || firstSync);
     firstSync = false;
   }
 }
@@ -69,7 +85,7 @@ export function initInteractiveMenuGlass() {
   const items = menuEl.querySelectorAll<HTMLElement>(".interactive-menu__item");
 
   items.forEach((item) => {
-    item.addEventListener("mouseenter", () => moveCursorTo(item, 1, false));
+    item.addEventListener("mouseenter", () => void moveCursorTo(item, 1, false));
   });
 
   menuEl.addEventListener("mouseleave", () => syncMenuCursor(false));
@@ -85,8 +101,12 @@ export function updateInteractiveMenuLine(activeIndex: number) {
   if (!menuEl) return;
   const items = menuEl.querySelectorAll<HTMLElement>(".interactive-menu__item");
   const btn = items[activeIndex];
-  if (btn) moveCursorTo(btn, 1, false);
+  if (btn) void moveCursorTo(btn, 1, false);
 }
 
-void initInteractiveMenuGlass();
-document.addEventListener("astro:page-load", initInteractiveMenuGlass);
+function scheduleMenuInit() {
+  requestAnimationFrame(() => initInteractiveMenuGlass());
+}
+
+void scheduleMenuInit();
+document.addEventListener("astro:page-load", scheduleMenuInit);

@@ -1,3 +1,4 @@
+import { shouldRunHeroShader } from "./deviceProfile";
 import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
 
 const VERTEX_SRC = `#version 300 es
@@ -232,7 +233,7 @@ let unsubSlide: (() => void) | null = null;
 
 function measure(canvas: HTMLCanvasElement, host: HTMLElement) {
   const rect = host.getBoundingClientRect();
-  const dpr = Math.min(Math.max(1, window.devicePixelRatio * 0.75), 2);
+  const dpr = Math.min(Math.max(1, window.devicePixelRatio * 0.65), 1.5);
   const w = Math.max(1, Math.floor(rect.width * dpr));
   const h = Math.max(1, Math.floor(rect.height * dpr));
   canvas.style.width = `${rect.width}px`;
@@ -280,9 +281,13 @@ async function initHeroShader() {
     return;
   }
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
   const host = document.querySelector<HTMLElement>("[data-hero-shader-host]");
+  host?.classList.toggle("hero-shader-host--static", !shouldRunHeroShader());
+
+  if (!shouldRunHeroShader()) {
+    destroyHeroShader();
+    return;
+  }
   const canvas = document.querySelector<HTMLCanvasElement>("[data-hero-shader-canvas]");
   if (!host || !canvas) return;
 

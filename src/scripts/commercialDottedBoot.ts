@@ -1,4 +1,6 @@
+import { shouldRunThreeEffects } from "./deviceProfile";
 import { getActiveSpaSlide, onSpaSlideChange, type SpaSlideId } from "./spaSlideEvents";
+import { runAfterNextPaint } from "./scheduleFrame";
 
 type ThreeModule = typeof import("three");
 
@@ -222,7 +224,7 @@ function initCommercialDotted() {
     return;
   }
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!shouldRunThreeEffects()) return;
 
   destroyCommercialDotted();
   hostEl = getOrCreateRoot();
@@ -252,5 +254,9 @@ declare global {
   }
 }
 
-void initCommercialDotted();
-document.addEventListener("astro:page-load", initCommercialDotted);
+function scheduleCommercialInit() {
+  runAfterNextPaint(() => initCommercialDotted());
+}
+
+void scheduleCommercialInit();
+document.addEventListener("astro:page-load", scheduleCommercialInit);

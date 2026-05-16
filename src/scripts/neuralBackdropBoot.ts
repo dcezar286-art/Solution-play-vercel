@@ -1,8 +1,8 @@
+import { neuralParticleCount, prefersReducedMotion } from "./deviceProfile";
 import { getActiveSpaSlide, onSpaSlideChange, type SpaSlideId } from "./spaSlideEvents";
 import { runAfterNextPaint } from "./scheduleFrame";
 
 const TRAIL_OPACITY = 0.14;
-const PARTICLE_COUNT = 360;
 const SPEED = 1;
 
 type HostState = {
@@ -120,7 +120,8 @@ function resizeHost(state: HostState) {
   state.canvas.style.width = `${state.width}px`;
   state.canvas.style.height = `${state.height}px`;
   state.particles = [];
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
+  const count = neuralParticleCount();
+  for (let i = 0; i < count; i++) {
     state.particles.push(createParticle(state));
   }
 }
@@ -168,7 +169,7 @@ function initNeuralBackdrop() {
     return;
   }
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (prefersReducedMotion() || neuralParticleCount() === 0) return;
 
   destroyNeuralBackdrop();
 

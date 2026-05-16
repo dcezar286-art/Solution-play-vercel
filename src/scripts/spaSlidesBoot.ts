@@ -5,8 +5,11 @@ declare global {
   }
 }
 
-import gsap from "gsap";
+import type gsap from "gsap";
+import { isMobileViewport } from "./deviceProfile";
 import { syncMenuCursor } from "./interactiveMenuBoot";
+import { loadGsap } from "./loadGsap";
+import { runAfterNextPaint } from "./scheduleFrame";
 import { emitSpaSlideChange } from "./spaSlideEvents";
 
 const SLIDE_IDS = ["hero", "services", "commercial", "contact"] as const;
@@ -16,6 +19,17 @@ type SlideId = (typeof SLIDE_IDS)[number];
 let currentIndex = 0;
 let isAnimating = false;
 let ctx: gsap.Context | null = null;
+
+function setSlideVisibility(slides: NodeListOf<HTMLElement>, activeIndex: number) {
+  slides.forEach((slide, i) => {
+    const active = i === activeIndex;
+    slide.classList.toggle("is-active", active);
+    slide.setAttribute("aria-hidden", active ? "false" : "true");
+    slide.style.opacity = active ? "1" : "0";
+    slide.style.visibility = active ? "visible" : "hidden";
+    slide.style.transform = "translateX(0)";
+  });
+}
 
 function setMenuActive(index: number) {
   document.querySelectorAll<HTMLElement>(".interactive-menu__item").forEach((btn, i) => {
@@ -27,9 +41,10 @@ function setMenuActive(index: number) {
   requestAnimationFrame(() => syncMenuCursor());
 }
 
-function goToSlide(index: number) {
+async function goToSlide(index: number) {
   if (index < 0 || index >= SLIDE_IDS.length || index === currentIndex || isAnimating) return;
 
+  const gsap = await loadGsap();
   const slides = gsap.utils.toArray<HTMLElement>(".spa-slide");
   const outgoing = slides[currentIndex];
   const incoming = slides[index];
@@ -42,8 +57,8 @@ function goToSlide(index: number) {
   document.documentElement.dataset.spaSlide = sceneId;
   setMenuActive(index);
 
-  const xFrom = direction * 56;
-  const xTo = direction * -56;
+  const xFrom = direction * (isMobileViewport() ? 28 : 56);
+  const xTo = direction * (isMobileViewport() ? -28 : -56);
 
   incoming.style.zIndex = "3";
   outgoing.style.zIndex = "2";
@@ -65,8 +80,13 @@ function goToSlide(index: number) {
         emitSpaSlideChange(SLIDE_IDS[index]);
       },
     })
-    .to(outgoing, { autoAlpha: 0, x: xTo, duration: 0.45 }, 0)
-    .fromTo(incoming, { autoAlpha: 0, x: xFrom }, { autoAlpha: 1, x: 0, duration: 0.55 }, 0.08);
+    .to(outgoing, { autoAlpha: 0, x: xTo, duration: isMobileViewport() ? 0.32 : 0.45 }, 0)
+    .fromTo(
+      incoming,
+      { autoAlpha: 0, x: xFrom },
+      { autoAlpha: 1, x: 0, duration: isMobileViewport() ? 0.38 : 0.55 },
+      0.08
+    );
 }
 
 function bindNavigation() {
@@ -76,7 +96,7 @@ function bindNavigation() {
       if (!id) return;
       if (el.tagName === "A") e.preventDefault();
       const index = SLIDE_IDS.indexOf(id);
-      if (index >= 0) goToSlide(index);
+      if (index >= 0) void goToSlide(index);
     });
   });
 
@@ -84,11 +104,11 @@ function bindNavigation() {
     if (isAnimating) return;
     if (e.key === "ArrowDown" || e.key === "PageDown") {
       e.preventDefault();
-      goToSlide(Math.min(currentIndex + 1, SLIDE_IDS.length - 1));
+      void goToSlide(Math.min(currentIndex + 1, SLIDE_IDS.length - 1));
     }
     if (e.key === "ArrowUp" || e.key === "PageUp") {
       e.preventDefault();
-      goToSlide(Math.max(currentIndex - 1, 0));
+      void goToSlide(Math.max(currentIndex - 1, 0));
     }
   });
 }
@@ -100,7 +120,7 @@ export function destroySpaSlides() {
   delete window.__solutionPlaySpaDestroy;
 }
 
-export function initSpaSlides() {
+export async function initSpaSlides() {
   if (!document.documentElement.classList.contains("home-spa")) {
     destroySpaSlides();
     return;
@@ -122,20 +142,26 @@ export function initSpaSlides() {
   const startScene = SLIDE_IDS[startIndex];
   document.documentElement.dataset.spaSlide = startScene;
 
-  slides.forEach((slide, i) => {
-    const active = i === startIndex;
-    slide.classList.toggle("is-active", active);
-    slide.setAttribute("aria-hidden", active ? "false" : "true");
-    gsap.set(slide, { autoAlpha: active ? 1 : 0, x: 0 });
-  });
+  setSlideVisibility(slides, startIndex);
 
   setMenuActive(startIndex);
   emitSpaSlideChange(startScene);
   bindNavigation();
 
-  ctx = gsap.context(() => {});
+  if (startIndex !== 0) {
+    const gsap = await loadGsap();
+    slides.forEach((slide, i) => {
+      gsap.set(slide, { autoAlpha: i === startIndex ? 1 : 0, x: 0 });
+    });
+    ctx = gsap.context(() => {});
+  }
+
   window.__solutionPlaySpaDestroy = destroySpaSlides;
 }
 
-void initSpaSlides();
-document.addEventListener("astro:page-load", initSpaSlides);
+function scheduleSpaInit() {
+  runAfterNextPaint(() => void initSpaSlides());
+}
+
+void scheduleSpaInit();
+document.addEventListener("astro:page-load", scheduleSpaInit);
