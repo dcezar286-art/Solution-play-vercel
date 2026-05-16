@@ -10,9 +10,21 @@ import HeroShaderBackdrop from "../components/HeroShaderBackdrop.astro";
 import CommercialDottedBackdrop from "../components/CommercialDottedBackdrop.astro";
 import NeuralBackdrop from "../components/NeuralBackdrop.astro";
 import CommercialMSP from "../components/CommercialMSP.astro";
+import { getImage } from "astro:assets";
+import BrandLogo from "../components/BrandLogo.astro";
+import ContactTrustIcons from "../components/ContactTrustIcons.astro";
 import { brand, hero, commercial, contact } from "../data/marketingContent";
 import { siteSeo } from "../data/seo";
-import logoUrl from "../../LOGO/LOGO BRANCA.png?url";
+import heroLogoSrc from "../../LOGO/SolutionPlay.png";
+
+const heroLogoPreload = (
+  await getImage({
+    src: heroLogoSrc,
+    width: 128,
+    height: 128,
+    format: "webp",
+  })
+).src;
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -26,7 +38,7 @@ const organizationSchema = {
 };
 ---
 
-<BaseLayout title={siteSeo.defaultTitle} homeSpa={true}>
+<BaseLayout title={siteSeo.defaultTitle} homeSpa={true} heroLogoPreload={heroLogoPreload}>
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
   <div class="spa-layout">
     <InteractiveTopNav />
@@ -45,15 +57,12 @@ const organizationSchema = {
                 <div class="wrap hero-studio-grid hero-studio-grid--single">
                   <div class="hero-studio-copy">
                     <div class="hero-brand-row">
-                      <img
+                      <BrandLogo
                         class="hero-brand-mark"
-                        src={logoUrl}
-                        alt=""
-                        width="64"
-                        height="64"
-                        decoding="async"
-                        fetchpriority="high"
+                        width={64}
+                        height={64}
                         loading="eager"
+                        fetchpriority="high"
                       />
                       <p class="hero-slogan">
                         Tecnologia que resolve. Soluções que <span class="hero-slogan__accent">impulsionam</span>.
@@ -114,10 +123,14 @@ const organizationSchema = {
               <div class="spa-slide__inner section lead-section lead-section--studio spa-slide__inner--contact" aria-labelledby="contato-heading">
                 <NeuralBackdrop slide="contact" color="#22d3ee" />
                 <div class="wrap lead-grid contact-slide-content">
-                  <div>
+                  <div class="contact-aside">
                     <p class="section-eyebrow">Contato</p>
+                    <p class="contact-service-badge">
+                      <ContactTrustIcons name="headset" class="contact-service-badge__icon" />
+                      <span>{contact.badge}</span>
+                    </p>
                     <h2 id="contato-heading">{contact.headline}</h2>
-                    <p style="color: var(--text-muted); max-width: 48ch">{contact.lead}</p>
+                    <p class="contact-aside__lead">{contact.lead}</p>
                     <ul class="contact-facts">
                       <li>
                         <strong>E-mail:</strong>{" "}
@@ -130,6 +143,21 @@ const organizationSchema = {
                         </a>
                       </li>
                       <li><strong>Planos:</strong> {commercial.plansNote}</li>
+                    </ul>
+                    <ul class="contact-trust" aria-label="Garantias de atendimento">
+                      {
+                        contact.trustItems.map((item) => (
+                          <li class="contact-trust__item">
+                            <span class="contact-trust__icon" aria-hidden="true">
+                              <ContactTrustIcons name={item.icon} />
+                            </span>
+                            <span class="contact-trust__text">
+                              <strong>{item.title}</strong>
+                              <span>{item.desc}</span>
+                            </span>
+                          </li>
+                        ))
+                      }
                     </ul>
                   </div>
                   <LeadForm />

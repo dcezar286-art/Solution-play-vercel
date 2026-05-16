@@ -1,5 +1,5 @@
 ---
-import logoUrl from "../../LOGO/LOGO BRANCA.png?url";
+import BrandLogo from "./BrandLogo.astro";
 
 const scenes = [
   { id: "hero", tone: "radial-gradient(ellipse 90% 70% at 50% 20%, rgba(34, 211, 238, 0.22), transparent 58%)" },
@@ -17,15 +17,7 @@ const scenes = [
       <span class="scene-backdrop__beam scene-backdrop__beam--b"></span>
       <span class="scene-backdrop__beam scene-backdrop__beam--c"></span>
     </div>
-    <img
-      class="scene-backdrop__cube"
-      data-cube-img
-      src={logoUrl}
-      alt=""
-      width="512"
-      height="512"
-      decoding="async"
-    />
+    <BrandLogo class="scene-backdrop__cube" data-cube-img width={512} height={512} loading="lazy" />
   </div>
   {
     scenes.map((s, i) => (

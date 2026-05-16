@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import RevealInit from "../components/RevealInit.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
@@ -18,6 +17,8 @@ interface Props {
   homeMotion?: boolean;
   /** SPA por slides — sem scroll vertical global. */
   homeSpa?: boolean;
+  /** Preload WebP da logo do hero (LCP). */
+  heroLogoPreload?: string;
 }
 
 const {
@@ -27,12 +28,13 @@ const {
   snapSections = false,
   homeMotion = false,
   homeSpa = false,
+  heroLogoPreload,
 } = Astro.props;
 
 const useSnapLayout = snapSections && !homeMotion && !homeSpa;
 const useHomeFx = homeMotion || homeSpa;
 const canonicalUrl = new URL(Astro.url.pathname, siteSeo.siteUrl).href;
-const ogImageUrl = ogImage ?? new URL("/favicon.svg", siteSeo.siteUrl).href;
+const ogImageUrl = ogImage ?? new URL("/og-image.png", siteSeo.siteUrl).href;
 const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 
@@ -62,15 +64,23 @@ const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {heroLogoPreload ? (
+      <link rel="preload" as="image" href={heroLogoPreload} fetchpriority="high" />
+    ) : null}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700&family=Sora:wght@600;700&family=Syne:wght@600;700;800&display=swap"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700&family=Sora:wght@600;700&family=Syne:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
     <title>{title}</title>
-    <ClientRouter />
   </head>
   <body class:list={["page-shell", { "snap-site-body": useSnapLayout }]}>
     <script is:inline>

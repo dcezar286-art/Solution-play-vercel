@@ -1,5 +1,5 @@
 ---
-import logoUrl from "../../LOGO/LOGO BRANCA.png?url";
+import BrandLogo from "./BrandLogo.astro";
 
 const items = [
   { id: "hero", num: "01", label: "Início", from: "#22d3ee", to: "#5eead4" },
@@ -11,7 +11,7 @@ const items = [
 
 <aside class="spa-sidebar" aria-label="Navegação principal">
   <a class="spa-sidebar__logo" href="/" data-slide-jump="hero" aria-label="Solution Play — início">
-    <img class="spa-sidebar__logo-mark" src={logoUrl} alt="" width="44" height="44" decoding="async" />
+    <BrandLogo class="spa-sidebar__logo-mark" width={44} height={44} loading="eager" />
     <span class="spa-sidebar__logo-text">
       Solution <span class="logo__accent">Play</span>
     </span>

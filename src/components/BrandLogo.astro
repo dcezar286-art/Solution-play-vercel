@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import logoSrc from "../../LOGO/SolutionPlay.png";
+
+interface Props {
+  class?: string;
+  width: number;
+  height: number;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+  alt?: string;
+  [key: string]: unknown;
+}
+
+const {
+  class: className,
+  width,
+  height,
+  loading = "lazy",
+  fetchpriority,
+  alt = "",
+  ...rest
+} = Astro.props;
+---
+
+<Image
+  src={logoSrc}
+  alt={alt}
+  width={width}
+  height={height}
+  widths={[width, width * 2]}
+  sizes={`${width}px`}
+  format="webp"
+  loading={loading}
+  fetchpriority={fetchpriority}
+  decoding="async"
+  class:list={["brand-logo-img", className]}
+  {...rest}
+/>

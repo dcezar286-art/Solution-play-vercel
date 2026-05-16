@@ -1,53 +1,146 @@
 ---
 import { brand } from "../data/marketingContent";
+import ContactTrustIcons from "./ContactTrustIcons.astro";
 ---
 
-<form id="lead-form" class="form-card" novalidate data-reveal style="--reveal-delay: 100ms">
+<form id="lead-form" class="form-card form-card--contact" novalidate data-reveal style="--reveal-delay: 100ms">
   <h2>Fale com a equipe</h2>
-  <p>Informe seu nome e perfil. Ao enviar, abrimos o WhatsApp com a mensagem pronta.</p>
+  <p>Informe seus dados e envie pelo WhatsApp ou e-mail com a mensagem pronta.</p>
 
-  <div class="field">
-    <label for="nome">Nome</label>
-    <input id="nome" name="nome" type="text" autocomplete="name" required maxlength="120" placeholder="Seu nome" />
+  <div class="form-card__fields">
+    <div class="field" data-field="nome">
+      <label for="nome">Nome</label>
+      <input id="nome" name="nome" type="text" autocomplete="name" maxlength="120" placeholder="Seu nome" />
+    </div>
+
+    <div class="form-card__row">
+      <div class="field" data-field="empresa">
+        <label for="empresa">Empresa</label>
+        <input id="empresa" name="empresa" type="text" autocomplete="organization" maxlength="160" placeholder="Nome da empresa" />
+      </div>
+
+      <div class="field" data-field="computadores">
+        <label for="computadores">Número de computadores</label>
+        <select id="computadores" name="computadores">
+          <option value="" selected>Selecione…</option>
+          <option value="Até 3">Até 3</option>
+          <option value="4 a 5">4 a 5</option>
+          <option value="6 a 10">6 a 10</option>
+          <option value="11 a 20">11 a 20</option>
+          <option value="Mais de 20">Mais de 20</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" data-field="perfil">
+      <label for="perfil">Perfil</label>
+      <select id="perfil" name="perfil">
+        <option value="" selected>Selecione…</option>
+        <option value="Empresa — MSP / contrato mensal">Empresa — MSP / contrato mensal</option>
+        <option value="Serviços avulsos / projeto pontual">Serviços avulsos / projeto pontual</option>
+        <option value="Outro / a definir">Outro / a definir</option>
+      </select>
+    </div>
+
+    <div class="field" data-field="urgencia">
+      <label for="urgencia">Urgência</label>
+      <select id="urgencia" name="urgencia">
+        <option value="" selected>Selecione…</option>
+        <option value="Sem pressa — estou pesquisando">Sem pressa — estou pesquisando</option>
+        <option value="Em breve — próximas semanas">Em breve — próximas semanas</option>
+        <option value="Urgente — preciso de suporte agora">Urgente — preciso de suporte agora</option>
+      </select>
+    </div>
   </div>
 
-  <div class="field">
-    <label for="perfil">Perfil</label>
-    <select id="perfil" name="perfil" required>
-      <option value="" disabled selected>Selecione…</option>
-      <option value="Empresa — MSP / contrato mensal">Empresa — MSP / contrato mensal</option>
-      <option value="Serviços avulsos / projeto pontual">Serviços avulsos / projeto pontual</option>
-      <option value="Outro / a definir">Outro / a definir</option>
-    </select>
-  </div>
-
-  <div class="form-actions">
-    <button class="btn btn-primary" type="submit">Abrir no WhatsApp</button>
+  <div class="form-actions form-actions--contact">
+    <button class="btn btn-primary" type="button" data-lead-action="whatsapp">
+      <ContactTrustIcons name="whatsapp" class="form-action-icon" />
+      WhatsApp
+    </button>
+    <button class="btn btn-outline" type="button" data-lead-action="email">
+      <ContactTrustIcons name="mail" class="form-action-icon" />
+      Enviar por e-mail
+    </button>
   </div>
 </form>
 
-<script define:vars={{ whatsapp: brand.whatsapp }}>
-  function buildMessage() {
-    const form = document.getElementById("lead-form");
-    if (!(form instanceof HTMLFormElement)) return "";
+<script client:visible define:vars={{ whatsapp: brand.whatsapp, email: brand.email }}>
+  const REQUIRED_IDS = ["nome", "empresa"];
+
+  function readFormData(form) {
     const fd = new FormData(form);
-    const nome = String(fd.get("nome") || "").trim();
-    const perfil = String(fd.get("perfil") || "").trim();
-    return ["Olá, Solution Play — contato pelo site.", "", `Nome: ${nome}`, `Perfil: ${perfil}`].join("\n");
+    return {
+      nome: String(fd.get("nome") || "").trim(),
+      empresa: String(fd.get("empresa") || "").trim(),
+      perfil: String(fd.get("perfil") || "").trim(),
+      computadores: String(fd.get("computadores") || "").trim(),
+      urgencia: String(fd.get("urgencia") || "").trim(),
+    };
+  }
+
+  function buildMessage(data) {
+    return [
+      "Olá, Solution Play — contato pelo site.",
+      "",
+      `Nome: ${data.nome}`,
+      `Empresa: ${data.empresa}`,
+      `Perfil: ${data.perfil || "—"}`,
+      `Nº de computadores: ${data.computadores || "—"}`,
+      `Urgência: ${data.urgencia || "—"}`,
+    ].join("\n");
+  }
+
+  function clearInvalid(form) {
+    form.querySelectorAll(".field.is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+  }
+
+  function validateRequired(form) {
+    clearInvalid(form);
+    let valid = true;
+
+    for (const id of REQUIRED_IDS) {
+      const input = form.querySelector(`#${id}`);
+      const field = form.querySelector(`[data-field="${id}"]`);
+      const value = input instanceof HTMLInputElement ? input.value.trim() : "";
+
+      if (!value) {
+        field?.classList.add("is-invalid");
+        valid = false;
+      }
+    }
+
+    return valid;
   }
 
   const form = document.getElementById("lead-form");
 
   if (form instanceof HTMLFormElement) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-      const text = encodeURIComponent(buildMessage());
-      const url = `https://wa.me/${whatsapp}?text=${text}`;
-      window.open(url, "_blank", "noopener,noreferrer");
+    form.addEventListener("submit", (e) => e.preventDefault());
+
+    form.querySelector('[data-lead-action="whatsapp"]')?.addEventListener("click", () => {
+      if (!validateRequired(form)) return;
+      const data = readFormData(form);
+      const text = encodeURIComponent(buildMessage(data));
+      window.open(`https://wa.me/${whatsapp}?text=${text}`, "_blank", "noopener,noreferrer");
     });
+
+    form.querySelector('[data-lead-action="email"]')?.addEventListener("click", () => {
+      if (!validateRequired(form)) return;
+      const data = readFormData(form);
+      const subject = encodeURIComponent(`Contato site — ${data.empresa}`);
+      const body = encodeURIComponent(buildMessage(data));
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    });
+
+    for (const id of REQUIRED_IDS) {
+      form.querySelector(`#${id}`)?.addEventListener("input", () => {
+        const field = form.querySelector(`[data-field="${id}"]`);
+        const input = form.querySelector(`#${id}`);
+        if (input instanceof HTMLInputElement && input.value.trim()) {
+          field?.classList.remove("is-invalid");
+        }
+      });
+    }
   }
 </script>

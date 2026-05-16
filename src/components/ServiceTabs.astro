@@ -22,32 +22,30 @@ import { mspIntro, mspPlans, differentiators } from "../data/marketingContent";
 
     <div class="msp-plan-list" role="list">
       {
-        mspPlans.map((plan) => (
-          <article
-            class:list={["msp-skew-card", `msp-skew-card--${plan.id}`]}
-            role="listitem"
-            tabindex="0"
-          >
-            <span class="msp-skew-card__panel" aria-hidden="true"></span>
-            <span class="msp-skew-card__panel msp-skew-card__panel--blur" aria-hidden="true"></span>
-            <span class="msp-skew-card__blobs" aria-hidden="true">
-              <span class="msp-skew-card__blob msp-skew-card__blob--a"></span>
-              <span class="msp-skew-card__blob msp-skew-card__blob--b"></span>
-            </span>
-            <div class="msp-skew-card__inner">
-              <header class="msp-plan-card__head">
-                <h3 class="msp-plan-card__name">{plan.name}</h3>
-              </header>
-              <p class="msp-plan-card__scope msp-text-shimmer">{plan.scope}</p>
-              <ul class="msp-plan-card__includes">
-                {plan.includes.map((line) => (
-                  <li>
-                    <span class="msp-text-shimmer">{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </article>
+        mspPlans.map((plan, index) => (
+          <div class="sp-wrap" role="listitem">
+            <article class:list={["sp-card", `sp-card-${index + 1}`]} tabindex="0">
+              <div class="sp-dot-track" aria-hidden="true">
+                <span class="sp-dot"></span>
+              </div>
+              <div class="sp-top-ray" aria-hidden="true"></div>
+              <div class="sp-cone" aria-hidden="true"></div>
+              <div class="sp-line-bottom" aria-hidden="true"></div>
+              <div class="sp-card__content">
+                <header class="msp-plan-card__head">
+                  <h3 class="msp-plan-card__name">{plan.name}</h3>
+                </header>
+                <p class="msp-plan-card__scope msp-text-shimmer">{plan.scope}</p>
+                <ul class="msp-plan-card__includes">
+                  {plan.includes.map((line) => (
+                    <li>
+                      <span class="msp-text-shimmer">{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          </div>
         ))
       }
     </div>

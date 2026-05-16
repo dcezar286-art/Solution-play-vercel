@@ -141,6 +141,33 @@ export const commercial = {
 } as const;
 
 export const contact = {
+  badge: "Atendimento especializado",
   headline: "Próximo passo",
   lead: "Preencha o formulário ao lado. Retornamos com alinhamento de escopo e condições conforme a proposta vigente.",
+  trustItems: [
+    {
+      id: "response",
+      title: "Resposta em até 4h úteis",
+      desc: "Seg–Sex, 8h–18h",
+      icon: "clock",
+    },
+    {
+      id: "area",
+      title: "São Paulo e região metropolitana",
+      desc: "Atendimento remoto e presencial",
+      icon: "map",
+    },
+    {
+      id: "cnpj",
+      title: "CNPJ 49.821.819/0001-09",
+      desc: "Empresa registrada",
+      icon: "badge",
+    },
+    {
+      id: "email",
+      title: "solutiontech1016@gmail.com",
+      desc: "Contato direto",
+      icon: "mail",
+    },
+  ],
 } as const;
