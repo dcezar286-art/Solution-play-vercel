@@ -11,10 +11,23 @@ import CommercialDottedBackdrop from "../components/CommercialDottedBackdrop.ast
 import NeuralBackdrop from "../components/NeuralBackdrop.astro";
 import CommercialMSP from "../components/CommercialMSP.astro";
 import { brand, hero, commercial, contact } from "../data/marketingContent";
+import { siteSeo } from "../data/seo";
 import logoUrl from "../../LOGO/LOGO BRANCA.png?url";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteSeo.siteName,
+  url: siteSeo.siteUrl,
+  email: brand.email,
+  telephone: brand.whatsappDisplay,
+  taxID: brand.cnpj,
+  description: siteSeo.defaultDescription,
+};
 ---
 
-<BaseLayout title="Solution Play — Soluções de TI completas" homeSpa={true}>
+<BaseLayout title={siteSeo.defaultTitle} homeSpa={true}>
+  <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
   <div class="spa-layout">
     <InteractiveTopNav />
 

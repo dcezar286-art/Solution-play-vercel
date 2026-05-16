@@ -5,10 +5,13 @@ import RevealInit from "../components/RevealInit.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
 import SpaBackground from "../components/SpaBackground.astro";
 import { brand } from "../data/marketingContent";
+import { siteSeo } from "../data/seo";
 
 interface Props {
   title: string;
   description?: string;
+  /** URL absoluta da imagem para redes sociais (opcional). */
+  ogImage?: string;
   /** Ativa secções em ecrã completo com scroll-snap (ex.: home). */
   snapSections?: boolean;
   /** Lenis + GSAP ScrollTrigger (incompatível com scroll-snap no html). */
@@ -19,7 +22,8 @@ interface Props {
 
 const {
   title,
-  description = "Amostra visual — Solution Play (TI e telecom). Demonstração para Vercel.",
+  description = siteSeo.defaultDescription,
+  ogImage,
   snapSections = false,
   homeMotion = false,
   homeSpa = false,
@@ -27,6 +31,9 @@ const {
 
 const useSnapLayout = snapSections && !homeMotion && !homeSpa;
 const useHomeFx = homeMotion || homeSpa;
+const canonicalUrl = new URL(Astro.url.pathname, siteSeo.siteUrl).href;
+const ogImageUrl = ogImage ?? new URL("/favicon.svg", siteSeo.siteUrl).href;
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 ---
 
 <!doctype html>
@@ -39,7 +46,22 @@ const useHomeFx = homeMotion || homeSpa;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonicalUrl} />
+    {googleVerification ? (
+      <meta name="google-site-verification" content={googleVerification} />
+    ) : null}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteSeo.siteName} />
+    <meta property="og:locale" content={siteSeo.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content={siteSeo.twitterCard} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
