@@ -12,10 +12,9 @@ export function isMobileViewport(): boolean {
   return window.matchMedia("(max-width: 767px)").matches;
 }
 
-/** WebGL do hero — desligado só em mobile (desktop mantém o efeito). */
+/** WebGL do hero — ativo em mobile e desktop (respeita acessibilidade e dados). */
 export function shouldRunHeroShader(): boolean {
   if (prefersReducedMotion() || prefersReducedData()) return false;
-  if (isMobileViewport()) return false;
   return true;
 }
 

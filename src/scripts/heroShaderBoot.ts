@@ -1,4 +1,4 @@
-import { shouldRunHeroShader } from "./deviceProfile";
+import { isMobileViewport, shouldRunHeroShader } from "./deviceProfile";
 import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
 
 const VERTEX_SRC = `#version 300 es
@@ -233,7 +233,10 @@ let unsubSlide: (() => void) | null = null;
 
 function measure(canvas: HTMLCanvasElement, host: HTMLElement) {
   const rect = host.getBoundingClientRect();
-  const dpr = Math.min(Math.max(1, window.devicePixelRatio * 0.65), 1.5);
+  const mobile = isMobileViewport();
+  const dpr = mobile
+    ? Math.min(Math.max(1, window.devicePixelRatio * 0.5), 1.15)
+    : Math.min(Math.max(1, window.devicePixelRatio * 0.65), 1.5);
   const w = Math.max(1, Math.floor(rect.width * dpr));
   const h = Math.max(1, Math.floor(rect.height * dpr));
   canvas.style.width = `${rect.width}px`;

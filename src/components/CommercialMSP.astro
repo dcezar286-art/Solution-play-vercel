@@ -34,11 +34,11 @@ import { commercial, mspPlans, oneOffServices } from "../data/marketingContent";
               {
                 mspPlans.map((p) => (
                   <tr>
-                    <td>
+                    <td data-label="Plano">
                       <strong>{p.name}</strong>
                     </td>
-                    <td>{p.price}</td>
-                    <td>{p.scope}</td>
+                    <td data-label="Investimento">{p.price}</td>
+                    <td data-label="Abrangência">{p.scope}</td>
                   </tr>
                 ))
               }
@@ -64,8 +64,8 @@ import { commercial, mspPlans, oneOffServices } from "../data/marketingContent";
               {
                 oneOffServices.map((row) => (
                   <tr>
-                    <td>{row.title}</td>
-                    <td>{row.price}</td>
+                    <td data-label="Serviço">{row.title}</td>
+                    <td data-label="Valor">{row.price}</td>
                   </tr>
                 ))
               }
