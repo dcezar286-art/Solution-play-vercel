@@ -3400,10 +3400,37 @@ html.home-spa .spa-hero-deco {
 @media (max-width: 767px) {
   .hero-shader-host {
     pointer-events: none;
+    background: radial-gradient(
+      ellipse 120% 85% at 50% 28%,
+      rgba(34, 211, 238, 0.22) 0%,
+      rgba(14, 116, 144, 0.12) 38%,
+      rgba(3, 3, 8, 0.97) 100%
+    );
   }
 
   .hero-shader-canvas {
     display: none;
+  }
+
+  .hero-shader-vignette {
+    background: radial-gradient(
+      ellipse 90% 75% at 50% 35%,
+      transparent 25%,
+      rgba(3, 3, 8, 0.55) 100%
+    );
+  }
+
+  html[data-spa-slide="hero"] .spa-bg-effects {
+    opacity: 0.5;
+  }
+
+  html.home-spa .spa-slide[data-slide="hero"] .spa-slide__inner.hero--studio {
+    background: linear-gradient(
+      180deg,
+      rgba(3, 3, 8, 0.35) 0%,
+      rgba(3, 3, 8, 0.55) 70%,
+      rgba(3, 3, 8, 0.72) 100%
+    );
   }
 }
 
@@ -3698,14 +3725,30 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
     justify-self: stretch;
   }
 
+  .spa-topbar__logo {
+    max-width: min(42vw, 9.5rem);
+  }
+
+  .spa-topbar__logo-mark {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
   .spa-topbar__logo-text {
-    display: inline;
-    font-size: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+    font-size: 0.46rem;
     letter-spacing: 0.1em;
-    max-width: 4.75rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
+    overflow: visible;
+    text-overflow: unset;
+    max-width: none;
+  }
+
+  .spa-topbar__logo-line {
+    display: block;
   }
 
   .interactive-menu__item {

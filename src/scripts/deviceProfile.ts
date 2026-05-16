@@ -34,6 +34,6 @@ export function neuralParticleCount(): number {
 
 export function backgroundBeamCount(): number {
   if (prefersReducedMotion()) return 0;
-  if (isMobileViewport()) return 8;
+  if (isMobileViewport()) return 12;
   return 18;
 }
