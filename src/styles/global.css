@@ -3494,7 +3494,8 @@ html.home-spa .spa-slide[data-slide="commercial"] .spa-slide__inner {
 }
 
 html[data-spa-slide="commercial"] .spa-bg-effects {
-  opacity: 0.28;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .commercial-inner--above {
