@@ -1,4 +1,4 @@
-export type SpaSlideId = "hero" | "services" | "commercial" | "contact" | "dono";
+export type SpaSlideId = "hero" | "services" | "commercial" | "contact";
 
 const SLIDE_EVENT = "spa:slide-change";
 

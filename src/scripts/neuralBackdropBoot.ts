@@ -1,4 +1,5 @@
 import { getActiveSpaSlide, onSpaSlideChange, type SpaSlideId } from "./spaSlideEvents";
+import { runAfterNextPaint } from "./scheduleFrame";
 
 const TRAIL_OPACITY = 0.14;
 const PARTICLE_COUNT = 360;
@@ -206,7 +207,7 @@ function initNeuralBackdrop() {
       state.mouse.x = -1000;
       state.mouse.y = -1000;
     };
-    container.addEventListener("mousemove", onMouseMove);
+    container.addEventListener("mousemove", onMouseMove, { passive: true });
     container.addEventListener("mouseleave", onMouseLeave);
   });
 
@@ -236,5 +237,5 @@ declare global {
   }
 }
 
-void initNeuralBackdrop();
-document.addEventListener("astro:page-load", initNeuralBackdrop);
+void runAfterNextPaint(initNeuralBackdrop);
+document.addEventListener("astro:page-load", () => runAfterNextPaint(initNeuralBackdrop));

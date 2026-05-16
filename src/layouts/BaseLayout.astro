@@ -4,6 +4,7 @@ import "../styles/global.css";
 import RevealInit from "../components/RevealInit.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
 import SpaBackground from "../components/SpaBackground.astro";
+import { brand } from "../data/marketingContent";
 
 interface Props {
   title: string;
@@ -59,8 +60,6 @@ const useHomeFx = homeMotion || homeSpa;
           window.__solutionPlayHeroShaderDestroy?.();
           window.__solutionPlayCommercialDottedDestroy?.();
           window.__solutionPlayNeuralDestroy?.();
-          window.__solutionPlayServicesPathsDestroy?.();
-          window.__solutionPlayEquipeHillsDestroy?.();
         }
         if (!document.documentElement.classList.contains("home-motion")) {
           window.__solutionPlayLenisDestroy?.();
@@ -71,6 +70,9 @@ const useHomeFx = homeMotion || homeSpa;
     <div class="grain-overlay" aria-hidden="true"></div>
     {homeSpa ? <SpaBackground /> : <NetworkBackdrop />}
     <slot />
+    <footer class="site-footer-cnpj" aria-label="Identificação da empresa">
+      <p class="site-footer-cnpj__line">CNPJ {brand.cnpj}</p>
+    </footer>
     <RevealInit />
   </body>
 </html>

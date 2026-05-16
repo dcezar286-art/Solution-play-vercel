@@ -1,6 +1,13 @@
 import { getActiveSpaSlide, onSpaSlideChange, type SpaSlideId } from "./spaSlideEvents";
 
 type ThreeModule = typeof import("three");
+
+const ROOT_ID = "__sp-commercial-dotted";
+const SEPARATION = 150;
+/** Alinhado ao DottedSurface de referência (40×60). */
+const AMOUNTX = 40;
+const AMOUNTY = 60;
+
 type SceneBundle = {
   scene: InstanceType<ThreeModule["Scene"]>;
   camera: InstanceType<ThreeModule["PerspectiveCamera"]>;
@@ -9,16 +16,12 @@ type SceneBundle = {
   count: number;
 };
 
-const SEPARATION = 150;
-const AMOUNTX = 40;
-const AMOUNTY = 60;
-
 let raf = 0;
 let bundle: SceneBundle | null = null;
 let hostEl: HTMLElement | null = null;
-let resizeObserver: ResizeObserver | null = null;
 let threeLoader: Promise<ThreeModule> | null = null;
 let unsubSlide: (() => void) | null = null;
+let onWinResize: (() => void) | null = null;
 
 function isCommercialSlide() {
   return getActiveSpaSlide() === "commercial";
@@ -29,39 +32,63 @@ function loadThree(): Promise<ThreeModule> {
   return threeLoader;
 }
 
-function measure(host: HTMLElement) {
-  const rect = host.getBoundingClientRect();
-  return {
-    w: Math.max(1, rect.width),
-    h: Math.max(1, rect.height),
-    dpr: Math.min(window.devicePixelRatio || 1, 2),
-  };
+/** Viewport inteiro — mesmo conceito do `fixed inset-0` no React. */
+function measureViewport() {
+  const w = Math.max(1, Math.floor(window.innerWidth));
+  const h = Math.max(1, Math.floor(window.innerHeight));
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  return { w, h, dpr };
+}
+
+function getOrCreateRoot(): HTMLElement {
+  let el = document.getElementById(ROOT_ID) as HTMLElement | null;
+  if (!el) {
+    el = document.createElement("div");
+    el.id = ROOT_ID;
+    el.className = "commercial-dotted-root is-hidden";
+    el.setAttribute("aria-hidden", "true");
+    document.body.appendChild(el);
+  }
+  return el;
+}
+
+function setRootVisible(visible: boolean) {
+  if (!hostEl) return;
+  hostEl.classList.toggle("is-hidden", !visible);
+  hostEl.setAttribute("aria-hidden", "true");
+}
+
+function disposeBundle() {
+  cancelAnimationFrame(raf);
+  raf = 0;
+  if (!bundle) return;
+  bundle.geometry.dispose();
+  const pts = bundle.scene.children[0] as import("three").Points;
+  (pts.material as import("three").Material).dispose();
+  bundle.renderer.dispose();
+  bundle.renderer.domElement.remove();
+  bundle = null;
+  hostEl?.querySelector(".commercial-dotted-vignette")?.remove();
 }
 
 function destroyCommercialDotted() {
-  cancelAnimationFrame(raf);
-  raf = 0;
-  hostEl = null;
-  resizeObserver?.disconnect();
-  resizeObserver = null;
+  disposeBundle();
+  if (onWinResize) {
+    window.removeEventListener("resize", onWinResize);
+    onWinResize = null;
+  }
   unsubSlide?.();
   unsubSlide = null;
 
-  if (bundle) {
-    bundle.geometry.dispose();
-    const pts = bundle.scene.children[0] as import("three").Points;
-    (pts.material as import("three").Material).dispose();
-    bundle.renderer.dispose();
-    bundle.renderer.domElement.remove();
-    bundle = null;
-  }
+  hostEl?.remove();
+  hostEl = null;
 
   delete window.__solutionPlayCommercialDottedDestroy;
 }
 
 function onResize() {
   if (!bundle || !hostEl) return;
-  const m = measure(hostEl);
+  const m = measureViewport();
   bundle.camera.aspect = m.w / m.h;
   bundle.camera.updateProjectionMatrix();
   bundle.renderer.setPixelRatio(m.dpr);
@@ -96,11 +123,6 @@ function startLoop() {
   raf = requestAnimationFrame(animate);
 }
 
-function stopLoop() {
-  cancelAnimationFrame(raf);
-  raf = 0;
-}
-
 function wake() {
   if (!bundle) return;
   onResize();
@@ -108,26 +130,36 @@ function wake() {
   requestAnimationFrame(renderFrame);
 }
 
-function buildScene(THREE: ThreeModule, host: HTMLElement) {
-  const { w, h, dpr } = measure(host);
+function buildScene(THREE: ThreeModule, root: HTMLElement) {
+  const { w, h, dpr } = measureViewport();
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x030308, 2800, 12000);
+  scene.fog = new THREE.Fog(0xffffff, 2000, 10000);
 
   const camera = new THREE.PerspectiveCamera(60, w / h, 1, 10000);
   camera.position.set(0, 355, 1220);
 
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+  const renderer = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: true,
+    powerPreference: "high-performance",
+  });
   renderer.setPixelRatio(dpr);
   renderer.setSize(w, h);
-  renderer.setClearColor(0x000000, 0);
+  renderer.setClearColor(scene.fog.color, 0);
 
   const canvas = renderer.domElement;
   canvas.className = "commercial-dotted-canvas";
-  host.prepend(canvas);
+  root.appendChild(canvas);
+
+  const vig = document.createElement("div");
+  vig.className = "commercial-dotted-vignette";
+  vig.setAttribute("aria-hidden", "true");
+  root.appendChild(vig);
 
   const positions: number[] = [];
   const colors: number[] = [];
+  const gray = 200 / 255;
   for (let ix = 0; ix < AMOUNTX; ix++) {
     for (let iy = 0; iy < AMOUNTY; iy++) {
       positions.push(
@@ -135,7 +167,7 @@ function buildScene(THREE: ThreeModule, host: HTMLElement) {
         0,
         iy * SEPARATION - (AMOUNTY * SEPARATION) / 2
       );
-      colors.push(0.37, 0.92, 0.83);
+      colors.push(gray, gray, gray);
     }
   }
 
@@ -144,10 +176,10 @@ function buildScene(THREE: ThreeModule, host: HTMLElement) {
   geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 14,
+    size: 8,
     vertexColors: true,
     transparent: true,
-    opacity: 0.95,
+    opacity: 0.8,
     sizeAttenuation: true,
   });
 
@@ -157,14 +189,10 @@ function buildScene(THREE: ThreeModule, host: HTMLElement) {
 }
 
 async function ensureCommercialScene() {
-  const host = hostEl;
-  if (!host || bundle) return;
+  if (!hostEl || bundle) return;
 
   const THREE = await loadThree();
-  buildScene(THREE, host);
-
-  resizeObserver = new ResizeObserver(onResize);
-  resizeObserver.observe(host);
+  buildScene(THREE, hostEl);
   onResize();
 
   if (isCommercialSlide()) {
@@ -175,6 +203,7 @@ async function ensureCommercialScene() {
 
 function onSlideChange(id: SpaSlideId) {
   if (id === "commercial") {
+    setRootVisible(true);
     void ensureCommercialScene().then(() => {
       if (bundle && isCommercialSlide()) {
         wake();
@@ -182,7 +211,8 @@ function onSlideChange(id: SpaSlideId) {
       }
     });
   } else {
-    stopLoop();
+    setRootVisible(false);
+    disposeBundle();
   }
 }
 
@@ -194,17 +224,24 @@ function initCommercialDotted() {
 
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const host = document.querySelector<HTMLElement>("[data-commercial-dotted-host]");
-  if (!host) return;
-
   destroyCommercialDotted();
-  hostEl = host;
+  hostEl = getOrCreateRoot();
+
+  onWinResize = () => onResize();
+  window.addEventListener("resize", onWinResize);
 
   unsubSlide = onSpaSlideChange(onSlideChange);
 
   if (isCommercialSlide()) {
+    setRootVisible(true);
     void ensureCommercialScene();
+  } else {
+    setRootVisible(false);
   }
+
+  queueMicrotask(() => {
+    onSlideChange(getActiveSpaSlide());
+  });
 
   window.__solutionPlayCommercialDottedDestroy = destroyCommercialDotted;
 }

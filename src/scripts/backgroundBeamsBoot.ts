@@ -4,6 +4,8 @@ declare global {
   }
 }
 
+import { runAfterNextPaint } from "./scheduleFrame";
+
 const BEAM_COUNT = 18;
 
 function destroyBackgroundBeams() {
@@ -46,5 +48,5 @@ function initBackgroundBeams() {
   window.__solutionPlayBeamsDestroy = destroyBackgroundBeams;
 }
 
-void initBackgroundBeams();
-document.addEventListener("astro:page-load", initBackgroundBeams);
+void runAfterNextPaint(initBackgroundBeams);
+document.addEventListener("astro:page-load", () => runAfterNextPaint(initBackgroundBeams));

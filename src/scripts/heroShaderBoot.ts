@@ -1,5 +1,4 @@
 import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
-import { heroShaderSource } from "../data/heroShaderSource";
 
 const VERTEX_SRC = `#version 300 es
 precision highp float;
@@ -40,13 +39,14 @@ class WebGLRenderer {
 
   constructor(
     private canvas: HTMLCanvasElement,
-    scale: number
+    scale: number,
+    shaderSource: string
   ) {
     const gl = canvas.getContext("webgl2", { alpha: false, antialias: false });
     if (!gl) throw new Error("WebGL2 não disponível");
     this.gl = gl;
     this.scale = scale;
-    this.shaderSource = heroShaderSource;
+    this.shaderSource = shaderSource;
   }
 
   updateScale(scale: number) {
@@ -274,7 +274,7 @@ function setHeroLoop(active: boolean) {
   }
 }
 
-function initHeroShader() {
+async function initHeroShader() {
   if (!document.documentElement.classList.contains("home-spa")) {
     destroyHeroShader();
     return;
@@ -289,8 +289,9 @@ function initHeroShader() {
   destroyHeroShader();
 
   try {
+    const { heroShaderSource } = await import("../data/heroShaderSource");
     const { w, h, dpr } = measure(canvas, host);
-    renderer = new WebGLRenderer(canvas, dpr);
+    renderer = new WebGLRenderer(canvas, dpr, heroShaderSource);
     renderer.resize(w, h);
     renderer.setup();
     renderer.init();
@@ -328,7 +329,7 @@ declare global {
 }
 
 function scheduleHeroShaderInit() {
-  const run = () => initHeroShader();
+  const run = () => void initHeroShader();
   if (typeof requestIdleCallback === "function") {
     requestIdleCallback(run, { timeout: 1800 });
   } else {

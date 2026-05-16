@@ -266,28 +266,6 @@ function registerHomeParallax() {
     }
   }
 
-  const dono = document.querySelector<HTMLElement>(".snap-section--dono");
-  if (dono) {
-    const stage = dono.querySelector<HTMLElement>(".dono-fiber__stage");
-    if (stage) {
-      gsap.fromTo(
-        stage,
-        { y: 0, rotate: 0 },
-        {
-          y: -52,
-          rotate: 1.1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: dono,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 0.72,
-          },
-        }
-      );
-    }
-  }
-
   const footer = document.querySelector<HTMLElement>("footer.site-footer--studio.snap-section");
   if (footer) {
     const cols = footer.querySelector<HTMLElement>(".wrap.cols");

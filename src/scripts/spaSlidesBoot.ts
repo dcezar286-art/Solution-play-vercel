@@ -9,7 +9,7 @@ import gsap from "gsap";
 import { syncMenuCursor } from "./interactiveMenuBoot";
 import { emitSpaSlideChange } from "./spaSlideEvents";
 
-const SLIDE_IDS = ["hero", "services", "commercial", "contact", "dono"] as const;
+const SLIDE_IDS = ["hero", "services", "commercial", "contact"] as const;
 
 type SlideId = (typeof SLIDE_IDS)[number];
 

@@ -1,200 +1,66 @@
 ---
-import { basicServices, advancedServices } from "../data/marketingContent";
-
-const tiServices = [
-  { title: "Implantação de servidores", desc: "Planejamento, hardening e entrega documentada." },
-  { title: "Active Directory", desc: "Identidade, políticas e integração com o ecossistema Microsoft." },
-  { title: "File Server", desc: "Compartilhamentos seguros, quotas e recuperação." },
-  { title: "Proxy Web", desc: "Controle de saída, políticas e visibilidade de tráfego." },
-  { title: "Proxy Squid", desc: "Cache e políticas avançadas para redes corporativas." },
-  {
-    title: "Monitoramento",
-    desc: "Operação com Zabbix e Grafana (menção textual; logos conforme licença de marca).",
-  },
-  { title: "DNS recursivo", desc: "Resolução confiável com boas práticas de segurança." },
-  { title: "VPNs", desc: "Conectividade remota e site-to-site com foco em segurança." },
-];
-
-const tiPages = [tiServices.slice(0, 4), tiServices.slice(4, 8)];
-
-const telecomServices = [
-  { title: "Implantação de roteadores", desc: "Homologação, baseline e documentação de borda." },
-  {
-    title: "Camada 3 — OSPF, BGP, MPLS",
-    desc: "Roteamento e transporte para redes de provedores e empresas.",
-  },
-  {
-    title: "Switches camada 2",
-    desc: "VLANs de serviço e transporte, QinQ, translation e cenários correlatos.",
-  },
-];
+import { mspIntro, mspPlans, differentiators } from "../data/marketingContent";
 ---
 
 <section class="section section--spa-services" aria-labelledby="servicos-heading">
   <div class="wrap">
     <div class="section-head">
-      <p class="section-eyebrow">Nossos serviços</p>
-      <h2 id="servicos-heading">Do básico ao avançado</h2>
-      <p>
-        Suporte no dia a dia, infraestrutura corporativa e escopos técnicos para empresas e provedores — conforme o
-        portfólio Solution Play.
+      <p class="section-eyebrow">{mspIntro.eyebrow}</p>
+      <h2 id="servicos-heading" class="msp-scramble-heading">
+        <span class="msp-scramble-heading__track" tabindex="0">
+          <span class="msp-scramble-heading__chars" data-text-scramble data-scramble-text={mspIntro.title}>
+            {mspIntro.title}
+          </span>
+        </span>
+        <span class="msp-scramble-heading__line" aria-hidden="true"></span>
+      </h2>
+      <p>{mspIntro.lead}</p>
+      <p class="section-head__hint">
+        Valores e investimentos mensais estão na seção <strong>Contratos</strong>.
       </p>
     </div>
 
-    <div class="tabs tabs--spa">
-      <input class="tab-radio" type="radio" name="segmento" id="tab-basicos" checked />
-      <input class="tab-radio" type="radio" name="segmento" id="tab-avancados" />
-      <input class="tab-radio" type="radio" name="segmento" id="tab-ti" />
-      <input class="tab-radio" type="radio" name="segmento" id="tab-telecom" />
-      <div class="tab-labels tab-labels--wrap" role="tablist" aria-label="Categoria de serviços">
-        <label class="tab-label" role="tab" for="tab-basicos" id="label-basicos">Básicos</label>
-        <label class="tab-label" role="tab" for="tab-avancados" id="label-avancados">Avançados</label>
-        <label class="tab-label" role="tab" for="tab-ti" id="label-ti">Empresas / TI</label>
-        <label class="tab-label" role="tab" for="tab-telecom" id="label-telecom">Provedores</label>
-      </div>
-
-      <div class="panels" role="presentation">
-        <div class="panel panel-basicos" role="tabpanel" aria-labelledby="label-basicos">
-          <div class="card-grid card-grid--spa">
-            {basicServices.map((s) => (
-              <article class="card">
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-        <div class="panel panel-avancados" role="tabpanel" aria-labelledby="label-avancados">
-          <div class="card-grid card-grid--spa">
-            {advancedServices.map((s) => (
-              <article class="card">
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-        <div class="panel panel-ti" role="tabpanel" aria-labelledby="label-ti">
-          <div class="service-pages" data-service-pages>
-            {
-              tiPages.map((page, pageIndex) => (
-                <div
-                  class:list={["service-page", { "is-active": pageIndex === 0 }]}
-                  data-service-page={pageIndex}
-                  hidden={pageIndex !== 0 ? true : undefined}
-                >
-                  <div class="card-grid card-grid--spa">
-                    {page.map((s) => (
-                      <article class="card">
-                        <h3>{s.title}</h3>
-                        <p>{s.desc}</p>
-                      </article>
-                    ))}
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-          <div class="service-pages__nav" data-service-pages-nav>
-            <button type="button" class="btn btn-ghost service-pages__btn" data-service-prev disabled>
-              Anterior
-            </button>
-            <span class="service-pages__indicator" data-service-indicator>1 / 2</span>
-            <button type="button" class="btn btn-ghost service-pages__btn" data-service-next>
-              Próximos
-            </button>
-          </div>
-        </div>
-        <div class="panel panel-telecom" role="tabpanel" aria-labelledby="label-telecom">
-          <div class="card-grid card-grid--spa">
-            {telecomServices.map((s) => (
-              <article class="card">
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
+    <div class="msp-plan-list" role="list">
+      {
+        mspPlans.map((plan) => (
+          <article
+            class:list={["msp-skew-card", `msp-skew-card--${plan.id}`]}
+            role="listitem"
+            tabindex="0"
+          >
+            <span class="msp-skew-card__panel" aria-hidden="true"></span>
+            <span class="msp-skew-card__panel msp-skew-card__panel--blur" aria-hidden="true"></span>
+            <span class="msp-skew-card__blobs" aria-hidden="true">
+              <span class="msp-skew-card__blob msp-skew-card__blob--a"></span>
+              <span class="msp-skew-card__blob msp-skew-card__blob--b"></span>
+            </span>
+            <div class="msp-skew-card__inner">
+              <header class="msp-plan-card__head">
+                <h3 class="msp-plan-card__name">{plan.name}</h3>
+              </header>
+              <p class="msp-plan-card__scope msp-text-shimmer">{plan.scope}</p>
+              <ul class="msp-plan-card__includes">
+                {plan.includes.map((line) => (
+                  <li>
+                    <span class="msp-text-shimmer">{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
     </div>
 
-    <div class="service-scope-lists service-scope-lists--four" data-reveal style="--reveal-delay: 120ms">
-      <div class="service-scope-list">
-        <h3>Serviços básicos</h3>
-        <ul>
-          {basicServices.map((s) => <li>{s.title}</li>)}
-        </ul>
-      </div>
-      <div class="service-scope-list">
-        <h3>Serviços avançados</h3>
-        <ul>
-          {advancedServices.map((s) => <li>{s.title}</li>)}
-        </ul>
-      </div>
-      <div class="service-scope-list">
-        <h3>TI — empresas</h3>
-        <ul>
-          <li>Implantação de servidores</li>
-          <li>Active Directory</li>
-          <li>File Server</li>
-          <li>Proxy Web e Squid</li>
-          <li>Monitoramento (Zabbix, Grafana)</li>
-          <li>DNS recursivo</li>
-          <li>VPNs</li>
-        </ul>
-      </div>
-      <div class="service-scope-list">
-        <h3>Telecom — provedores</h3>
-        <ul>
-          <li>Implantação de roteadores</li>
-          <li>Camada 3: OSPF, BGP, MPLS</li>
-          <li>Switches L2: VLANs, QinQ, translation</li>
-        </ul>
-      </div>
+    <div class="msp-block msp-block--diff">
+      <h3 class="msp-block__title">Diferenciais Solution Play</h3>
+      <ul class="msp-diff-list">
+        {differentiators.map((line) => <li>{line}</li>)}
+      </ul>
     </div>
   </div>
 </section>
 
 <script>
-  function initServicePages() {
-    const root = document.querySelector("[data-service-pages]");
-    if (!root) return;
-
-    const pages = Array.from(root.querySelectorAll<HTMLElement>("[data-service-page]"));
-    const prev = document.querySelector<HTMLButtonElement>("[data-service-prev]");
-    const next = document.querySelector<HTMLButtonElement>("[data-service-next]");
-    const indicator = document.querySelector("[data-service-indicator]");
-    if (!prev || !next || !indicator || !pages.length) return;
-
-    let idx = 0;
-
-    const render = () => {
-      pages.forEach((p, i) => {
-        const on = i === idx;
-        p.classList.toggle("is-active", on);
-        p.hidden = !on;
-      });
-      indicator.textContent = `${idx + 1} / ${pages.length}`;
-      prev.disabled = idx === 0;
-      next.disabled = idx === pages.length - 1;
-    };
-
-    prev.onclick = () => {
-      if (idx > 0) {
-        idx -= 1;
-        render();
-      }
-    };
-    next.onclick = () => {
-      if (idx < pages.length - 1) {
-        idx += 1;
-        render();
-      }
-    };
-
-    render();
-  }
-
-  initServicePages();
-  document.addEventListener("astro:page-load", initServicePages);
+  import "../scripts/textScrambleBoot.ts";
 </script>

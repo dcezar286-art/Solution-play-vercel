@@ -9,12 +9,9 @@ import BenefitsRow from "../components/BenefitsRow.astro";
 import HeroShaderBackdrop from "../components/HeroShaderBackdrop.astro";
 import CommercialDottedBackdrop from "../components/CommercialDottedBackdrop.astro";
 import NeuralBackdrop from "../components/NeuralBackdrop.astro";
-import ServicesPathsBackdrop from "../components/ServicesPathsBackdrop.astro";
-import EquipeFallingPatternBackdrop from "../components/EquipeFallingPatternBackdrop.astro";
-import PriceCallout from "../components/PriceCallout.astro";
+import CommercialMSP from "../components/CommercialMSP.astro";
 import { brand, hero, commercial, contact } from "../data/marketingContent";
-import logoUrl from "../../LOGO/SolutionPlay-removebg-preview.png?url";
-import donoUrl from "../../DONO.png?url";
+import logoUrl from "../../LOGO/LOGO BRANCA.png?url";
 ---
 
 <BaseLayout title="Solution Play — Soluções de TI completas" homeSpa={true}>
@@ -35,7 +32,16 @@ import donoUrl from "../../DONO.png?url";
                 <div class="wrap hero-studio-grid hero-studio-grid--single">
                   <div class="hero-studio-copy">
                     <div class="hero-brand-row">
-                      <img class="hero-brand-mark" src={logoUrl} alt="" width="64" height="64" decoding="async" />
+                      <img
+                        class="hero-brand-mark"
+                        src={logoUrl}
+                        alt=""
+                        width="64"
+                        height="64"
+                        decoding="async"
+                        fetchpriority="high"
+                        loading="eager"
+                      />
                       <p class="hero-slogan">
                         Tecnologia que resolve. Soluções que <span class="hero-slogan__accent">impulsionam</span>.
                       </p>
@@ -70,7 +76,6 @@ import donoUrl from "../../DONO.png?url";
 
             <article class="spa-slide" data-slide="services" aria-hidden="true">
               <div class="spa-slide__inner spa-slide__inner--services">
-                <ServicesPathsBackdrop />
                 <div class="services-slide-content">
                   <MarqueeStrip />
                   <ServiceTabs />
@@ -81,22 +86,12 @@ import donoUrl from "../../DONO.png?url";
             <article class="spa-slide" data-slide="commercial" aria-hidden="true">
               <div class="spa-slide__inner section commercial commercial--studio" aria-labelledby="comercial-heading">
                 <CommercialDottedBackdrop />
-                <div class="wrap commercial-inner commercial-inner--above">
-                  <div>
-                    <p class="section-eyebrow">Contratos</p>
-                    <h2 id="comercial-heading">{commercial.headline}</h2>
-                    <PriceCallout />
-                    <p class="price-note">{commercial.note}</p>
-                    <p class="commercial-plans-note">{commercial.plansNote}</p>
-                    <ul class="term-list">
-                      {commercial.terms.map((t) => <li>{t}</li>)}
-                    </ul>
-                  </div>
-                  <div class="note-box">
-                    <p style="margin: 0">
-                      Use a secção <strong>Contato</strong> no menu para falar com a equipa e conhecer condições do
-                      contrato.
-                    </p>
+                <div class="wrap commercial-inner commercial-inner--above commercial-inner--spa">
+                  <div class="commercial-main">
+                    <h2 id="comercial-heading" class="section-eyebrow commercial-page-title">
+                      {commercial.headline}
+                    </h2>
+                    <CommercialMSP />
                   </div>
                 </div>
               </div>
@@ -112,6 +107,10 @@ import donoUrl from "../../DONO.png?url";
                     <p style="color: var(--text-muted); max-width: 48ch">{contact.lead}</p>
                     <ul class="contact-facts">
                       <li>
+                        <strong>E-mail:</strong>{" "}
+                        <a href={`mailto:${brand.email}`}>{brand.email}</a>
+                      </li>
+                      <li>
                         <strong>WhatsApp:</strong>{" "}
                         <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noopener noreferrer">
                           {brand.whatsappDisplay}
@@ -121,37 +120,6 @@ import donoUrl from "../../DONO.png?url";
                     </ul>
                   </div>
                   <LeadForm />
-                </div>
-              </div>
-            </article>
-
-            <article class="spa-slide" data-slide="dono" aria-hidden="true">
-              <div class="spa-slide__inner dono-fiber snap-section--dono equipe-slide" aria-labelledby="dono-heading">
-                <EquipeFallingPatternBackdrop />
-                <div class="wrap dono-fiber__wrap equipe-slide-content">
-                  <p class="section-eyebrow">Equipe</p>
-                  <h2 id="dono-heading" class="dono-fiber__title">Operação em rede</h2>
-                  <p class="dono-fiber__lead">
-                    Efeito inspirado em fibras luminosas — silhueta derivada da fotografia.
-                  </p>
-                  <figure class="dono-fiber__figure" style={`--dono-src: url("${donoUrl}")`}>
-                    <div class="dono-fiber__stage" aria-hidden="true">
-                      <div class="dono-fiber__base"></div>
-                      <div class="dono-fiber__glow"></div>
-                      <div class="dono-fiber__fibers"></div>
-                      <div class="dono-fiber__scan"></div>
-                    </div>
-                    <img
-                      class="dono-fiber__photo"
-                      src={donoUrl}
-                      alt="Profissional Solution Play em ambiente de rede e monitorização"
-                      width="960"
-                      height="640"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <figcaption class="dono-fiber__cap">Infraestrutura e equipes em campo</figcaption>
-                  </figure>
                 </div>
               </div>
             </article>
