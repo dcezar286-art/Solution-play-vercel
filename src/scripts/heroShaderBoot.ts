@@ -230,6 +230,21 @@ let pointers: PointerHandler | null = null;
 let resizeObserver: ResizeObserver | null = null;
 let loopActive = false;
 let unsubSlide: (() => void) | null = null;
+let viewportMq: MediaQueryList | null = null;
+let onViewportChange: (() => void) | null = null;
+
+/** WebGL só no desktop; mobile usa imagem/CSS estática. */
+function shouldInitHeroWebGL(): boolean {
+  if (!shouldRunHeroShader()) return false;
+  if (isMobileViewport()) return false;
+  return true;
+}
+
+function setStaticBackdrop(host: HTMLElement, staticMode: boolean) {
+  host.classList.toggle("hero-shader-host--static", staticMode);
+  const staticEl = host.querySelector<HTMLElement>("[data-hero-shader-static]");
+  if (staticEl) staticEl.hidden = !staticMode;
+}
 
 function measure(canvas: HTMLCanvasElement, host: HTMLElement) {
   const rect = host.getBoundingClientRect();
@@ -250,6 +265,11 @@ function destroyHeroShader() {
   loopActive = false;
   unsubSlide?.();
   unsubSlide = null;
+  if (viewportMq && onViewportChange) {
+    viewportMq.removeEventListener("change", onViewportChange);
+  }
+  viewportMq = null;
+  onViewportChange = null;
   resizeObserver?.disconnect();
   resizeObserver = null;
   renderer?.reset();
@@ -285,14 +305,24 @@ async function initHeroShader() {
   }
 
   const host = document.querySelector<HTMLElement>("[data-hero-shader-host]");
-  host?.classList.toggle("hero-shader-host--static", !shouldRunHeroShader());
+  if (!host) return;
 
-  if (!shouldRunHeroShader()) {
+  const staticMode = !shouldInitHeroWebGL();
+  setStaticBackdrop(host, staticMode);
+
+  if (staticMode) {
     destroyHeroShader();
+    if (!viewportMq) {
+      viewportMq = window.matchMedia("(max-width: 767px)");
+      onViewportChange = () => void initHeroShader();
+      viewportMq.addEventListener("change", onViewportChange);
+    }
+    window.__solutionPlayHeroShaderDestroy = destroyHeroShader;
     return;
   }
+
   const canvas = document.querySelector<HTMLCanvasElement>("[data-hero-shader-canvas]");
-  if (!host || !canvas) return;
+  if (!canvas) return;
 
   destroyHeroShader();
 
@@ -323,6 +353,12 @@ async function initHeroShader() {
       setHeroLoop(id === "hero");
     });
     setHeroLoop(getActiveSpaSlide() === "hero");
+
+    if (!viewportMq) {
+      viewportMq = window.matchMedia("(max-width: 767px)");
+      onViewportChange = () => void initHeroShader();
+      viewportMq.addEventListener("change", onViewportChange);
+    }
 
     window.__solutionPlayHeroShaderDestroy = destroyHeroShader;
   } catch (err) {

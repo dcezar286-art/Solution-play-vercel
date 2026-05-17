@@ -19,6 +19,8 @@ interface Props {
   homeSpa?: boolean;
   /** Preload WebP da logo do hero (LCP). */
   heroLogoPreload?: string;
+  /** Preload do fundo estático do hero. */
+  heroBgPreload?: string;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   homeMotion = false,
   homeSpa = false,
   heroLogoPreload,
+  heroBgPreload,
 } = Astro.props;
 
 const useSnapLayout = snapSections && !homeMotion && !homeSpa;
@@ -66,8 +69,11 @@ const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
     <meta name="twitter:image" content={ogImageUrl} />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {heroBgPreload ? (
+      <link rel="preload" as="image" href={heroBgPreload} type="image/webp" fetchpriority="high" />
+    ) : null}
     {heroLogoPreload ? (
-      <link rel="preload" as="image" href={heroLogoPreload} fetchpriority="high" />
+      <link rel="preload" as="image" href={heroLogoPreload} fetchpriority="low" />
     ) : null}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -90,6 +96,7 @@ const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
           window.__solutionPlayEntropyDestroy?.();
           window.__solutionPlayBeamsDestroy?.();
           window.__solutionPlayHeroShaderDestroy?.();
+          window.__solutionPlayHeroRootsDestroy?.();
           window.__solutionPlayCommercialDottedDestroy?.();
           window.__solutionPlayNeuralDestroy?.();
         }

@@ -6,9 +6,10 @@ import LeadForm from "../components/LeadForm.astro";
 import HomeSpaMotion from "../components/HomeSpaMotion.astro";
 import InteractiveTopNav from "../components/InteractiveTopNav.astro";
 import BenefitsRow from "../components/BenefitsRow.astro";
-import HeroShaderBackdrop from "../components/HeroShaderBackdrop.astro";
+import HeroOutlineSvg from "../components/HeroOutlineSvg.astro";
+import NetworkBackdrop from "../components/NetworkBackdrop.astro";
 import CommercialDottedBackdrop from "../components/CommercialDottedBackdrop.astro";
-import NeuralBackdrop from "../components/NeuralBackdrop.astro";
+import CommercialCornerBeams from "../components/CommercialCornerBeams.astro";
 import CommercialMSP from "../components/CommercialMSP.astro";
 import { getImage } from "astro:assets";
 import BrandLogo from "../components/BrandLogo.astro";
@@ -38,7 +39,11 @@ const organizationSchema = {
 };
 ---
 
-<BaseLayout title={siteSeo.defaultTitle} homeSpa={true} heroLogoPreload={heroLogoPreload}>
+<BaseLayout
+  title={siteSeo.defaultTitle}
+  homeSpa={true}
+  heroLogoPreload={heroLogoPreload}
+>
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
   <div class="spa-layout">
     <InteractiveTopNav />
@@ -48,12 +53,8 @@ const organizationSchema = {
         <div class="spa-viewport">
           <div class="spa-track">
             <article class="spa-slide is-active" data-slide="hero" aria-hidden="false">
-              <div class="spa-slide__inner hero hero--studio" aria-labelledby="hero-heading">
-                <HeroShaderBackdrop />
-                <div class="hero-studio-atmos spa-hero-deco" aria-hidden="true">
-                  <span class="hero-studio-deco hero-studio-deco--mass">INFRA</span>
-                  <span class="hero-studio-deco hero-studio-deco--trace">BGP · MPLS · AD</span>
-                </div>
+              <div class="spa-slide__inner hero hero--studio hero--center" aria-labelledby="hero-heading">
+                <NetworkBackdrop variant="hero" />
                 <div class="wrap hero-studio-grid hero-studio-grid--single">
                   <div class="hero-studio-copy">
                     <div class="hero-brand-row">
@@ -68,27 +69,37 @@ const organizationSchema = {
                         Tecnologia que resolve. Soluções que <span class="hero-slogan__accent">impulsionam</span>.
                       </p>
                     </div>
-                    <h1 id="hero-heading" class="hero-mega">
+
+                    <h1 id="hero-heading" class="hero-mega hero-mega--data-beam">
                       {
-                        hero.headlineLines.map((line) => (
-                          <span
-                            class:list={[
-                              "hero-mega__line",
-                              line.variant === "outline" && "hero-mega__line--outline",
-                              line.variant === "accent" && "hero-mega__line--accent",
-                            ]}
-                          >
-                            {line.text}
-                          </span>
-                        ))
+                        hero.headlineLines.map((line) =>
+                          line.variant === "outline" ? (
+                            <HeroOutlineSvg text={line.text} />
+                          ) : (
+                            <span
+                              class:list={[
+                                "hero-mega__line",
+                                line.variant === "solid" && "hero-mega__line--solid",
+                                line.variant === "accent" && "hero-mega__line--accent",
+                              ]}
+                            >
+                              {line.text}
+                            </span>
+                          ),
+                        )
                       }
                     </h1>
+
                     <p class="hero-lead hero-lead--studio">{hero.lead}</p>
                     <BenefitsRow />
                     <div class="hero-studio-foot">
                       <div class="hero-ctas">
-                        <button type="button" class="btn btn-primary" data-slide-jump="contact">Formulário</button>
-                        <button type="button" class="btn btn-ghost" data-slide-jump="services">Nossos serviços</button>
+                        <button type="button" class="btn btn-primary" data-slide-jump="contact">
+                          Formulário
+                        </button>
+                        <button type="button" class="btn btn-ghost" data-slide-jump="services">
+                          Nossos serviços
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -98,6 +109,7 @@ const organizationSchema = {
 
             <article class="spa-slide" data-slide="services" aria-hidden="true">
               <div class="spa-slide__inner spa-slide__inner--services">
+                <NetworkBackdrop variant="services" />
                 <div class="services-slide-content">
                   <MarqueeStrip />
                   <ServiceTabs />
@@ -108,6 +120,7 @@ const organizationSchema = {
             <article class="spa-slide" data-slide="commercial" aria-hidden="true">
               <div class="spa-slide__inner section commercial commercial--studio" aria-labelledby="comercial-heading">
                 <CommercialDottedBackdrop />
+                <CommercialCornerBeams variant="viewport" />
                 <div class="wrap commercial-inner commercial-inner--above commercial-inner--spa">
                   <div class="commercial-main">
                     <h2 id="comercial-heading" class="section-eyebrow commercial-page-title">
@@ -121,7 +134,7 @@ const organizationSchema = {
 
             <article class="spa-slide" data-slide="contact" aria-hidden="true">
               <div class="spa-slide__inner section lead-section lead-section--studio spa-slide__inner--contact" aria-labelledby="contato-heading">
-                <NeuralBackdrop slide="contact" color="#22d3ee" />
+                <NetworkBackdrop variant="contact" />
                 <div class="wrap lead-grid contact-slide-content">
                   <div class="contact-aside">
                     <p class="section-eyebrow">Contato</p>

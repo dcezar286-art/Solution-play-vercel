@@ -1,8 +1,297 @@
 ---
+/** Fundo de redes: grade + topologia SVG + feixes H/V (CSS puro, sem canvas). */
+
+interface Props {
+  variant?: "hero" | "services" | "contact";
+}
+
+const { variant = "hero" } = Astro.props;
+const hBeams = variant === "contact" ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5];
+const vBeams = variant === "contact" ? [0, 1, 2] : [0, 1, 2, 3, 4];
 ---
 
-<canvas id="network-backdrop" class="network-backdrop" aria-hidden="true"></canvas>
+<div
+  class:list={["network-backdrop", variant !== "hero" && `network-backdrop--${variant}`]}
+  data-network-backdrop={variant}
+  aria-hidden="true"
+>
+  <div class="network-backdrop__mesh" aria-hidden="true"></div>
+  <div class="network-backdrop__mist" aria-hidden="true"></div>
 
-<script>
-  import "../scripts/networkBackdropBoot.ts";
-</script>
+  <svg class="network-backdrop__topology" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke="rgba(34, 211, 238, 0.07)" stroke-width="1">
+      <path d="M80 760 L420 520 L600 420 L780 520 L1120 760" />
+      <path d="M120 780 L380 580 L600 480 L820 580 L1080 780" />
+      <path d="M600 780 L600 380" />
+      <path d="M200 720 L600 440 L1000 720" />
+    </g>
+    <g fill="rgba(29, 158, 117, 0.35)">
+      <circle cx="80" cy="760" r="3" />
+      <circle cx="1120" cy="760" r="3" />
+      <circle cx="600" cy="380" r="4" />
+      <circle cx="420" cy="520" r="2" />
+      <circle cx="780" cy="520" r="2" />
+      <circle cx="200" cy="720" r="2" />
+      <circle cx="1000" cy="720" r="2" />
+    </g>
+  </svg>
+
+  <div class="network-backdrop__beams" aria-hidden="true">
+    {hBeams.map((i) => <span class="network-beam network-beam--h" style={`--i: ${i}`} />)}
+    {vBeams.map((i) => <span class="network-beam network-beam--v" style={`--i: ${i}`} />)}
+  </div>
+
+  <div class="network-backdrop__hubs" aria-hidden="true">
+    <span class="network-hub" style="left: 8%; bottom: 6%"></span>
+    <span class="network-hub" style="left: 50%; bottom: 8%"></span>
+    <span class="network-hub" style="left: 92%; bottom: 6%"></span>
+  </div>
+
+  <div class="network-backdrop__scan" aria-hidden="true"></div>
+  <div class="network-backdrop__vignette" aria-hidden="true"></div>
+</div>
+
+<style>
+  .network-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #060a12;
+  }
+
+  .network-backdrop__mesh {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    background-image:
+      linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px),
+      radial-gradient(circle at center, rgba(29, 158, 117, 0.22) 1px, transparent 1px);
+    background-size: 48px 48px, 48px 48px, 24px 24px;
+    mask-image: radial-gradient(ellipse 92% 88% at 50% 52%, #000 18%, transparent 74%);
+  }
+
+  .network-backdrop__mist {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 65% 45% at 50% 100%, rgba(29, 158, 117, 0.16) 0%, transparent 58%),
+      radial-gradient(ellipse 50% 35% at 12% 92%, rgba(34, 211, 238, 0.07) 0%, transparent 52%),
+      radial-gradient(ellipse 50% 35% at 88% 92%, rgba(34, 211, 238, 0.07) 0%, transparent 52%),
+      radial-gradient(ellipse 100% 80% at 50% 50%, #0a1520 0%, #060a12 78%);
+  }
+
+  .network-backdrop__topology {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.85;
+  }
+
+  .network-backdrop__beams {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .network-beam {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 1px;
+  }
+
+  .network-beam--h {
+    left: -30%;
+    width: 28%;
+    height: 1px;
+    top: calc(12% + var(--i) * 14%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(34, 211, 238, 0.05) 20%,
+      rgba(160, 240, 220, 0.55) 50%,
+      rgba(34, 211, 238, 0.05) 80%,
+      transparent 100%
+    );
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
+    animation: network-beam-h 9s linear infinite;
+    animation-delay: calc(var(--i) * -1.45s);
+    opacity: 0;
+  }
+
+  .network-beam--v {
+    top: -20%;
+    width: 1px;
+    height: 22%;
+    left: calc(10% + var(--i) * 18%);
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(29, 158, 117, 0.08) 25%,
+      rgba(180, 255, 235, 0.5) 50%,
+      rgba(29, 158, 117, 0.08) 75%,
+      transparent 100%
+    );
+    box-shadow: 0 0 10px rgba(29, 158, 117, 0.2);
+    animation: network-beam-v 11s linear infinite;
+    animation-delay: calc(var(--i) * -1.9s);
+    opacity: 0;
+  }
+
+  @keyframes network-beam-h {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.45;
+    }
+    92% {
+      opacity: 0.4;
+    }
+    100% {
+      transform: translateX(420%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes network-beam-v {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.4;
+    }
+    90% {
+      opacity: 0.35;
+    }
+    100% {
+      transform: translateY(520%);
+      opacity: 0;
+    }
+  }
+
+  .network-backdrop__hubs {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .network-hub {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: 50%;
+    background: rgba(29, 158, 117, 0.35);
+    box-shadow:
+      0 0 0 3px rgba(29, 158, 117, 0.08),
+      0 0 14px rgba(34, 211, 238, 0.35);
+    animation: network-hub-pulse 4s ease-in-out infinite;
+  }
+
+  .network-hub:nth-child(2) {
+    animation-delay: -1.3s;
+  }
+
+  .network-hub:nth-child(3) {
+    animation-delay: -2.6s;
+  }
+
+  @keyframes network-hub-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.15);
+      opacity: 1;
+    }
+  }
+
+  .network-backdrop__scan {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    opacity: 0.035;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(34, 211, 238, 0.12) 2px,
+      rgba(34, 211, 238, 0.12) 3px
+    );
+    pointer-events: none;
+  }
+
+  .network-backdrop__vignette {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 42%, transparent 0%, rgba(6, 10, 18, 0.42) 100%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.48) 0%, transparent 22%, transparent 70%, rgba(6, 10, 18, 0.28) 100%);
+  }
+
+  /* Serviços / Contato: mais suave para leitura do conteúdo */
+  .network-backdrop--services .network-backdrop__mesh,
+  .network-backdrop--contact .network-backdrop__mesh {
+    opacity: 0.42;
+  }
+
+  .network-backdrop--services .network-backdrop__topology,
+  .network-backdrop--contact .network-backdrop__topology {
+    opacity: 0.72;
+  }
+
+  .network-backdrop--services .network-backdrop__vignette {
+    background:
+      radial-gradient(ellipse 75% 60% at 50% 38%, transparent 0%, rgba(6, 10, 18, 0.5) 100%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.55) 0%, transparent 18%, transparent 75%, rgba(6, 10, 18, 0.35) 100%);
+  }
+
+  .network-backdrop--contact .network-backdrop__vignette {
+    background:
+      radial-gradient(ellipse 78% 62% at 50% 45%, transparent 0%, rgba(6, 10, 18, 0.55) 100%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.5) 0%, transparent 20%, transparent 72%, rgba(6, 10, 18, 0.38) 100%);
+  }
+
+  .network-backdrop--contact .network-beam--h {
+    animation-duration: 11s;
+  }
+
+  .network-backdrop--contact .network-beam--v {
+    animation-duration: 13s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .network-beam--h,
+    .network-beam--v {
+      animation: none;
+      opacity: 0.12;
+    }
+
+    .network-beam--h {
+      left: 20%;
+      width: 60%;
+    }
+
+    .network-beam--v {
+      top: 30%;
+      height: 40%;
+    }
+
+    .network-hub {
+      animation: none;
+      opacity: 0.7;
+    }
+  }
+</style>

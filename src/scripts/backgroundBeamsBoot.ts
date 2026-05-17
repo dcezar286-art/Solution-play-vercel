@@ -5,6 +5,7 @@ declare global {
 }
 
 import { backgroundBeamCount, prefersReducedMotion } from "./deviceProfile";
+import { getActiveSpaSlide, onSpaSlideChange } from "./spaSlideEvents";
 import { runAfterNextPaint } from "./scheduleFrame";
 
 function destroyBackgroundBeams() {
@@ -12,12 +13,9 @@ function destroyBackgroundBeams() {
   delete window.__solutionPlayBeamsDestroy;
 }
 
-function initBackgroundBeams() {
-  if (!document.documentElement.classList.contains("home-spa")) {
-    destroyBackgroundBeams();
-    return;
-  }
+let unsubBeamsSlide: (() => void) | null = null;
 
+function paintBackgroundBeams() {
   const beamCount = backgroundBeamCount();
   if (prefersReducedMotion() || beamCount === 0) return;
 
@@ -46,6 +44,30 @@ function initBackgroundBeams() {
 
   stream.appendChild(fragment);
   window.__solutionPlayBeamsDestroy = destroyBackgroundBeams;
+}
+
+function syncBackgroundBeams() {
+  const slide = getActiveSpaSlide();
+  if (slide === "hero" || slide === "services" || slide === "commercial" || slide === "contact") {
+    destroyBackgroundBeams();
+    return;
+  }
+  paintBackgroundBeams();
+}
+
+function initBackgroundBeams() {
+  if (!document.documentElement.classList.contains("home-spa")) {
+    destroyBackgroundBeams();
+    unsubBeamsSlide?.();
+    unsubBeamsSlide = null;
+    return;
+  }
+
+  if (!unsubBeamsSlide) {
+    unsubBeamsSlide = onSpaSlideChange(() => runAfterNextPaint(syncBackgroundBeams));
+  }
+
+  syncBackgroundBeams();
 }
 
 void runAfterNextPaint(initBackgroundBeams);

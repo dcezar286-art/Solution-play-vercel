@@ -1,5 +1,6 @@
 ---
 import { commercial, mspPlans, oneOffServices } from "../data/marketingContent";
+import CommercialCornerBeams from "./CommercialCornerBeams.astro";
 ---
 
 <div class="commercial-msp">
@@ -14,7 +15,9 @@ import { commercial, mspPlans, oneOffServices } from "../data/marketingContent";
     <p class="price-note price-note--muted">{commercial.paymentNote}</p>
   </div>
 
-  <div class="commercial-msp__cards">
+  <div class="commercial-msp__cards-stage">
+    <CommercialCornerBeams variant="frame" />
+    <div class="commercial-msp__cards">
     <div class="tilt-shell" data-tilt-card>
       <div class="commercial-card commercial-card--plans">
         <p class="commercial-card__label">Planos mensais (MSP)</p>
@@ -73,6 +76,7 @@ import { commercial, mspPlans, oneOffServices } from "../data/marketingContent";
           </table>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </div>
