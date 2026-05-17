@@ -726,7 +726,7 @@ html.home-spa .commercial--studio h2.commercial-page-title.section-eyebrow {
 .commercial-msp__cards-stage {
   position: relative;
   width: 100%;
-  max-width: 1040px;
+  max-width: min(1240px, 100%);
   margin-inline: auto;
   padding: 1rem 0.35rem;
 }
@@ -735,10 +735,19 @@ html.home-spa .commercial--studio h2.commercial-page-title.section-eyebrow {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
-  gap: 0.95rem 1.05rem;
-  align-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem 1rem;
+  align-items: stretch;
   width: 100%;
+}
+
+/* Terceiro card (políticas) em linha própria — planos e avulsos com largura total */
+@media (min-width: 1101px) {
+  .commercial-msp__cards > .tilt-shell:last-child {
+    grid-column: 1 / -1;
+    width: min(100%, 40rem);
+    justify-self: center;
+  }
 }
 
 .tilt-shell {
@@ -765,14 +774,48 @@ html.home-spa .commercial--studio h2.commercial-page-title.section-eyebrow {
   box-shadow: none;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1100px) {
   .commercial-msp__cards {
     grid-template-columns: 1fr;
   }
+}
 
+@media (max-width: 720px) {
   .commercial-msp__cards-stage {
     padding: 0.75rem 0.15rem;
   }
+}
+
+.commercial-card--policies {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.commercial-policy-list {
+  margin: 0.65rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.commercial-policy__heading {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-mega);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(94, 234, 212, 0.92);
+}
+
+.commercial-policy__text {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.05vw, 0.88rem);
+  line-height: 1.55;
+  color: rgba(203, 213, 225, 0.88);
 }
 
 .commercial-card {
@@ -809,20 +852,65 @@ html.home-spa .commercial--studio h2.commercial-page-title.section-eyebrow {
 .commercial-card__table {
   margin-top: 0.55rem;
   border-radius: 12px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
   border: 1px solid rgba(34, 211, 238, 0.16);
   background: rgba(0, 8, 18, 0.55);
 }
 
 .commercial-card__table .data-table {
-  font-size: clamp(0.76rem, 1.05vw, 0.88rem);
+  table-layout: fixed;
+  width: 100%;
+  font-size: clamp(0.72rem, 0.9vw, 0.84rem);
 }
 
-.data-table--msp th:nth-child(2),
-.data-table--msp td:nth-child(2) {
-  white-space: nowrap;
+.commercial-card--plans .data-table--msp th,
+.commercial-card--plans .data-table--msp td,
+.commercial-card--avulsos .data-table--compact th,
+.commercial-card--avulsos .data-table--compact td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+  padding: 0.5rem 0.4rem;
+  vertical-align: top;
+}
+
+.commercial-card--plans .data-table--msp thead th {
+  font-size: clamp(0.52rem, 0.75vw, 0.62rem);
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+}
+
+.commercial-card--plans .data-table--msp th:nth-child(1) {
+  width: 26%;
+}
+
+.commercial-card--plans .data-table--msp th:nth-child(2) {
+  width: 34%;
+}
+
+.commercial-card--plans .data-table--msp th:nth-child(3) {
+  width: 40%;
+}
+
+.commercial-card--plans .data-table--msp td:nth-child(2) {
+  white-space: normal;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.commercial-card--avulsos .data-table--compact th:nth-child(1) {
+  width: 56%;
+}
+
+.commercial-card--avulsos .data-table--compact th:nth-child(2) {
+  width: 44%;
+}
+
+.commercial-card--avulsos .data-table--compact th:last-child,
+.commercial-card--avulsos .data-table--compact td:last-child {
+  white-space: normal;
+  text-align: right;
 }
 
 @media (max-width: 767px) {
@@ -3775,12 +3863,7 @@ html.home-spa .spa-slide[data-slide="hero"] .hero-ctas {
 html.home-spa .spa-slide[data-slide="commercial"] .spa-slide__inner {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    rgba(3, 3, 8, 0.02) 0%,
-    rgba(3, 3, 8, 0.12) 55%,
-    rgba(3, 3, 8, 0.22) 100%
-  );
+  background: transparent;
 }
 
 html[data-spa-slide="commercial"] .spa-bg-effects {

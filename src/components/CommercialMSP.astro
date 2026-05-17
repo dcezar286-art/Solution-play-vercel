@@ -1,5 +1,5 @@
 ---
-import { commercial, mspPlans, oneOffServices } from "../data/marketingContent";
+import { commercial, commercialPolicies, mspPlans, oneOffServices } from "../data/marketingContent";
 import CommercialCornerBeams from "./CommercialCornerBeams.astro";
 ---
 
@@ -18,65 +18,81 @@ import CommercialCornerBeams from "./CommercialCornerBeams.astro";
   <div class="commercial-msp__cards-stage">
     <CommercialCornerBeams variant="frame" />
     <div class="commercial-msp__cards">
-    <div class="tilt-shell" data-tilt-card>
-      <div class="commercial-card commercial-card--plans">
-        <p class="commercial-card__label">Planos mensais (MSP)</p>
-        <div class="commercial-card__table">
-          <table class="data-table data-table--msp">
-            <caption class="visually-hidden">
-              Planos de serviços gerenciados: investimento mensal e abrangência por plano
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Plano</th>
-                <th scope="col">Investimento</th>
-                <th scope="col">Abrangência</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                mspPlans.map((p) => (
-                  <tr>
-                    <td data-label="Plano">
-                      <strong>{p.name}</strong>
-                    </td>
-                    <td data-label="Investimento">{p.price}</td>
-                    <td data-label="Abrangência">{p.scope}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+      <div class="tilt-shell" data-tilt-card>
+        <div class="commercial-card commercial-card--plans">
+          <p class="commercial-card__label">Planos mensais (MSP)</p>
+          <div class="commercial-card__table">
+            <table class="data-table data-table--msp">
+              <caption class="visually-hidden">
+                Planos de serviços gerenciados: investimento mensal e abrangência por plano
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Plano</th>
+                  <th scope="col">Investimento</th>
+                  <th scope="col">Abrangência</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  mspPlans.map((p) => (
+                    <tr>
+                      <td data-label="Plano">
+                        <strong>{p.name}</strong>
+                      </td>
+                      <td data-label="Investimento">{p.price}</td>
+                      <td data-label="Abrangência">{p.scope}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="tilt-shell" data-tilt-card>
-      <div class="commercial-card commercial-card--avulsos">
-        <h3 class="commercial-card__title">Serviços avulsos</h3>
-        <div class="commercial-card__table">
-          <table class="data-table data-table--compact">
-            <caption class="visually-hidden">Serviços pontuais e valores a partir de</caption>
-            <thead>
-              <tr>
-                <th scope="col">Serviço</th>
-                <th scope="col">Valor a partir de</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                oneOffServices.map((row) => (
-                  <tr>
-                    <td data-label="Serviço">{row.title}</td>
-                    <td data-label="Valor">{row.price}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+      <div class="tilt-shell" data-tilt-card>
+        <div class="commercial-card commercial-card--avulsos">
+          <h3 class="commercial-card__title">Serviços avulsos</h3>
+          <div class="commercial-card__table">
+            <table class="data-table data-table--compact">
+              <caption class="visually-hidden">Serviços pontuais e valores a partir de</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Serviço</th>
+                  <th scope="col">A partir de</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  oneOffServices.map((row) => (
+                    <tr>
+                      <td data-label="Serviço">{row.title}</td>
+                      <td data-label="Valor">{row.price}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+
+      <div class="tilt-shell" data-tilt-card>
+        <div class="commercial-card commercial-card--policies">
+          <h3 class="commercial-card__title">{commercialPolicies.title}</h3>
+          <ul class="commercial-policy-list">
+            {
+              commercialPolicies.items.map((item) => (
+                <li class="commercial-policy">
+                  <p class="commercial-policy__heading">{item.heading}</p>
+                  <p class="commercial-policy__text">{item.body}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>

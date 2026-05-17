@@ -140,6 +140,25 @@ export const commercial = {
   terms: ["6 meses", "1 ano", "2 anos"],
 } as const;
 
+/** Garantias e licenciamento — card Contratos (solicitação do cliente). */
+export const commercialPolicies = {
+  title: "Garantias e licenciamento",
+  items: [
+    {
+      id: "warranty",
+      heading: "Garantia de equipamentos",
+      body:
+        "A garantia de hardware, periféricos e demais equipamentos de terceiros é de responsabilidade exclusiva do fabricante ou fornecedor original. A Solution Play orienta e apoia na abertura de chamados junto ao fabricante, mas não oferece garantia própria sobre equipamentos que não comercializa.",
+    },
+    {
+      id: "software",
+      heading: "Software original e licenciado",
+      body:
+        "Nossos serviços utilizam apenas software adquirido de forma legal, com licenças originais dos fabricantes. Não realizamos ativação indevida, cracking, bypass ou qualquer forma de burla de licenciamento.",
+    },
+  ],
+} as const;
+
 export const contact = {
   badge: "Atendimento especializado",
   headline: "Próximo passo",

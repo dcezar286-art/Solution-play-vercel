@@ -8,7 +8,6 @@ import InteractiveTopNav from "../components/InteractiveTopNav.astro";
 import BenefitsRow from "../components/BenefitsRow.astro";
 import HeroOutlineSvg from "../components/HeroOutlineSvg.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
-import CommercialDottedBackdrop from "../components/CommercialDottedBackdrop.astro";
 import CommercialCornerBeams from "../components/CommercialCornerBeams.astro";
 import CommercialMSP from "../components/CommercialMSP.astro";
 import { getImage } from "astro:assets";
@@ -119,7 +118,7 @@ const organizationSchema = {
 
             <article class="spa-slide" data-slide="commercial" aria-hidden="true">
               <div class="spa-slide__inner section commercial commercial--studio" aria-labelledby="comercial-heading">
-                <CommercialDottedBackdrop />
+                <NetworkBackdrop variant="commercial" />
                 <CommercialCornerBeams variant="viewport" />
                 <div class="wrap commercial-inner commercial-inner--above commercial-inner--spa">
                   <div class="commercial-main">

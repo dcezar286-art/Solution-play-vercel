@@ -2,12 +2,13 @@
 /** Fundo de redes: grade + topologia SVG + feixes H/V (CSS puro, sem canvas). */
 
 interface Props {
-  variant?: "hero" | "services" | "contact";
+  variant?: "hero" | "services" | "contact" | "commercial";
 }
 
 const { variant = "hero" } = Astro.props;
-const hBeams = variant === "contact" ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5];
-const vBeams = variant === "contact" ? [0, 1, 2] : [0, 1, 2, 3, 4];
+const hBeams =
+  variant === "contact" || variant === "commercial" ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5];
+const vBeams = variant === "contact" || variant === "commercial" ? [0, 1, 2] : [0, 1, 2, 3, 4];
 ---
 
 <div
@@ -241,15 +242,31 @@ const vBeams = variant === "contact" ? [0, 1, 2] : [0, 1, 2, 3, 4];
       linear-gradient(180deg, rgba(6, 10, 18, 0.48) 0%, transparent 22%, transparent 70%, rgba(6, 10, 18, 0.28) 100%);
   }
 
-  /* Serviços / Contato: mais suave para leitura do conteúdo */
+  /* Serviços / Contato / Contratos: mais suave para leitura do conteúdo */
   .network-backdrop--services .network-backdrop__mesh,
-  .network-backdrop--contact .network-backdrop__mesh {
+  .network-backdrop--contact .network-backdrop__mesh,
+  .network-backdrop--commercial .network-backdrop__mesh {
     opacity: 0.42;
   }
 
   .network-backdrop--services .network-backdrop__topology,
-  .network-backdrop--contact .network-backdrop__topology {
+  .network-backdrop--contact .network-backdrop__topology,
+  .network-backdrop--commercial .network-backdrop__topology {
     opacity: 0.72;
+  }
+
+  .network-backdrop--commercial .network-backdrop__vignette {
+    background:
+      radial-gradient(ellipse 75% 60% at 50% 40%, transparent 0%, rgba(6, 10, 18, 0.52) 100%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.52) 0%, transparent 18%, transparent 75%, rgba(6, 10, 18, 0.36) 100%);
+  }
+
+  .network-backdrop--commercial .network-beam--h {
+    animation-duration: 11s;
+  }
+
+  .network-backdrop--commercial .network-beam--v {
+    animation-duration: 13s;
   }
 
   .network-backdrop--services .network-backdrop__vignette {
