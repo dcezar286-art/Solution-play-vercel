@@ -3700,6 +3700,10 @@ html.home-spa .spa-hero-deco {
 }
 
 @media (max-width: 767px) {
+  html.home-spa .spa-viewport {
+    touch-action: pan-y pinch-zoom;
+  }
+
   .hero-shader-host {
     pointer-events: none;
   }
@@ -4037,7 +4041,8 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
 
 @media (max-width: 899px) {
   html.home-spa {
-    --spa-topbar-h: 4.25rem;
+    /* Header em 2 linhas (logo + menu) — 4.25rem cortava o conteúdo do hero */
+    --spa-topbar-h: calc(6.85rem + env(safe-area-inset-top, 0px));
   }
 
   .spa-topbar {
@@ -4045,6 +4050,7 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
     grid-template-rows: auto auto;
     height: auto;
     min-height: var(--spa-topbar-h);
+    padding-top: max(0.55rem, env(safe-area-inset-top, 0px));
     padding-bottom: 0.5rem;
   }
 
@@ -4101,5 +4107,52 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
 
   .card-grid--spa {
     grid-template-columns: 1fr;
+  }
+
+  /* Início — evita logo duplicado e conteúdo escondido atrás do header */
+  html.home-spa .spa-slide[data-slide="hero"] .spa-slide__inner.hero--studio {
+    justify-content: flex-start;
+    padding-top: 0.35rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  html.home-spa .spa-slide[data-slide="hero"] .hero-brand-mark {
+    display: none;
+  }
+
+  html.home-spa .spa-slide[data-slide="hero"] .hero-brand-row {
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+    justify-content: center;
+  }
+
+  html.home-spa .spa-slide[data-slide="hero"] .hero-slogan {
+    font-size: 0.82rem;
+    max-width: 18rem;
+    text-align: center;
+  }
+
+  html.home-spa .spa-slide[data-slide="hero"] .benefits-row {
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+  }
+
+  html.home-spa .spa-slide[data-slide="hero"] .benefits-row__item {
+    padding: 0.5rem 0.55rem;
+  }
+
+  /* Serviços — cards empilhados sem “vão” de 48vh entre planos */
+  .msp-plan-list {
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+  }
+
+  .section--spa-services .sp-wrap {
+    min-height: 0;
+  }
+
+  .section--spa-services .sp-card {
+    padding: 1rem 0.9rem;
   }
 }

@@ -19,6 +19,11 @@ type SlideId = (typeof SLIDE_IDS)[number];
 let currentIndex = 0;
 let isAnimating = false;
 let ctx: gsap.Context | null = null;
+let swipeTeardown: (() => void) | null = null;
+
+const SWIPE_MIN_PX = 52;
+const SWIPE_MAX_MS = 650;
+const SWIPE_HORIZONTAL_RATIO = 1.15;
 
 function setSlideVisibility(slides: NodeListOf<HTMLElement>, activeIndex: number) {
   slides.forEach((slide, i) => {
@@ -89,6 +94,71 @@ async function goToSlide(index: number) {
     );
 }
 
+function isSwipeExcludedTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof Element)) return true;
+  return !!target.closest(
+    "input, textarea, select, option, button, a, label, .interactive-menu, .spa-topbar, [data-no-swipe]"
+  );
+}
+
+function bindSwipeNavigation() {
+  swipeTeardown?.();
+  swipeTeardown = null;
+
+  const root = document.querySelector<HTMLElement>(".spa-viewport");
+  if (!root) return;
+
+  let startX = 0;
+  let startY = 0;
+  let startTime = 0;
+  let tracking = false;
+
+  const onTouchStart = (e: TouchEvent) => {
+    if (!isMobileViewport() || isAnimating || e.touches.length !== 1) return;
+    if (isSwipeExcludedTarget(e.target)) return;
+
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    startTime = Date.now();
+    tracking = true;
+  };
+
+  const onTouchEnd = (e: TouchEvent) => {
+    if (!tracking) return;
+    tracking = false;
+
+    if (!isMobileViewport() || isAnimating) return;
+    if (isSwipeExcludedTarget(e.target)) return;
+
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    const elapsed = Date.now() - startTime;
+
+    if (elapsed > SWIPE_MAX_MS) return;
+    if (Math.abs(dx) < SWIPE_MIN_PX) return;
+    if (Math.abs(dy) * SWIPE_HORIZONTAL_RATIO > Math.abs(dx)) return;
+
+    if (dx < 0) void goToSlide(Math.min(currentIndex + 1, SLIDE_IDS.length - 1));
+    else void goToSlide(Math.max(currentIndex - 1, 0));
+  };
+
+  const onTouchCancel = () => {
+    tracking = false;
+  };
+
+  root.addEventListener("touchstart", onTouchStart, { passive: true });
+  root.addEventListener("touchend", onTouchEnd, { passive: true });
+  root.addEventListener("touchcancel", onTouchCancel, { passive: true });
+
+  swipeTeardown = () => {
+    root.removeEventListener("touchstart", onTouchStart);
+    root.removeEventListener("touchend", onTouchEnd);
+    root.removeEventListener("touchcancel", onTouchCancel);
+  };
+}
+
 function bindNavigation() {
   document.querySelectorAll<HTMLElement>("[data-slide-jump]").forEach((el) => {
     el.addEventListener("click", (e) => {
@@ -114,6 +184,8 @@ function bindNavigation() {
 }
 
 export function destroySpaSlides() {
+  swipeTeardown?.();
+  swipeTeardown = null;
   ctx?.revert();
   ctx = null;
   window.__solutionPlayLenisDestroy?.();
@@ -147,6 +219,7 @@ export async function initSpaSlides() {
   setMenuActive(startIndex);
   emitSpaSlideChange(startScene);
   bindNavigation();
+  bindSwipeNavigation();
 
   if (startIndex !== 0) {
     const gsap = await loadGsap();
