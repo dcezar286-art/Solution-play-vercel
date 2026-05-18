@@ -14,6 +14,7 @@
   --font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: "Sora", var(--font);
   --font-mega: "Syne", var(--font-display);
+  --font-network: "Oxanium", var(--font-mega);
 }
 
 *,
@@ -1800,50 +1801,103 @@ html.home-spa [data-slide="commercial"] .commercial-msp__below .commercial-msp__
 
 .benefits-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 0.8rem;
   margin: 0 0 1.5rem;
   padding: 0;
   list-style: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
   .benefits-row {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
   }
 }
 
 .benefits-row__item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.55rem;
-  padding: 0.65rem 0.75rem;
+  display: grid;
+  flex: 1 1 auto;
+  align-items: center;
+  min-width: 140px;
+  height: auto;
+  overflow: visible;
+  padding: 0.95rem 1rem;
   border-radius: 12px;
-  border: 1px solid rgba(94, 234, 212, 0.15);
-  background: rgba(8, 16, 28, 0.45);
+  border: 2px solid rgba(94, 234, 212, 0.34);
+  background: rgba(8, 16, 28, 0.2);
+}
+
+.benefits-row__body {
+  display: grid;
+  gap: 0.34rem;
+  justify-items: center;
+  align-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+  overflow: visible;
+  text-align: center;
+}
+
+.benefits-row__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  column-gap: 0.62rem;
 }
 
 .benefits-row__icon {
+  display: grid;
+  place-items: center;
   flex-shrink: 0;
-  color: var(--accent);
-  margin-top: 0.1rem;
+  width: clamp(1.05rem, 1.5vw, 1.3rem);
+  min-width: clamp(1.05rem, 1.5vw, 1.3rem);
+  height: clamp(1.05rem, 1.5vw, 1.3rem);
+  color: rgba(245, 250, 255, 0.92);
+  margin: 0 auto 0.12rem;
+}
+
+.benefits-row__icon-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.95;
 }
 
 .benefits-row__item strong {
   display: block;
-  font-size: 0.72rem;
+  font-size: clamp(0.72rem, 1.12vw, 0.9rem);
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: #fff;
-  margin-bottom: 0.15rem;
+  color: rgba(250, 252, 255, 0.97);
+  margin: 0;
+  line-height: 1.2;
+  min-height: 0;
+  white-space: normal;
+  overflow: visible;
+  text-align: center;
 }
 
 .benefits-row__item span {
   display: block;
-  font-size: 0.78rem;
-  color: var(--text-muted);
+  font-size: clamp(0.66rem, 0.9vw, 0.78rem);
+  color: rgba(236, 242, 252, 0.9);
   line-height: 1.35;
+  margin: 0;
+  white-space: normal;
+  overflow: visible;
+  text-align: center;
+}
+
+@media (min-width: 1200px) {
+  .benefits-row__item strong {
+    font-size: clamp(0.74rem, 0.72vw, 0.92rem);
+    letter-spacing: 0.03em;
+  }
+
+  .benefits-row__item span {
+    font-size: clamp(0.66rem, 0.62vw, 0.8rem);
+  }
+
 }
 
 .price-callout {
@@ -2145,60 +2199,120 @@ html.home-spa [data-slide="commercial"] .commercial-msp__below .commercial-msp__
   isolation: isolate;
 }
 
-.hero-mega__line--outline-svg {
+/* Outline wireframe — "COMPLETAS PARA SUA" com vibe de rede */
+.hero-mega__line--network {
   display: block;
   width: 100%;
   max-width: 100%;
-  margin: 0;
-  line-height: 0;
+  line-height: 0.95;
   overflow: visible;
 }
 
-.hero-outline-svg {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  min-height: clamp(2rem, 8.8vw, 4.75rem);
-  margin-inline: auto;
-  overflow: visible;
-}
-
-.hero-outline-svg__text {
-  font-family: var(--font-mega);
+.hero-network-text {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-network);
   font-weight: 700;
-  font-size: 76px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.35px rgba(94, 234, 212, 0.88);
+  text-shadow:
+    0 0 2px rgba(29, 158, 117, 0.28),
+    0 0 8px rgba(94, 234, 212, 0.18);
+  animation: heroNetworkPulse 4.2s ease-in-out infinite;
 }
 
-.hero-outline-svg__text--base {
-  color: rgba(94, 234, 212, 0.45);
+.hero-network-text::before {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 52%;
+  height: 2px;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(94, 234, 212, 0.12) 18%,
+    rgba(94, 234, 212, 0.4) 50%,
+    rgba(34, 211, 238, 0.2) 72%,
+    transparent 100%
+  );
+  opacity: 0.75;
+  filter: drop-shadow(0 0 3px rgba(94, 234, 212, 0.32));
+  animation: heroNetworkBeamSweep 5.6s linear infinite;
+  pointer-events: none;
 }
 
-.hero-outline-svg__text--beam {
-  color: #5eead4;
-  stroke-dasharray: 72 3200;
-  filter: drop-shadow(0 0 6px rgba(94, 234, 212, 0.85));
-  animation: heroOutlineStrokeFlow 8.5s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+.hero-network-text::after {
+  content: "";
+  position: absolute;
+  left: -1%;
+  right: -1%;
+  top: 52%;
+  height: 7px;
+  transform: translateY(-50%);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(94, 234, 212, 0.92) 0 2px, transparent 3px),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10px,
+      rgba(94, 234, 212, 0.52) 10px 12px,
+      transparent 12px 22px
+    );
+  background-size: 220% 100%, auto;
+  opacity: 0.7;
+  animation: heroNetworkDataPackets 3.8s linear infinite;
+  pointer-events: none;
 }
 
-@keyframes heroOutlineStrokeFlow {
+@keyframes heroNetworkPulse {
   0%,
-  24% {
-    stroke-dashoffset: 3272;
-    opacity: 0;
-  }
-  26% {
-    opacity: 1;
-  }
-  54% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  62%,
   100% {
-    stroke-dashoffset: 0;
-    opacity: 0;
+    -webkit-text-stroke-color: rgba(94, 234, 212, 0.76);
+    text-shadow:
+      0 0 2px rgba(29, 158, 117, 0.22),
+      0 0 6px rgba(94, 234, 212, 0.14);
+  }
+
+  50% {
+    -webkit-text-stroke-color: rgba(94, 234, 212, 0.96);
+    text-shadow:
+      0 0 3px rgba(29, 158, 117, 0.35),
+      0 0 10px rgba(94, 234, 212, 0.24),
+      0 0 14px rgba(34, 211, 238, 0.14);
+  }
+}
+
+@keyframes heroNetworkBeamSweep {
+  0% {
+    transform: translate(-7%, -50%);
+    opacity: 0.22;
+  }
+  14%,
+  85% {
+    opacity: 0.78;
+  }
+  100% {
+    transform: translate(7%, -50%);
+    opacity: 0.22;
+  }
+}
+
+@keyframes heroNetworkDataPackets {
+  0% {
+    background-position: 200% 0, 0 0;
+    opacity: 0.3;
+  }
+  35%,
+  65% {
+    opacity: 0.82;
+  }
+  100% {
+    background-position: -20% 0, -22px 0;
+    opacity: 0.3;
   }
 }
 
@@ -2846,7 +2960,9 @@ html.snap-site-html .hero.hero--studio.snap-section {
   .hero-stagger--aside,
   #hero-heading:not(.hero-mega),
   .hero-mega__line,
-  .hero-outline-svg__text--beam,
+  .hero-network-text,
+  .hero-network-text::before,
+  .hero-network-text::after,
   .hero-studio-deco,
   .marquee-strip__inner,
   .grain-overlay,
@@ -3779,20 +3895,15 @@ html.home-spa .spa-slide[data-slide="hero"] .hero-mega--data-beam {
     letter-spacing: -0.02em;
   }
 
-  .hero-outline-svg__text {
-    font-size: clamp(40px, 10.5vw, 62px);
-    letter-spacing: 0.02em;
-  }
-
-  .hero-outline-svg {
-    min-height: clamp(1.75rem, 9vw, 2.65rem);
+  .hero-network-text {
+    -webkit-text-stroke-width: 1.15px;
   }
 }
 
 @media (max-width: 420px) {
-  .hero-outline-svg__text {
-    font-size: clamp(34px, 9.2vw, 48px);
-    letter-spacing: 0.01em;
+  .hero-network-text {
+    -webkit-text-stroke-width: 1.02px;
+    letter-spacing: 0.045em;
   }
 }
 
@@ -3819,7 +3930,7 @@ html.home-spa .spa-slide[data-slide="hero"] .hero-lead--studio {
 }
 
 html.home-spa .spa-slide[data-slide="hero"] .benefits-row {
-  max-width: 36rem;
+  max-width: min(100%, 56rem);
   margin-inline: auto;
 }
 
@@ -4134,12 +4245,12 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
   }
 
   html.home-spa .spa-slide[data-slide="hero"] .benefits-row {
-    gap: 0.45rem;
+    gap: 0.55rem;
     margin-bottom: 1rem;
   }
 
   html.home-spa .spa-slide[data-slide="hero"] .benefits-row__item {
-    padding: 0.5rem 0.55rem;
+    padding: 0.62rem 0.7rem;
   }
 
   /* Serviços — cards empilhados sem “vão” de 48vh entre planos */

@@ -14,12 +14,12 @@ const icons: Record<string, string> = {
   {
     benefits.map((b) => (
       <li class="benefits-row__item">
-        <span class="benefits-row__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
-            <path d={icons[b.icon]} />
-          </svg>
-        </span>
-        <div>
+        <div class="benefits-row__body">
+          <span class="benefits-row__icon" aria-hidden="true">
+            <svg class="benefits-row__icon-svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d={icons[b.icon]} />
+            </svg>
+          </span>
           <strong>{b.title}</strong>
           <span>{b.desc}</span>
         </div>
