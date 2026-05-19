@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --bg-deep: #030308;
   --bg-panel: rgba(10, 14, 28, 0.78);
@@ -1800,18 +1802,9 @@ html.home-spa [data-slide="commercial"] .commercial-msp__below .commercial-msp__
 }
 
 .benefits-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(140px, 1fr));
-  gap: 0.8rem;
   margin: 0 0 1.5rem;
   padding: 0;
   list-style: none;
-}
-
-@media (min-width: 1200px) {
-  .benefits-row {
-    grid-template-columns: repeat(4, minmax(140px, 1fr));
-  }
 }
 
 .benefits-row__item {
@@ -3858,20 +3851,16 @@ html.home-spa .spa-slide[data-slide="hero"] .spa-slide__inner.hero--studio {
   background: transparent;
 }
 
-html.home-spa .spa-slide[data-slide="hero"] .hero-studio-grid,
+html.home-spa .spa-slide[data-slide="hero"] .hero-center-shell,
 html.home-spa .spa-slide[data-slide="hero"] .hero-studio-copy {
   position: relative;
   z-index: 2;
 }
 
 /* Hero SPA: conteúdo centralizado */
-html.home-spa .spa-slide[data-slide="hero"] .wrap.hero-studio-grid {
+html.home-spa .spa-slide[data-slide="hero"] .hero-center-shell {
   margin-inline: auto;
-  width: min(1120px, 100% - 2rem);
-}
-
-html.home-spa .spa-slide[data-slide="hero"] .hero-studio-grid--single {
-  max-width: 44rem;
+  width: 100%;
 }
 
 html.home-spa .spa-slide[data-slide="hero"] .hero-mega--data-beam {
@@ -3882,14 +3871,6 @@ html.home-spa .spa-slide[data-slide="hero"] .hero-mega--data-beam {
 }
 
 @media (max-width: 767px) {
-  html.home-spa .spa-slide[data-slide="hero"] .wrap.hero-studio-grid {
-    width: min(1120px, 100% - 1rem);
-  }
-
-  html.home-spa .spa-slide[data-slide="hero"] .hero-studio-grid--single {
-    max-width: 100%;
-  }
-
   html.home-spa .spa-slide[data-slide="hero"] .hero-mega__line {
     font-size: clamp(1.55rem, 7.8vw, 2.35rem);
     letter-spacing: -0.02em;
@@ -3914,15 +3895,31 @@ html.home-spa .spa-slide[data-slide="hero"] .hero-studio-copy {
 
 html.home-spa .spa-slide[data-slide="hero"] .hero-brand-row {
   justify-content: center;
+  margin-top: clamp(-2.25rem, -4vh, -1.25rem);
+  margin-bottom: clamp(2.75rem, 5.5vh, 3.75rem);
 }
 
 html.home-spa .spa-slide[data-slide="hero"] .hero-brand-row .hero-slogan {
   flex: 0 1 auto;
   text-align: center;
+  max-width: 100%;
 }
 
-html.home-spa .spa-slide[data-slide="hero"] .hero-mega__line {
+html.home-spa .spa-slide[data-slide="hero"] .hero-mega--data-beam {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.4rem, 1.4vh, 0.85rem);
+}
+
+html.home-spa .spa-slide[data-slide="hero"] .hero-mega__line,
+html.home-spa .spa-slide[data-slide="hero"] .hero-mega__line--network {
   text-align: center;
+  line-height: 1.08;
+}
+
+html.home-spa .spa-slide[data-slide="hero"] .hero-mega__line--network {
+  margin-top: clamp(0.15rem, 0.6vh, 0.35rem);
 }
 
 html.home-spa .spa-slide[data-slide="hero"] .hero-lead--studio {
@@ -4233,8 +4230,8 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
   }
 
   html.home-spa .spa-slide[data-slide="hero"] .hero-brand-row {
-    margin-top: 0;
-    margin-bottom: 0.4rem;
+    margin-top: -0.75rem;
+    margin-bottom: 2rem;
     justify-content: center;
   }
 

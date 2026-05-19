@@ -52,24 +52,32 @@ const organizationSchema = {
         <div class="spa-viewport">
           <div class="spa-track">
             <article class="spa-slide is-active" data-slide="hero" aria-hidden="false">
-              <div class="spa-slide__inner hero hero--studio hero--center" aria-labelledby="hero-heading">
+              <div
+                class="spa-slide__inner hero hero--studio flex w-full flex-col items-center justify-center"
+                aria-labelledby="hero-heading"
+              >
                 <NetworkBackdrop variant="hero" />
-                <div class="wrap hero-studio-grid hero-studio-grid--single">
-                  <div class="hero-studio-copy">
-                    <div class="hero-brand-row">
+                <div
+                  class="hero-center-shell relative z-[2] flex w-full max-w-7xl flex-col items-center justify-center px-4 text-center"
+                >
+                  <div class="hero-studio-copy flex w-full flex-col items-center justify-center text-center">
+                    <div class="hero-brand-row -mt-6 mb-10 flex flex-wrap items-center justify-center gap-4 md:-mt-10 md:mb-14">
                       <BrandLogo
-                        class="hero-brand-mark"
+                        class="hero-brand-mark shrink-0"
                         width={64}
                         height={64}
                         loading="eager"
                         fetchpriority="high"
                       />
-                      <p class="hero-slogan">
+                      <p class="hero-slogan m-0 text-center">
                         Tecnologia que resolve. Soluções que <span class="hero-slogan__accent">impulsionam</span>.
                       </p>
                     </div>
 
-                    <h1 id="hero-heading" class="hero-mega hero-mega--data-beam">
+                    <h1
+                      id="hero-heading"
+                      class="hero-mega hero-mega--data-beam flex w-full flex-col items-center gap-2 text-center md:gap-3"
+                    >
                       {
                         hero.headlineLines.map((line) =>
                           line.variant === "outline" ? (
@@ -89,10 +97,10 @@ const organizationSchema = {
                       }
                     </h1>
 
-                    <p class="hero-lead hero-lead--studio">{hero.lead}</p>
+                    <p class="hero-lead hero-lead--studio mx-auto text-center">{hero.lead}</p>
                     <BenefitsRow />
-                    <div class="hero-studio-foot">
-                      <div class="hero-ctas">
+                    <div class="hero-studio-foot flex w-full flex-col items-center">
+                      <div class="hero-ctas flex w-full flex-wrap justify-center gap-4">
                         <button type="button" class="btn btn-primary" data-slide-jump="contact">
                           Formulário
                         </button>

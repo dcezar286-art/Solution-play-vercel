@@ -1,6 +1,8 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineConfig({
   site: "https://www.solutionplay.com.br",
   integrations: [sitemap()],
@@ -16,5 +18,7 @@ export default defineConfig({
         },
       },
     },
+
+    plugins: [tailwindcss()],
   },
 });

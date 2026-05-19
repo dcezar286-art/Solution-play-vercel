@@ -10,7 +10,10 @@ const icons: Record<string, string> = {
 };
 ---
 
-<ul class="benefits-row" aria-label="Principais benefícios">
+<ul
+  class="benefits-row grid w-full max-w-7xl grid-cols-1 justify-center justify-items-center gap-4 sm:grid-cols-2 lg:grid-cols-4 mx-auto"
+  aria-label="Principais benefícios"
+>
   {
     benefits.map((b) => (
       <li class="benefits-row__item">
