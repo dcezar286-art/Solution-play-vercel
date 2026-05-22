@@ -1,0 +1,138 @@
+---
+/** Fundo em vídeo por slide SPA — carrega sob demanda e pausa fora do slide ativo. */
+
+interface Props {
+  slide: "hero" | "services" | "commercial";
+  videoSrc: string;
+  posterSrc: string;
+  /** Só o hero pré-carrega metadados; demais slides carregam ao entrar. */
+  eagerPreload?: boolean;
+  objectPosition?: string;
+  variant?: "default" | "services" | "commercial";
+}
+
+const {
+  slide,
+  videoSrc,
+  posterSrc,
+  eagerPreload = false,
+  objectPosition = "center 42%",
+  variant =
+    slide === "services" ? "services" : slide === "commercial" ? "commercial" : "default",
+} = Astro.props;
+---
+
+<div
+  class:list={["slide-video-backdrop", variant !== "default" && `slide-video-backdrop--${variant}`]}
+  data-slide-video-backdrop={slide}
+  aria-hidden="true"
+>
+  <video
+    class="slide-video-backdrop__video"
+    data-slide-video
+    autoplay
+    muted
+    loop
+    playsinline
+    preload={eagerPreload ? "metadata" : "none"}
+    poster={posterSrc}
+    disablepictureinpicture
+    disableremoteplayback
+    style={`object-position: ${objectPosition}`}
+  >
+    <source src={videoSrc} type="video/mp4" />
+  </video>
+  <div class="slide-video-backdrop__tint" aria-hidden="true"></div>
+  <div class="slide-video-backdrop__overlay" aria-hidden="true"></div>
+</div>
+
+<script>
+  import "../scripts/slideVideoBackdropBoot.ts";
+</script>
+
+<style>
+  .slide-video-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #060a12;
+  }
+
+  .slide-video-backdrop__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.72;
+    filter: saturate(1.05) contrast(1.04);
+  }
+
+  .slide-video-backdrop__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      radial-gradient(ellipse 85% 70% at 50% 38%, rgba(6, 10, 18, 0.15) 0%, rgba(6, 10, 18, 0.62) 72%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.55) 0%, transparent 28%, transparent 68%, rgba(6, 10, 18, 0.45) 100%),
+      linear-gradient(90deg, rgba(6, 10, 18, 0.35) 0%, transparent 18%, transparent 82%, rgba(6, 10, 18, 0.35) 100%);
+  }
+
+  .slide-video-backdrop--services .slide-video-backdrop__video {
+    opacity: 0.68;
+    object-position: center 40%;
+  }
+
+  .slide-video-backdrop--services .slide-video-backdrop__overlay {
+    background:
+      radial-gradient(ellipse 90% 75% at 50% 42%, rgba(6, 10, 18, 0.2) 0%, rgba(6, 10, 18, 0.68) 74%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.58) 0%, transparent 24%, transparent 70%, rgba(6, 10, 18, 0.5) 100%),
+      linear-gradient(90deg, rgba(6, 10, 18, 0.4) 0%, transparent 16%, transparent 84%, rgba(6, 10, 18, 0.4) 100%);
+  }
+
+  /* Camada de cor da marca (teal / ciano) — slide Contratos */
+  .slide-video-backdrop__tint {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .slide-video-backdrop--commercial .slide-video-backdrop__video {
+    opacity: 0.58;
+    object-position: center 38%;
+    filter:
+      sepia(0.32)
+      hue-rotate(152deg)
+      saturate(1.45)
+      brightness(0.78)
+      contrast(1.08);
+  }
+
+  .slide-video-backdrop--commercial .slide-video-backdrop__tint {
+    opacity: 1;
+    background:
+      radial-gradient(ellipse 85% 65% at 50% 32%, rgba(34, 211, 238, 0.28) 0%, transparent 58%),
+      radial-gradient(ellipse 60% 45% at 12% 88%, rgba(29, 158, 117, 0.22) 0%, transparent 52%),
+      radial-gradient(ellipse 55% 40% at 88% 78%, rgba(94, 234, 212, 0.16) 0%, transparent 50%),
+      linear-gradient(165deg, rgba(6, 10, 18, 0.55) 0%, rgba(8, 22, 32, 0.42) 45%, rgba(6, 10, 18, 0.62) 100%);
+    mix-blend-mode: soft-light;
+  }
+
+  .slide-video-backdrop--commercial .slide-video-backdrop__overlay {
+    z-index: 2;
+    background:
+      radial-gradient(ellipse 88% 72% at 50% 40%, rgba(34, 211, 238, 0.08) 0%, rgba(6, 10, 18, 0.72) 76%),
+      linear-gradient(180deg, rgba(6, 10, 18, 0.62) 0%, rgba(8, 18, 28, 0.35) 30%, transparent 55%, rgba(6, 10, 18, 0.55) 100%),
+      linear-gradient(90deg, rgba(6, 10, 18, 0.45) 0%, transparent 14%, transparent 86%, rgba(6, 10, 18, 0.45) 100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide-video-backdrop__video {
+      display: none;
+    }
+  }
+</style>

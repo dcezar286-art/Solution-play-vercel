@@ -3847,7 +3847,7 @@ html[data-spa-slide="hero"] .spa-bg-effects {
 html.home-spa .spa-slide[data-slide="hero"] .spa-slide__inner.hero--studio {
   position: relative;
   overflow-x: clip;
-  overflow-y: hidden;
+  overflow-y: auto;
   background: transparent;
 }
 
@@ -3895,7 +3895,7 @@ html.home-spa .spa-slide[data-slide="hero"] .hero-studio-copy {
 
 html.home-spa .spa-slide[data-slide="hero"] .hero-brand-row {
   justify-content: center;
-  margin-top: clamp(-2.25rem, -4vh, -1.25rem);
+  margin-top: clamp(0.35rem, 1.5vh, 1rem);
   margin-bottom: clamp(2.75rem, 5.5vh, 3.75rem);
 }
 
@@ -4220,7 +4220,7 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
   /* Início — evita logo duplicado e conteúdo escondido atrás do header */
   html.home-spa .spa-slide[data-slide="hero"] .spa-slide__inner.hero--studio {
     justify-content: flex-start;
-    padding-top: 0.35rem;
+    padding-top: 0.75rem;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -4230,7 +4230,7 @@ html.home-spa .spa-slide[data-slide="contact"] .spa-slide__inner {
   }
 
   html.home-spa .spa-slide[data-slide="hero"] .hero-brand-row {
-    margin-top: -0.75rem;
+    margin-top: 0.5rem;
     margin-bottom: 2rem;
     justify-content: center;
   }

@@ -20,19 +20,24 @@ let currentIndex = 0;
 let isAnimating = false;
 let ctx: gsap.Context | null = null;
 let swipeTeardown: (() => void) | null = null;
+let navAbort: AbortController | null = null;
 
 const SWIPE_MIN_PX = 52;
 const SWIPE_MAX_MS = 650;
 const SWIPE_HORIZONTAL_RATIO = 1.15;
 
-function setSlideVisibility(slides: NodeListOf<HTMLElement>, activeIndex: number) {
+function clearSlideInlineVisibility(slide: HTMLElement) {
+  slide.style.removeProperty("opacity");
+  slide.style.removeProperty("visibility");
+  slide.style.removeProperty("transform");
+}
+
+function setSlideVisibility(slides: NodeListOf<HTMLElement> | HTMLElement[], activeIndex: number) {
   slides.forEach((slide, i) => {
     const active = i === activeIndex;
     slide.classList.toggle("is-active", active);
     slide.setAttribute("aria-hidden", active ? "false" : "true");
-    slide.style.opacity = active ? "1" : "0";
-    slide.style.visibility = active ? "visible" : "hidden";
-    slide.style.transform = "translateX(0)";
+    clearSlideInlineVisibility(slide);
   });
 }
 
@@ -67,20 +72,18 @@ async function goToSlide(index: number) {
 
   incoming.style.zIndex = "3";
   outgoing.style.zIndex = "2";
+  clearSlideInlineVisibility(incoming);
+  clearSlideInlineVisibility(outgoing);
 
   gsap
     .timeline({
       defaults: { ease: "power3.inOut" },
       onComplete: () => {
-        outgoing.classList.remove("is-active");
-        outgoing.setAttribute("aria-hidden", "true");
-        incoming.classList.add("is-active");
-        incoming.setAttribute("aria-hidden", "false");
-        gsap.set(outgoing, { clearProps: "all" });
-        gsap.set(incoming, { clearProps: "all" });
+        gsap.set([outgoing, incoming], { clearProps: "all" });
         outgoing.style.zIndex = "";
         incoming.style.zIndex = "";
         currentIndex = index;
+        setSlideVisibility(slides, index);
         isAnimating = false;
         emitSpaSlideChange(SLIDE_IDS[index]);
       },
@@ -160,34 +163,49 @@ function bindSwipeNavigation() {
 }
 
 function bindNavigation() {
-  document.querySelectorAll<HTMLElement>("[data-slide-jump]").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      const id = (el as HTMLElement).dataset.slideJump as SlideId | undefined;
+  navAbort?.abort();
+  navAbort = new AbortController();
+  const { signal } = navAbort;
+
+  document.addEventListener(
+    "click",
+    (e) => {
+      const el = (e.target as Element | null)?.closest<HTMLElement>("[data-slide-jump]");
+      if (!el) return;
+      const id = el.dataset.slideJump as SlideId | undefined;
       if (!id) return;
       if (el.tagName === "A") e.preventDefault();
       const index = SLIDE_IDS.indexOf(id);
       if (index >= 0) void goToSlide(index);
-    });
-  });
+    },
+    { signal },
+  );
 
-  document.addEventListener("keydown", (e) => {
-    if (isAnimating) return;
-    if (e.key === "ArrowDown" || e.key === "PageDown") {
-      e.preventDefault();
-      void goToSlide(Math.min(currentIndex + 1, SLIDE_IDS.length - 1));
-    }
-    if (e.key === "ArrowUp" || e.key === "PageUp") {
-      e.preventDefault();
-      void goToSlide(Math.max(currentIndex - 1, 0));
-    }
-  });
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (isAnimating) return;
+      if (e.key === "ArrowDown" || e.key === "PageDown") {
+        e.preventDefault();
+        void goToSlide(Math.min(currentIndex + 1, SLIDE_IDS.length - 1));
+      }
+      if (e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault();
+        void goToSlide(Math.max(currentIndex - 1, 0));
+      }
+    },
+    { signal },
+  );
 }
 
 export function destroySpaSlides() {
   swipeTeardown?.();
   swipeTeardown = null;
+  navAbort?.abort();
+  navAbort = null;
   ctx?.revert();
   ctx = null;
+  isAnimating = false;
   window.__solutionPlayLenisDestroy?.();
   delete window.__solutionPlaySpaDestroy;
 }

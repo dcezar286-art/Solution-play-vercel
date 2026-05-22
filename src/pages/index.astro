@@ -8,6 +8,7 @@ import InteractiveTopNav from "../components/InteractiveTopNav.astro";
 import BenefitsRow from "../components/BenefitsRow.astro";
 import HeroOutlineSvg from "../components/HeroOutlineSvg.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
+import SlideVideoBackdrop from "../components/SlideVideoBackdrop.astro";
 import CommercialCornerBeams from "../components/CommercialCornerBeams.astro";
 import CommercialMSP from "../components/CommercialMSP.astro";
 import { getImage } from "astro:assets";
@@ -56,12 +57,17 @@ const organizationSchema = {
                 class="spa-slide__inner hero hero--studio flex w-full flex-col items-center justify-center"
                 aria-labelledby="hero-heading"
               >
-                <NetworkBackdrop variant="hero" />
+                <SlideVideoBackdrop
+                  slide="hero"
+                  videoSrc="/media/background-inicio.mp4"
+                  posterSrc="/media/hero-bg.webp"
+                  eagerPreload
+                />
                 <div
                   class="hero-center-shell relative z-[2] flex w-full max-w-7xl flex-col items-center justify-center px-4 text-center"
                 >
                   <div class="hero-studio-copy flex w-full flex-col items-center justify-center text-center">
-                    <div class="hero-brand-row -mt-6 mb-10 flex flex-wrap items-center justify-center gap-4 md:-mt-10 md:mb-14">
+                    <div class="hero-brand-row flex flex-wrap items-center justify-center gap-4">
                       <BrandLogo
                         class="hero-brand-mark shrink-0"
                         width={64}
@@ -116,7 +122,13 @@ const organizationSchema = {
 
             <article class="spa-slide" data-slide="services" aria-hidden="true">
               <div class="spa-slide__inner spa-slide__inner--services">
-                <NetworkBackdrop variant="services" />
+                <SlideVideoBackdrop
+                  slide="services"
+                  videoSrc="/media/background-servico.mp4"
+                  posterSrc="/media/hero-bg.webp"
+                  variant="services"
+                  objectPosition="center 40%"
+                />
                 <div class="services-slide-content">
                   <MarqueeStrip />
                   <ServiceTabs />
@@ -126,7 +138,13 @@ const organizationSchema = {
 
             <article class="spa-slide" data-slide="commercial" aria-hidden="true">
               <div class="spa-slide__inner section commercial commercial--studio" aria-labelledby="comercial-heading">
-                <NetworkBackdrop variant="commercial" />
+                <SlideVideoBackdrop
+                  slide="commercial"
+                  videoSrc="/media/background-contratos.mp4"
+                  posterSrc="/media/hero-bg.webp"
+                  variant="commercial"
+                  objectPosition="center 38%"
+                />
                 <CommercialCornerBeams variant="viewport" />
                 <div class="wrap commercial-inner commercial-inner--above commercial-inner--spa">
                   <div class="commercial-main">
