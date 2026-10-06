@@ -37,6 +37,7 @@ function bindTextScramble(el: HTMLElement) {
       clearInterval(interval);
       interval = null;
     }
+    el.textContent = full;
   };
 
   const scramble = () => {
@@ -61,13 +62,13 @@ function bindTextScramble(el: HTMLElement) {
 
       if (frame >= duration) {
         clear();
-        el.textContent = full;
       }
     }, 30);
   };
 
   el.addEventListener("pointerenter", scramble);
   el.addEventListener("focus", scramble);
+  document.addEventListener("solutionplay:chapter-change", clear);
 }
 
 function initTextScramble() {

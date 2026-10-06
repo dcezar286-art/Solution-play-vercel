@@ -1,0 +1,20 @@
+---
+interface Props {
+  id: string;
+  labelledby: string;
+  tone?: "hero" | "standard" | "pricing" | "contact";
+}
+
+const { id, labelledby, tone = "standard" } = Astro.props;
+---
+
+<section
+  id={id}
+  data-chapter={id}
+  class:list={["cinematic-chapter", `cinematic-chapter--${tone}`]}
+  aria-labelledby={labelledby}
+>
+  <div class="cinematic-chapter__inner">
+    <slot />
+  </div>
+</section>

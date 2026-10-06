@@ -6,17 +6,10 @@ import { mspIntro, mspPlans, differentiators } from "../data/marketingContent";
   <div class="wrap">
     <div class="section-head">
       <p class="section-eyebrow">{mspIntro.eyebrow}</p>
-      <h2 id="servicos-heading" class="msp-scramble-heading">
-        <span class="msp-scramble-heading__track" tabindex="0">
-          <span class="msp-scramble-heading__chars" data-text-scramble data-scramble-text={mspIntro.title}>
-            {mspIntro.title}
-          </span>
-        </span>
-        <span class="msp-scramble-heading__line" aria-hidden="true"></span>
-      </h2>
+      <h2 id="servicos-heading">{mspIntro.title}</h2>
       <p>{mspIntro.lead}</p>
       <p class="section-head__hint">
-        Valores e investimentos mensais estão na seção <strong>Contratos</strong>.
+        Valores e investimentos mensais estão na seção <strong>Planos</strong>.
       </p>
     </div>
 
@@ -25,12 +18,15 @@ import { mspIntro, mspPlans, differentiators } from "../data/marketingContent";
         mspPlans.map((plan, index) => (
           <div class="sp-wrap" role="listitem">
             <article class:list={["sp-card", `sp-card-${index + 1}`]} tabindex="0">
-              <div class="sp-dot-track" aria-hidden="true">
-                <span class="sp-dot"></span>
+              <div class="sp-decoration-clip" aria-hidden="true">
+                <div class="sp-dot-track">
+                  <span class="sp-dot"></span>
+                </div>
+                <div class="sp-top-ray"></div>
+                <div class="sp-cone"></div>
+                <div class="sp-sweep"></div>
+                <div class="sp-line-bottom"></div>
               </div>
-              <div class="sp-top-ray" aria-hidden="true"></div>
-              <div class="sp-cone" aria-hidden="true"></div>
-              <div class="sp-line-bottom" aria-hidden="true"></div>
               <div class="sp-card__content">
                 <header class="msp-plan-card__head">
                   <h3 class="msp-plan-card__name">{plan.name}</h3>
@@ -58,7 +54,3 @@ import { mspIntro, mspPlans, differentiators } from "../data/marketingContent";
     </div>
   </div>
 </section>
-
-<script client:visible>
-  import "../scripts/textScrambleBoot.ts";
-</script>

@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/studio.css";
 import RevealInit from "../components/RevealInit.astro";
 import NetworkBackdrop from "../components/NetworkBackdrop.astro";
 import SpaBackground from "../components/SpaBackground.astro";
@@ -46,6 +47,7 @@ const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
   lang="pt-BR"
   class:list={[{ "snap-site-html": useSnapLayout, "home-motion": useHomeFx, "home-spa": homeSpa }]}
   data-spa-slide={homeSpa ? "hero" : undefined}
+  data-active-chapter={homeSpa ? "brand" : undefined}
 >
   <head>
     <meta charset="utf-8" />

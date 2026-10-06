@@ -1,0 +1,53 @@
+---
+---
+
+<div class="cinematic-scene" aria-hidden="true">
+  <canvas class="cinematic-scene__canvas" data-cinematic-canvas></canvas>
+  <div class="cinematic-scene__fallback">
+    <svg class="studio-static-cube" viewBox="0 0 320 360" fill="none">
+      <defs><linearGradient id="cube-top" x2="1" y2="1"><stop stop-color="#b7e5df"/><stop offset="1" stop-color="#173f43"/></linearGradient><linearGradient id="cube-side" x2="1" y2="1"><stop stop-color="#133f45"/><stop offset="1" stop-color="#07191e"/></linearGradient></defs>
+      <path d="M160 25 290 100 160 175 30 100Z" fill="url(#cube-top)"/>
+      <path d="M30 100 160 175 160 325 30 250Z" fill="url(#cube-side)"/>
+      <path d="M160 175 290 100 290 250 160 325Z" fill="#123f40"/>
+      <g stroke="#6febd1" stroke-opacity=".55" stroke-width="2">
+        <path d="M160 25 290 100 290 250 160 325 30 250 30 100Z M30 100 160 175 290 100 M160 175V325"/>
+        <path d="m73 75 130 75v150 M117 50 130 75v150 M73 125 130-75 M117 150 130-75 M73 125v150 M117 150v150 M30 150l130 75 130-75 M30 200l130 75 130-75"/>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<aside class="cinematic-hud" aria-label="Navegação das cenas">
+  <div class="cinematic-hud__readout" aria-hidden="true">
+    <span class="cinematic-hud__eyebrow">Cena ativa</span>
+    <span class="cinematic-hud__title cinematic-hud__title--brand">Núcleo Solution Play</span>
+    <span class="cinematic-hud__title cinematic-hud__title--services">Módulos de operação</span>
+    <span class="cinematic-hud__title cinematic-hud__title--trust">Base de confiança</span>
+    <span class="cinematic-hud__title cinematic-hud__title--pricing">Planos de execução</span>
+    <span class="cinematic-hud__title cinematic-hud__title--contact">Convergência</span>
+    <span class="cinematic-hud__hint">role ou use ↑ ↓</span>
+  </div>
+
+  <div class="cinematic-hud__rail">
+    <button type="button" data-chapter-jump="brand" class="cinematic-hud__dot" aria-label="Ir para início">
+      <span>01</span>
+    </button>
+    <button type="button" data-chapter-jump="services" class="cinematic-hud__dot" aria-label="Ir para serviços">
+      <span>02</span>
+    </button>
+    <button type="button" data-chapter-jump="trust" class="cinematic-hud__dot" aria-label="Ir para base de confiança">
+      <span>03</span>
+    </button>
+    <button type="button" data-chapter-jump="pricing" class="cinematic-hud__dot" aria-label="Ir para planos">
+      <span>04</span>
+    </button>
+    <button type="button" data-chapter-jump="contact" class="cinematic-hud__dot" aria-label="Ir para contato">
+      <span>05</span>
+    </button>
+  </div>
+</aside>
+
+<script>
+  import "../scripts/cinematicSceneLoader";
+  import "../scripts/immersiveDeckBoot";
+</script>

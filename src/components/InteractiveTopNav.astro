@@ -1,16 +1,16 @@
 ---
 import BrandLogo from "./BrandLogo.astro";
-
-const items = [
-  { id: "hero", label: "Início" },
-  { id: "services", label: "Serviços" },
-  { id: "commercial", label: "Contratos" },
-  { id: "contact", label: "Contato" },
-];
+import { cinematicChapters } from "../data/contentChapters";
 ---
 
 <header class="spa-topbar spa-topbar--glass">
-  <a class="spa-topbar__logo" href="/" data-slide-jump="hero" aria-label="Solution Play — início">
+  <a
+    class="spa-topbar__logo"
+    href="#brand"
+    data-chapter-jump="brand"
+    onclick="window.__solutionPlayGoToChapter?.('brand')"
+    aria-label="Solution Play — início"
+  >
     <BrandLogo class="spa-topbar__logo-mark" width={36} height={36} loading="eager" />
     <span class="spa-topbar__logo-text">
       <span class="spa-topbar__logo-line">Solution</span>
@@ -25,13 +25,14 @@ const items = [
     </span>
     <ul class="interactive-menu__list">
       {
-        items.map((item, i) => (
+        cinematicChapters.map((item, i) => (
           <li class="interactive-menu__cell">
             <button
               type="button"
               class:list={["interactive-menu__item", { active: i === 0 }]}
-              data-slide-jump={item.id}
+              data-chapter-jump={item.id}
               data-menu-index={i}
+              onclick={`window.__solutionPlayGoToChapter?.('${item.id}')`}
               aria-current={i === 0 ? "page" : undefined}
             >
               {item.label}
@@ -42,7 +43,12 @@ const items = [
     </ul>
   </nav>
 
-  <button type="button" class="btn btn-primary spa-topbar__cta" data-slide-jump="contact">
+  <button
+    type="button"
+    class="btn btn-primary spa-topbar__cta"
+    data-chapter-jump="contact"
+    onclick="window.__solutionPlayGoToChapter?.('contact')"
+  >
     Contato
   </button>
 </header>

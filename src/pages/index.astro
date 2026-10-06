@@ -1,20 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import MarqueeStrip from "../components/MarqueeStrip.astro";
 import ServiceTabs from "../components/ServiceTabs.astro";
 import LeadForm from "../components/LeadForm.astro";
-import HomeSpaMotion from "../components/HomeSpaMotion.astro";
 import InteractiveTopNav from "../components/InteractiveTopNav.astro";
 import BenefitsRow from "../components/BenefitsRow.astro";
 import HeroOutlineSvg from "../components/HeroOutlineSvg.astro";
-import NetworkBackdrop from "../components/NetworkBackdrop.astro";
-import SlideVideoBackdrop from "../components/SlideVideoBackdrop.astro";
-import CommercialCornerBeams from "../components/CommercialCornerBeams.astro";
-import CommercialMSP from "../components/CommercialMSP.astro";
-import { getImage } from "astro:assets";
 import BrandLogo from "../components/BrandLogo.astro";
 import ContactTrustIcons from "../components/ContactTrustIcons.astro";
-import { brand, hero, commercial, contact } from "../data/marketingContent";
+import CinematicScene from "../components/CinematicScene.astro";
+import CinematicChapter from "../components/CinematicChapter.astro";
+import PricingFinale from "../components/PricingFinale.astro";
+import { getImage } from "astro:assets";
+import { brand, benefits, differentiators, commercial, contact } from "../data/marketingContent";
 import { siteSeo } from "../data/seo";
 import heroLogoSrc from "../../LOGO/SolutionPlay.png";
 
@@ -45,169 +42,123 @@ const organizationSchema = {
   heroLogoPreload={heroLogoPreload}
 >
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
-  <div class="spa-layout">
+  <div class="cinematic-layout">
+    <CinematicScene />
     <InteractiveTopNav />
 
-    <div class="spa-stage">
-      <main id="conteudo-principal" class="spa-main">
-        <div class="spa-viewport">
-          <div class="spa-track">
-            <article class="spa-slide is-active" data-slide="hero" aria-hidden="false">
-              <div
-                class="spa-slide__inner hero hero--studio flex w-full flex-col items-center justify-center"
-                aria-labelledby="hero-heading"
-              >
-                <SlideVideoBackdrop
-                  slide="hero"
-                  videoSrc="/media/background-inicio.mp4"
-                  posterSrc="/media/hero-bg.webp"
-                  eagerPreload
-                />
-                <div
-                  class="hero-center-shell relative z-[2] flex w-full max-w-7xl flex-col items-center justify-center px-4 text-center"
-                >
-                  <div class="hero-studio-copy flex w-full flex-col items-center justify-center text-center">
-                    <div class="hero-brand-row flex flex-wrap items-center justify-center gap-4">
-                      <BrandLogo
-                        class="hero-brand-mark shrink-0"
-                        width={64}
-                        height={64}
-                        loading="eager"
-                        fetchpriority="high"
-                      />
-                      <p class="hero-slogan m-0 text-center">
-                        Tecnologia que resolve. Soluções que <span class="hero-slogan__accent">impulsionam</span>.
-                      </p>
-                    </div>
-
-                    <h1
-                      id="hero-heading"
-                      class="hero-mega hero-mega--data-beam flex w-full flex-col items-center gap-2 text-center md:gap-3"
-                    >
-                      {
-                        hero.headlineLines.map((line) =>
-                          line.variant === "outline" ? (
-                            <HeroOutlineSvg text={line.text} />
-                          ) : (
-                            <span
-                              class:list={[
-                                "hero-mega__line",
-                                line.variant === "solid" && "hero-mega__line--solid",
-                                line.variant === "accent" && "hero-mega__line--accent",
-                              ]}
-                            >
-                              {line.text}
-                            </span>
-                          ),
-                        )
-                      }
-                    </h1>
-
-                    <p class="hero-lead hero-lead--studio mx-auto text-center">{hero.lead}</p>
-                    <BenefitsRow />
-                    <div class="hero-studio-foot flex w-full flex-col items-center">
-                      <div class="hero-ctas flex w-full flex-wrap justify-center gap-4">
-                        <button type="button" class="btn btn-primary" data-slide-jump="contact">
-                          Formulário
-                        </button>
-                        <button type="button" class="btn btn-ghost" data-slide-jump="services">
-                          Nossos serviços
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article class="spa-slide" data-slide="services" aria-hidden="true">
-              <div class="spa-slide__inner spa-slide__inner--services">
-                <SlideVideoBackdrop
-                  slide="services"
-                  videoSrc="/media/background-servico.mp4"
-                  posterSrc="/media/hero-bg.webp"
-                  variant="services"
-                  objectPosition="center 40%"
-                />
-                <div class="services-slide-content">
-                  <MarqueeStrip />
-                  <ServiceTabs />
-                </div>
-              </div>
-            </article>
-
-            <article class="spa-slide" data-slide="commercial" aria-hidden="true">
-              <div class="spa-slide__inner section commercial commercial--studio" aria-labelledby="comercial-heading">
-                <SlideVideoBackdrop
-                  slide="commercial"
-                  videoSrc="/media/background-contratos.mp4"
-                  posterSrc="/media/hero-bg.webp"
-                  variant="commercial"
-                  objectPosition="center 38%"
-                />
-                <CommercialCornerBeams variant="viewport" />
-                <div class="wrap commercial-inner commercial-inner--above commercial-inner--spa">
-                  <div class="commercial-main">
-                    <h2 id="comercial-heading" class="section-eyebrow commercial-page-title">
-                      {commercial.headline}
-                    </h2>
-                    <CommercialMSP />
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <article class="spa-slide" data-slide="contact" aria-hidden="true">
-              <div class="spa-slide__inner section lead-section lead-section--studio spa-slide__inner--contact" aria-labelledby="contato-heading">
-                <NetworkBackdrop variant="contact" />
-                <div class="wrap lead-grid contact-slide-content">
-                  <div class="contact-aside">
-                    <p class="section-eyebrow">Contato</p>
-                    <p class="contact-service-badge">
-                      <ContactTrustIcons name="headset" class="contact-service-badge__icon" />
-                      <span>{contact.badge}</span>
-                    </p>
-                    <h2 id="contato-heading">{contact.headline}</h2>
-                    <p class="contact-aside__lead">{contact.lead}</p>
-                    <ul class="contact-facts">
-                      <li>
-                        <strong>E-mail:</strong>{" "}
-                        <a href={`mailto:${brand.email}`}>{brand.email}</a>
-                      </li>
-                      <li>
-                        <strong>WhatsApp:</strong>{" "}
-                        <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noopener noreferrer">
-                          {brand.whatsappDisplay}
-                        </a>
-                      </li>
-                      <li><strong>Planos:</strong> {commercial.plansNote}</li>
-                    </ul>
-                    <ul class="contact-trust" aria-label="Garantias de atendimento">
-                      {
-                        contact.trustItems.map((item) => (
-                          <li class="contact-trust__item">
-                            <span class="contact-trust__icon" aria-hidden="true">
-                              <ContactTrustIcons name={item.icon} />
-                            </span>
-                            <span class="contact-trust__text">
-                              <strong>{item.title}</strong>
-                              <span>{item.desc}</span>
-                            </span>
-                          </li>
-                        ))
-                      }
-                    </ul>
-                  </div>
-                  <LeadForm />
-                </div>
-              </div>
-            </article>
-
+    <main id="conteudo-principal" class="cinematic-main">
+      <CinematicChapter id="brand" labelledby="hero-heading" tone="hero">
+        <div class="cinematic-hero studio-hero">
+          <p class="studio-hero__eyebrow" data-motion-card="hero-brand"><span></span> TI para empresas em movimento</p>
+          <h1 id="hero-heading" class="studio-hero__title" data-motion-card="hero-title">
+            Tecnologia<br />que resolve.<br /><span>Seu negócio<br class="studio-mobile-break" /> vai além.</span>
+          </h1>
+          <p class="studio-hero__lead" data-motion-card="hero-lead">Cuidamos da sua TI.<br />Você transforma o próximo passo em crescimento.</p>
+          <div class="studio-hero__actions" data-motion-card="hero-actions">
+            <button type="button" class="studio-link" data-chapter-jump="services">Explore nossas soluções <span aria-hidden="true">↗</span></button>
+            <button type="button" class="studio-link studio-link--subtle" data-chapter-jump="contact">Vamos conversar <span aria-hidden="true">↗</span></button>
           </div>
         </div>
-      </main>
-    </div>
+        <div class="studio-object-caption" aria-hidden="true"><span>SOLUTION CORE</span><span>Um núcleo. Todas as conexões.</span></div>
+        <div class="studio-hero__bottom"><span>Suporte · Infraestrutura · Segurança</span><button type="button" data-chapter-jump="services">Role para explorar <span aria-hidden="true">↓</span></button></div>
+      </CinematicChapter>
+
+      <CinematicChapter id="services" labelledby="servicos-heading">
+        <div class="cinematic-services" data-motion-card="services-panel">
+          <div class="scene-signal scene-signal--section" data-motion-card="scene-signal">
+            <span>02</span>
+            <strong>Módulos de operação</strong>
+            <em>os serviços se organizam como camadas do ambiente</em>
+          </div>
+          <ServiceTabs />
+        </div>
+      </CinematicChapter>
+
+      <CinematicChapter id="trust" labelledby="confianca-heading">
+        <div class="trust-chapter" data-motion-card="trust-panel">
+          <div class="scene-signal scene-signal--section" data-motion-card="scene-signal">
+            <span>03</span>
+            <strong>Base de confiança</strong>
+            <em>menos parada, mais segurança e suporte especializado</em>
+          </div>
+          <p class="section-eyebrow">Por que a Solution Play</p>
+          <h2 id="confianca-heading">Tecnologia ativa para o seu negócio</h2>
+          <div class="trust-grid">
+            {
+              benefits.map((item) => (
+                <article class="trust-item" data-motion-card="trust-item">
+                  <h3>{item.title}</h3>
+                  <p>{item.desc}</p>
+                </article>
+              ))
+            }
+          </div>
+          <ul class="trust-differentiators">
+            {differentiators.map((item) => <li>{item}</li>)}
+          </ul>
+          <p class="trust-site">{brand.siteDisplay}</p>
+        </div>
+      </CinematicChapter>
+
+      <CinematicChapter id="pricing" labelledby="comercial-heading" tone="pricing">
+        <div data-motion-card="pricing-panel">
+          <div class="scene-signal scene-signal--section" data-motion-card="scene-signal">
+            <span>04</span>
+            <strong>Planos de execução</strong>
+            <em>contratos mensais claros para cada estágio da empresa</em>
+          </div>
+          <PricingFinale />
+        </div>
+      </CinematicChapter>
+
+      <CinematicChapter id="contact" labelledby="contato-heading" tone="contact">
+        <div class="wrap lead-grid contact-slide-content" data-motion-card="contact-panel">
+          <div class="contact-aside" data-motion-card="contact-copy">
+            <div class="scene-signal scene-signal--section" data-motion-card="scene-signal">
+              <span>05</span>
+              <strong>Convergência</strong>
+              <em>o próximo passo vira atendimento direto</em>
+            </div>
+            <p class="section-eyebrow">Contato</p>
+            <p class="contact-service-badge">
+              <ContactTrustIcons name="headset" class="contact-service-badge__icon" />
+              <span>{contact.badge}</span>
+            </p>
+            <h2 id="contato-heading">{contact.headline}</h2>
+            <p class="contact-aside__lead">{contact.lead}</p>
+            <ul class="contact-facts">
+              <li>
+                <strong>E-mail:</strong>{" "}
+                <a href={`mailto:${brand.email}`}>{brand.email}</a>
+              </li>
+              <li>
+                <strong>WhatsApp:</strong>{" "}
+                <a href={`https://wa.me/${brand.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                  {brand.whatsappDisplay}
+                </a>
+              </li>
+              <li><strong>Planos:</strong> {commercial.plansNote}</li>
+            </ul>
+            <ul class="contact-trust" aria-label="Garantias de atendimento">
+              {
+                contact.trustItems.map((item) => (
+                  <li class="contact-trust__item">
+                    <span class="contact-trust__icon" aria-hidden="true">
+                      <ContactTrustIcons name={item.icon} />
+                    </span>
+                    <span class="contact-trust__text">
+                      <strong>{item.title}</strong>
+                      <span>{item.desc}</span>
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <LeadForm />
+        </div>
+      </CinematicChapter>
+    </main>
   </div>
 
-  <HomeSpaMotion />
 </BaseLayout>
