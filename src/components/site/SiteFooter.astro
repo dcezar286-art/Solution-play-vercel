@@ -1,0 +1,34 @@
+---
+import BrandLogo from "../BrandLogo.astro";
+import { brand, whatsappLink } from "../../data/content";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__grid">
+    <div>
+      <a class="brand" href="/" aria-label={`${brand.name}, página inicial`}>
+        <BrandLogo class="brand__mark" width={32} height={32} alt="" />
+        <span class="brand__text">Solution <b>Play</b></span>
+      </a>
+      <p class="site-footer__tag">TI, segurança eletrônica, redes e sistemas para empresas de São Paulo.</p>
+    </div>
+    <nav aria-label="Rodapé">
+      <ul>
+        <li><a href="/#servicos">Serviços</a></li>
+        <li><a href="/desenvolvimento/">Desenvolvimento</a></li>
+        <li><a href="/#atendimento">Como contratar</a></li>
+        <li><a href="/#contato">Contato</a></li>
+      </ul>
+    </nav>
+    <ul class="site-footer__contact">
+      <li><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp {brand.whatsappDisplay}</a></li>
+      <li><a href={`mailto:${brand.email}`}>{brand.email}</a></li>
+      <li>{brand.hours}</li>
+    </ul>
+  </div>
+  <div class="wrap site-footer__base">
+    <span>© {year} {brand.name}</span>
+    <span>CNPJ {brand.cnpj}</span>
+  </div>
+</footer>

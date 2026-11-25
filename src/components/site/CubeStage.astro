@@ -1,0 +1,30 @@
+---
+/**
+ * Palco do cubo Solution Play.
+ * - Celular / PCs sem WebGL2: cubo em CSS 3D (leve, gira com a rolagem).
+ * - Desktop com WebGL2: carrega o cubo 3D (Three.js) e faz a troca suave quando estiver pronto.
+ * A posição do cubo muda conforme a seção visível (atributo data-scene no <html>).
+ */
+const faces = ["front", "back", "right", "left", "top", "bottom"];
+---
+
+<div class="cube-stage" aria-hidden="true" data-cube-stage>
+  <div class="cube-stage__rig">
+    <div class="css-cube">
+      <div class="css-cube__body">
+        {faces.map((face) => (
+          <div class:list={["css-cube__face", `css-cube__face--${face}`]}>
+            {Array.from({ length: 16 }).map(() => <span></span>)}
+          </div>
+        ))}
+        <div class="css-cube__core"></div>
+      </div>
+    </div>
+    <div class="cube-stage__halo"></div>
+  </div>
+  <canvas class="cube-stage__canvas" data-cube-canvas></canvas>
+</div>
+
+<script>
+  import "../../scripts/site/cubeLoader.ts";
+</script>

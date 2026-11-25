@@ -1,0 +1,74 @@
+---
+import "../styles/site.css";
+import SiteHeader from "../components/site/SiteHeader.astro";
+import SiteFooter from "../components/site/SiteFooter.astro";
+import WhatsAppBar from "../components/site/WhatsAppBar.astro";
+import { siteSeo } from "../data/seo";
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  /** Página atual — destaca o item no menu. */
+  current?: "home" | "dev";
+  /** Mensagem pronta usada pela barra fixa do WhatsApp. */
+  whatsappMessage?: string;
+  /** Dados estruturados (JSON-LD) específicos da página. */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+  /** Carrega a fonte monoespaçada (usada só no bloco de código da página Dev). */
+  mono?: boolean;
+}
+
+const { title, description = siteSeo.defaultDescription, ogImage, current = "home", whatsappMessage, schema, mono = false } = Astro.props;
+const fontUrl = `https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800${mono ? "&family=JetBrains+Mono:wght@400;500" : ""}&display=swap`;
+
+const canonicalUrl = new URL(Astro.url.pathname, siteSeo.siteUrl).href;
+const ogImageUrl = ogImage ?? new URL("/og-image.png", siteSeo.siteUrl).href;
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>document.documentElement.classList.add("js")</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07111f" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonicalUrl} />
+    {googleVerification ? <meta name="google-site-verification" content={googleVerification} /> : null}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteSeo.siteName} />
+    <meta property="og:locale" content={siteSeo.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content={siteSeo.twitterCard} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href={fontUrl} />
+    {schemas.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
+  </head>
+  <body data-page={current}>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <div class="ambient" aria-hidden="true"><div class="ambient__glow"></div><div class="ambient__grid"></div></div>
+    <SiteHeader current={current} />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <SiteFooter />
+    <WhatsAppBar message={whatsappMessage} />
+    <script>
+      import "../scripts/site/pageMotion.ts";
+    </script>
+  </body>
+</html>

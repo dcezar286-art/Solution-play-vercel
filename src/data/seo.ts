@@ -1,11 +1,11 @@
-import { brand } from "./marketingContent";
+import { brand } from "./content";
 
 export const siteSeo = {
   siteUrl: brand.siteUrl,
-  siteName: "Solution Play",
-  defaultTitle: "Solution Play — Soluções de TI e MSP para empresas",
+  siteName: brand.name,
+  defaultTitle: "Solution Play | Suporte de TI, Segurança Eletrônica, NOC e Desenvolvimento",
   defaultDescription:
-    "Suporte técnico, manutenção preventiva, monitoramento, servidores, Active Directory e consultoria em TI para pequenas e médias empresas. Planos MSP flexíveis.",
+    "Suporte de TI e infraestrutura, segurança eletrônica (CFTV, alarmes, controle de acesso), NOC para provedores e desenvolvimento de sistemas em Python. Atendimento em São Paulo e região.",
   locale: "pt_BR",
   twitterCard: "summary_large_image" as const,
 };

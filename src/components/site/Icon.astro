@@ -1,0 +1,26 @@
+---
+/** Ícones em linha (SVG) — leves e sem dependências. */
+interface Props {
+  name: "whatsapp" | "server" | "camera" | "network" | "code" | "arrow" | "check" | "mail" | "plus" | "clock" | "map" | "shield" | "badge";
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+---
+
+<svg class:list={["icon", className]} viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  {name === "whatsapp" && (
+    <path fill="currentColor" stroke="none" d="M12.04 2a9.9 9.9 0 0 0-8.5 15l-1.4 5.1 5.24-1.37A9.9 9.9 0 1 0 12.04 2Zm0 18.1a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.1.82.83-3.03-.2-.31a8.22 8.22 0 1 1 6.95 3.85Zm4.5-6.15c-.25-.12-1.46-.72-1.69-.8-.22-.08-.39-.12-.55.13-.17.24-.64.8-.78.96-.14.17-.29.19-.53.06a6.7 6.7 0 0 1-3.32-2.9c-.25-.43.25-.4.71-1.33.08-.16.04-.3-.02-.42l-.75-1.82c-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.66.31 2.76 2.76 0 0 0-.86 2.06 4.8 4.8 0 0 0 1 2.55 11 11 0 0 0 4.2 3.7c1.56.68 2.18.73 2.96.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.17-.47-.29Z" />
+  )}
+  {name === "server" && (<><rect x="3" y="4" width="18" height="7" rx="2" /><rect x="3" y="13" width="18" height="7" rx="2" /><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6" /></>)}
+  {name === "camera" && (<><path d="M3 8.5 15.5 5l1.5 5.5L4.5 14Z" /><path d="m17 8 4-1v5l-3.5 1M8 13.5V18M5 18h6" /></>)}
+  {name === "network" && (<><circle cx="12" cy="5" r="2.2" /><circle cx="5" cy="19" r="2.2" /><circle cx="19" cy="19" r="2.2" /><circle cx="12" cy="13" r="1.6" /><path d="M12 7.2v4.2M10.7 14.1l-4.2 3.4M13.3 14.1l4.2 3.4" /></>)}
+  {name === "code" && (<><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14" /></>)}
+  {name === "arrow" && <path d="M7 17 17 7M8 7h9v9" />}
+  {name === "check" && <path d="m5 12.5 4.5 4.5L19 7.5" />}
+  {name === "mail" && (<><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m4 7 8 6 8-6" /></>)}
+  {name === "plus" && <path d="M12 5v14M5 12h14" />}
+  {name === "clock" && (<><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>)}
+  {name === "map" && (<><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></>)}
+  {name === "shield" && (<><path d="M12 3 5 6v5.5c0 4.3 3 8 7 9.5 4-1.5 7-5.2 7-9.5V6Z" /><path d="m9 12 2 2 4-4" /></>)}
+  {name === "badge" && (<><rect x="4" y="4" width="16" height="16" rx="3" /><path d="M8 9h8M8 13h5" /></>)}
+</svg>

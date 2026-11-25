@@ -1,0 +1,56 @@
+---
+import BrandLogo from "../BrandLogo.astro";
+import Icon from "./Icon.astro";
+import { brand, whatsappLink } from "../../data/content";
+
+interface Props {
+  current?: "home" | "dev";
+}
+const { current = "home" } = Astro.props;
+
+const links = [
+  { href: "/#servicos", label: "Serviços", key: "servicos" },
+  { href: "/desenvolvimento/", label: "Desenvolvimento", key: "dev" },
+  { href: "/#atendimento", label: "Como contratar", key: "atendimento" },
+  { href: "/#contato", label: "Contato", key: "contato" },
+];
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="/" aria-label={`${brand.name}, página inicial`}>
+      <BrandLogo class="brand__mark" width={34} height={34} loading="eager" alt="" />
+      <span class="brand__text">Solution <b>Play</b></span>
+    </a>
+
+    <nav class="site-nav" aria-label="Principal">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} data-nav={link.key} aria-current={current === "dev" && link.key === "dev" ? "page" : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="btn btn--primary btn--sm site-header__cta" href={whatsappLink()} target="_blank" rel="noopener">
+      <Icon name="whatsapp" /> Chamar no WhatsApp
+    </a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-sheet" data-menu-toggle>
+      <span class="sr-only">Abrir menu</span>
+      <span class="menu-toggle__bars" aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu-sheet" id="menu-sheet" data-menu-sheet hidden>
+  <ul>
+    {links.map((link) => <li><a href={link.href} data-menu-link>{link.label}</a></li>)}
+  </ul>
+  <p class="menu-sheet__meta">WhatsApp {brand.whatsappDisplay}<br />{brand.hours}</p>
+</div>

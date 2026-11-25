@@ -1,0 +1,76 @@
+---
+/** Formulário curto: monta a mensagem e abre o WhatsApp (ou e-mail). Não envia dados para servidor. */
+import Icon from "./Icon.astro";
+import { brand, services } from "../../data/content";
+---
+
+<form class="contact-form" id="contact-form" novalidate aria-labelledby="cf-title">
+  <h3 id="cf-title">Prefere deixar a mensagem pronta?</h3>
+  <div class="field">
+    <label for="cf-nome">Seu nome</label>
+    <input id="cf-nome" name="nome" type="text" autocomplete="name" maxlength="120" required aria-describedby="cf-nome-erro" />
+    <span class="field__error" id="cf-nome-erro">Escreva seu nome para a gente saber com quem está falando.</span>
+  </div>
+  <div class="field">
+    <label for="cf-empresa">Empresa <span>(opcional)</span></label>
+    <input id="cf-empresa" name="empresa" type="text" autocomplete="organization" maxlength="160" />
+  </div>
+  <div class="field">
+    <label for="cf-servico">Assunto</label>
+    <select id="cf-servico" name="servico">
+      {services.map((s) => <option value={s.title}>{s.title}</option>)}
+      <option value="Outro assunto">Outro assunto</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="cf-msg">Mensagem <span>(opcional)</span></label>
+    <textarea id="cf-msg" name="mensagem" rows="3" maxlength="800"></textarea>
+  </div>
+  <div class="contact-form__actions">
+    <button class="btn btn--primary" type="submit"><Icon name="whatsapp" /> Enviar pelo WhatsApp</button>
+    <button class="text-link" type="button" data-send-email>Enviar por e-mail</button>
+  </div>
+  <p class="contact-form__note">O WhatsApp abre com a sua mensagem escrita; é só confirmar o envio. Nada fica salvo no site.</p>
+</form>
+
+<script define:vars={{ whatsapp: brand.whatsapp, email: brand.email }}>
+  const form = document.getElementById("contact-form");
+  if (form instanceof HTMLFormElement) {
+    const build = () => {
+      const fd = new FormData(form);
+      const nome = String(fd.get("nome") || "").trim();
+      const empresa = String(fd.get("empresa") || "").trim();
+      const servico = String(fd.get("servico") || "").trim();
+      const msg = String(fd.get("mensagem") || "").trim();
+      return {
+        nome,
+        servico,
+        text: [
+          `Olá! Sou ${nome}${empresa ? `, da ${empresa}` : ""}.`,
+          `Assunto: ${servico}`,
+          msg ? `\n${msg}` : null,
+          "\n(Mensagem enviada pelo site)",
+        ]
+          .filter(Boolean)
+          .join("\n"),
+      };
+    };
+    const valid = () => {
+      const input = form.querySelector("#cf-nome");
+      const ok = input instanceof HTMLInputElement && input.value.trim().length > 1;
+      input?.closest(".field")?.classList.toggle("is-invalid", !ok);
+      if (!ok) input?.focus();
+      return ok;
+    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!valid()) return;
+      window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(build().text)}`, "_blank", "noopener");
+    });
+    form.querySelector("[data-send-email]")?.addEventListener("click", () => {
+      if (!valid()) return;
+      const data = build();
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent(`Contato pelo site — ${data.servico}`)}&body=${encodeURIComponent(data.text)}`;
+    });
+  }
+</script>

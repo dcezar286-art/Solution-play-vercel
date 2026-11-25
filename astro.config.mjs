@@ -5,7 +5,14 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://www.solutionplay.com.br",
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // /servicos é apenas um redirecionamento antigo — fica fora do sitemap.
+      filter: (page) => !page.includes("/servicos"),
+      changefreq: "monthly",
+      lastmod: new Date(),
+    }),
+  ],
   compressHTML: true,
   vite: {
     build: {

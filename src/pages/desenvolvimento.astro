@@ -1,0 +1,191 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Icon from "../components/site/Icon.astro";
+import { brand, devSolutions, devStack, devProcess, devFaq, whatsappLink } from "../data/content";
+
+const title = "Desenvolvimento de sistemas em Python: PDV, ERP, SaaS e IA | Solution Play";
+const description =
+  "Desenvolvimento de sistemas sob medida em Python: PDV, ERP, SaaS, controle de estoque, monitoria de links e servidores com Zabbix e Grafana, e agentes de IA. Atendimento em São Paulo e todo o Brasil.";
+const waMessage = "Olá! Vim pela página de Desenvolvimento e quero conversar sobre um sistema.";
+const pageUrl = `${brand.siteUrl}/desenvolvimento/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Desenvolvimento de sistemas sob medida",
+    serviceType: "Desenvolvimento de software",
+    url: pageUrl,
+    description,
+    provider: { "@type": "Organization", name: brand.name, url: brand.siteUrl, telephone: "+55 11 93741-5034" },
+    areaServed: { "@type": "Country", name: "Brasil" },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Soluções de desenvolvimento",
+      itemListElement: devSolutions.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s.title, description: s.desc },
+      })),
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: brand.siteUrl },
+      { "@type": "ListItem", position: 2, name: "Desenvolvimento", item: pageUrl },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: devFaq.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+
+const codeLines = [
+  { t: '<span class="k">from</span> solutionplay <span class="k">import</span> Sistema', d: 0 },
+  { t: "", d: 1 },
+  { t: 'app = Sistema(<span class="s">"sua-empresa"</span>)', d: 2 },
+  { t: 'app.modulos([<span class="s">"PDV"</span>, <span class="s">"ERP"</span>, <span class="s">"Estoque"</span>])', d: 3 },
+  { t: 'app.monitorar(zabbix=<span class="k">True</span>, grafana=<span class="k">True</span>)', d: 4 },
+  { t: 'app.agente_ia(<span class="s">"atendimento"</span>)', d: 5 },
+  { t: "", d: 6 },
+  { t: 'app.deploy()  <span class="c"># no ar</span>', d: 7 },
+];
+---
+
+<SiteLayout title={title} description={description} current="dev" whatsappMessage={waMessage} schema={schema} mono>
+  <!-- Topo -->
+  <section class="dev-hero" data-scene="dev-hero" aria-labelledby="dev-title">
+    <div class="wrap dev-hero__inner">
+      <div>
+        <nav class="crumbs" aria-label="Você está em" data-intro style="--n:0"><a href="/">Início</a><span aria-hidden="true">/</span>Desenvolvimento</nav>
+        <h1 id="dev-title" class="dev-hero__title" data-intro style="--n:0">Sistemas sob medida, feitos em Python.</h1>
+        <p class="hero__lead" data-intro style="--n:1">
+          PDV, ERP, controle de estoque, monitoria de rede e agentes de IA, construídos para o jeito que a sua empresa trabalha e mantidos pela mesma equipe que cuida da sua infraestrutura.
+        </p>
+        <div class="hero__actions" data-intro style="--n:2">
+          <a class="btn btn--primary" href={whatsappLink(waMessage)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Conversar sobre o meu sistema</a>
+          <a class="text-link" href="#solucoes">Ver o que desenvolvemos</a>
+        </div>
+      </div>
+
+      <div class="code-window" aria-hidden="true" data-intro style="--n:2">
+        <div class="code-window__bar"><i></i><i></i><i></i><span>projeto.py</span></div>
+        <pre class="code-window__body">{codeLines.map((l, i) => <code style={`--l:${l.d}`}><b>{i + 1}</b><span set:html={l.t || " "} /></code>)}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Soluções -->
+  <section class="section" id="solucoes" data-scene="dev-solucoes" aria-labelledby="solucoes-title">
+    <div class="wrap">
+      <header class="section-head">
+        <h2 id="solucoes-title">O que desenvolvemos</h2>
+        <p>Cada sistema é montado para o seu processo e conversa com as ferramentas que você já usa.</p>
+      </header>
+
+      <div class="solution-grid">
+        {
+          devSolutions.map((s) => (
+            <article class="solution" id={s.id}>
+              <span class="solution__area">{s.tag}</span>
+              <h3>{s.title}</h3>
+              <p class="solution__desc">{s.desc}</p>
+              <ul class="checklist">
+                {s.features.map((f) => <li>{f}</li>)}
+              </ul>
+              <a class="text-link text-link--orange" href={whatsappLink(`Olá! Vim pela página de Desenvolvimento e tenho interesse em: ${s.title}.`)} target="_blank" rel="noopener">
+                <Icon name="whatsapp" /> Pedir orçamento
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Tecnologias -->
+  <section class="section" id="tecnologias" data-scene="dev-stack" aria-labelledby="stack-title">
+    <div class="wrap stack">
+      <div>
+        <header class="section-head">
+          <h2 id="stack-title">Com que tecnologia</h2>
+        </header>
+        <div class="python">
+          <p class="python__name" aria-label="Python">Python</p>
+          <p>É a base dos nossos sistemas: robusto, fácil de manter ao longo dos anos e o padrão do mercado em dados, automação e inteligência artificial.</p>
+        </div>
+      </div>
+      <dl class="stack-list">
+        {
+          devStack
+            .filter((g) => !("primary" in g && g.primary))
+            .map((g) => (
+              <div>
+                <dt>{g.group}</dt>
+                <dd>{g.items.join(", ")}</dd>
+              </div>
+            ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Processo (sequência real, por isso numerada) -->
+  <section class="section" id="processo" data-scene="dev-processo" aria-labelledby="processo-title">
+    <div class="wrap">
+      <header class="section-head">
+        <h2 id="processo-title">Da conversa ao sistema no ar</h2>
+      </header>
+      <ol class="process">
+        {
+          devProcess.map((p, i) => (
+            <li>
+              <span class="process__num" aria-hidden="true">{i + 1}</span>
+              <h3>{p.title}</h3>
+              <p>{p.desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Perguntas -->
+  <section class="section" id="perguntas" data-scene="dev-faq" aria-labelledby="faq-title">
+    <div class="wrap faq">
+      <header class="section-head">
+        <h2 id="faq-title">Perguntas frequentes</h2>
+      </header>
+      <div>
+        {
+          devFaq.map((f) => (
+            <details class="faq__item">
+              <summary>{f.q}<Icon name="plus" /></summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Chamada final -->
+  <section class="section" data-scene="dev-cta" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="cta-band">
+        <div>
+          <h2 id="cta-title">Tem um processo que merece um sistema?</h2>
+          <p>Conte a sua ideia. Numa primeira conversa já dá para entender o caminho, o prazo e o investimento.</p>
+        </div>
+        <a class="btn btn--primary btn--lg" href={whatsappLink(waMessage)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Chamar no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
