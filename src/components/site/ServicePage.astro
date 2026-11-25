@@ -31,7 +31,7 @@ const schema = [
     url: pageUrl,
     description: page.description,
     provider: { "@type": "ProfessionalService", name: brand.name, url: `${brand.siteUrl}/`, telephone: "+55 11 93741-5034" },
-    areaServed: { "@type": "State", name: "São Paulo" },
+    areaServed: page.areaServed ?? { "@type": "State", name: "São Paulo" },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: page.serviceType,

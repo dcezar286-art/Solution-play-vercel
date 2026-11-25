@@ -15,6 +15,8 @@ export type ServicePageData = {
   lead: string;
   serviceType: string;
   whatsappMessage: string;
+  /** Área atendida informada ao Google (JSON-LD). Padrão: estado de São Paulo. */
+  areaServed?: { "@type": "Country" | "State"; name: string };
   /** Ficha rápida mostrada ao lado do título. */
   facts: { label: string; value: string }[];
   items: { title: string; desc: string }[];
@@ -113,18 +115,19 @@ export const servicePages: Record<"ti" | "seguranca" | "noc", ServicePageData> =
   noc: {
     slug: "/noc-provedores/",
     name: "NOC para provedores",
-    title: "NOC e Redes para Provedores em São Paulo | Solution Play",
+    title: "NOC e Redes para Provedores em Todo o Brasil | Solution Play",
     description:
-      "NOC 24/7 e engenharia de redes para provedores de internet em São Paulo: BGP, OSPF, MPLS, engenharia de tráfego, core de rede e gestão de ativos.",
+      "NOC 24/7 e engenharia de redes para provedores de internet em todo o Brasil: BGP, OSPF, MPLS, engenharia de tráfego, core de rede e gestão de ativos.",
     h1: "NOC e engenharia de redes para provedores de internet",
     lead: "Monitoramento 24/7, roteamento e engenharia de tráfego para o seu provedor ficar no ar e crescer com estabilidade.",
     serviceType: "NOC e engenharia de redes",
+    areaServed: { "@type": "Country", name: "Brasil" },
     whatsappMessage: "Olá! Vim pela página de NOC para Provedores e quero falar com um especialista.",
     facts: [
       { label: "Para", value: "Provedores (ISPs) e operadoras" },
       { label: "Monitoramento", value: "24 horas, 7 dias por semana" },
       { label: "Contratação", value: "NOC contínuo ou projeto pontual" },
-      { label: "Base", value: "São Paulo, atendimento remoto" },
+      { label: "Atendimento", value: "Remoto, em todo o Brasil" },
     ],
     items: [
       { title: "Monitoramento 24/7", desc: "Links, concentradores e equipamentos de core acompanhados o tempo todo, com alertas." },
