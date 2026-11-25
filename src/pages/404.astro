@@ -1,0 +1,35 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Icon from "../components/site/Icon.astro";
+import { whatsappLink } from "../data/content";
+
+const links = [
+  { href: "/", label: "Página inicial", hint: "Todos os serviços da Solution Play" },
+  { href: "/desenvolvimento/", label: "Desenvolvimento de sistemas", hint: "PDV, ERP, SaaS, estoque e IA" },
+  { href: "/#contato", label: "Contato", hint: "WhatsApp, e-mail e formulário" },
+];
+---
+
+<SiteLayout title="Página não encontrada | Solution Play" description="Esta página não existe ou mudou de endereço. Veja os serviços da Solution Play ou fale com a gente." noindex>
+  <section class="not-found" aria-labelledby="nf-title">
+    <div class="wrap">
+      <h1 id="nf-title">Esta página não existe ou mudou de endereço</h1>
+      <p>Confira o endereço digitado ou siga por um destes caminhos.</p>
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href}>
+                {l.label}
+                <small>{l.hint}</small>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={whatsappLink()} target="_blank" rel="noopener"><Icon name="whatsapp" /> Chamar no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

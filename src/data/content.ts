@@ -51,6 +51,7 @@ export const services: Service[] = [
       "Microsoft 365, usuários e permissões",
     ],
     message: "Olá! Vim pelo site e quero falar sobre Suporte de TI e Infraestrutura.",
+    href: "/suporte-ti/",
   },
   {
     id: "seguranca",
@@ -66,6 +67,7 @@ export const services: Service[] = [
       "Projeto, instalação e manutenção",
     ],
     message: "Olá! Vim pelo site e quero falar sobre Segurança Eletrônica (CFTV, alarmes, controle de acesso).",
+    href: "/seguranca-eletronica/",
   },
   {
     id: "noc",
@@ -80,6 +82,7 @@ export const services: Service[] = [
       "Engenharia de tráfego e core de rede",
     ],
     message: "Olá! Vim pelo site e quero falar sobre NOC e Engenharia de Redes para provedor.",
+    href: "/noc-provedores/",
   },
   {
     id: "dev",

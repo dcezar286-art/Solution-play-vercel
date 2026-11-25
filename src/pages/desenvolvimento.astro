@@ -3,9 +3,9 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import Icon from "../components/site/Icon.astro";
 import { brand, devSolutions, devStack, devProcess, devFaq, whatsappLink } from "../data/content";
 
-const title = "Desenvolvimento de sistemas em Python: PDV, ERP, SaaS e IA | Solution Play";
+const title = "Desenvolvimento de Sistemas em São Paulo | Solution Play";
 const description =
-  "Desenvolvimento de sistemas sob medida em Python: PDV, ERP, SaaS, controle de estoque, monitoria de links e servidores com Zabbix e Grafana, e agentes de IA. Atendimento em São Paulo e todo o Brasil.";
+  "Desenvolvimento de sistemas sob medida em Python em São Paulo: PDV, ERP, SaaS, controle de estoque, monitoria com Zabbix e Grafana e agentes de IA.";
 const waMessage = "Olá! Vim pela página de Desenvolvimento e quero conversar sobre um sistema.";
 const pageUrl = `${brand.siteUrl}/desenvolvimento/`;
 
@@ -17,8 +17,8 @@ const schema = [
     serviceType: "Desenvolvimento de software",
     url: pageUrl,
     description,
-    provider: { "@type": "Organization", name: brand.name, url: brand.siteUrl, telephone: "+55 11 93741-5034" },
-    areaServed: { "@type": "Country", name: "Brasil" },
+    provider: { "@type": "ProfessionalService", name: brand.name, url: `${brand.siteUrl}/`, telephone: "+55 11 93741-5034" },
+    areaServed: { "@type": "State", name: "São Paulo" },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Soluções de desenvolvimento",
@@ -32,7 +32,7 @@ const schema = [
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Início", item: brand.siteUrl },
+      { "@type": "ListItem", position: 1, name: "Início", item: `${brand.siteUrl}/` },
       { "@type": "ListItem", position: 2, name: "Desenvolvimento", item: pageUrl },
     ],
   },

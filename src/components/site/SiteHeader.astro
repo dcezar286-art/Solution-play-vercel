@@ -4,14 +4,15 @@ import Icon from "./Icon.astro";
 import { brand, whatsappLink } from "../../data/content";
 
 interface Props {
-  current?: "home" | "dev";
+  current?: "home" | "dev" | "ti" | "seguranca" | "noc";
 }
 const { current = "home" } = Astro.props;
 
 const links = [
-  { href: "/#servicos", label: "Serviços", key: "servicos" },
+  { href: "/suporte-ti/", label: "Suporte de TI", key: "ti" },
+  { href: "/seguranca-eletronica/", label: "Segurança eletrônica", key: "seguranca" },
+  { href: "/noc-provedores/", label: "NOC para provedores", key: "noc" },
   { href: "/desenvolvimento/", label: "Desenvolvimento", key: "dev" },
-  { href: "/#atendimento", label: "Como contratar", key: "atendimento" },
   { href: "/#contato", label: "Contato", key: "contato" },
 ];
 ---
@@ -28,7 +29,7 @@ const links = [
         {
           links.map((link) => (
             <li>
-              <a href={link.href} data-nav={link.key} aria-current={current === "dev" && link.key === "dev" ? "page" : undefined}>
+              <a href={link.href} data-nav={link.key} aria-current={current === link.key ? "page" : undefined}>
                 {link.label}
               </a>
             </li>
@@ -38,7 +39,7 @@ const links = [
     </nav>
 
     <a class="btn btn--primary btn--sm site-header__cta" href={whatsappLink()} target="_blank" rel="noopener">
-      <Icon name="whatsapp" /> Chamar no WhatsApp
+      <Icon name="whatsapp" /> <span class="cta-long">Chamar no </span>WhatsApp
     </a>
 
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-sheet" data-menu-toggle>

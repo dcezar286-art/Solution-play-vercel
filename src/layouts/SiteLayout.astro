@@ -10,16 +10,18 @@ interface Props {
   description?: string;
   ogImage?: string;
   /** Página atual — destaca o item no menu. */
-  current?: "home" | "dev";
+  current?: "home" | "dev" | "ti" | "seguranca" | "noc";
   /** Mensagem pronta usada pela barra fixa do WhatsApp. */
   whatsappMessage?: string;
   /** Dados estruturados (JSON-LD) específicos da página. */
   schema?: Record<string, unknown> | Record<string, unknown>[];
   /** Carrega a fonte monoespaçada (usada só no bloco de código da página Dev). */
   mono?: boolean;
+  /** Páginas que não devem aparecer no Google (ex.: 404). */
+  noindex?: boolean;
 }
 
-const { title, description = siteSeo.defaultDescription, ogImage, current = "home", whatsappMessage, schema, mono = false } = Astro.props;
+const { title, description = siteSeo.defaultDescription, ogImage, current = "home", whatsappMessage, schema, mono = false, noindex = false } = Astro.props;
 const fontUrl = `https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800${mono ? "&family=JetBrains+Mono:wght@400;500" : ""}&display=swap`;
 
 const canonicalUrl = new URL(Astro.url.pathname, siteSeo.siteUrl).href;
@@ -37,8 +39,8 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta name="theme-color" content="#07111f" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large"} />
+    {noindex ? null : <link rel="canonical" href={canonicalUrl} />}
     {googleVerification ? <meta name="google-site-verification" content={googleVerification} /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteSeo.siteName} />
@@ -47,6 +49,9 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Solution Play: suporte de TI, segurança eletrônica e sistemas em São Paulo" />
     <meta name="twitter:card" content={siteSeo.twitterCard} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

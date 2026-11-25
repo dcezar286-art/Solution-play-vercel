@@ -21,25 +21,7 @@ for (const { name, size } of faviconSizes) {
     .toFile(path.join(publicDir, name));
 }
 
-const ogWidth = 1200;
-const ogHeight = 630;
-const logoOnOg = 280;
+// Imagem de compartilhamento (1200x630) com nome e proposta da marca.
+await import("./generate-og-image.mjs");
 
-const logoBuffer = await sharp(logoPath)
-  .resize(logoOnOg, logoOnOg, { fit: "contain", background: { r: 3, g: 3, b: 10, alpha: 1 } })
-  .png()
-  .toBuffer();
-
-await sharp({
-  create: {
-    width: ogWidth,
-    height: ogHeight,
-    channels: 3,
-    background: { r: 3, g: 3, b: 10 },
-  },
-})
-  .composite([{ input: logoBuffer, gravity: "center" }])
-  .png()
-  .toFile(path.join(publicDir, "og-image.png"));
-
-console.log("Generated public/favicon.png, apple-touch-icon.png, og-image.png");
+console.log("Generated public/favicon.png, apple-touch-icon.png");

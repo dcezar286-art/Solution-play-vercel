@@ -3,12 +3,16 @@ import sitemap from "@astrojs/sitemap";
 
 import tailwindcss from "@tailwindcss/vite";
 
+const SITE = "https://www.solutionplay.com.br";
+
+// URLs que nunca devem entrar no sitemap (comparação exata, para não bloquear páginas futuras).
+const SITEMAP_EXCLUDE = new Set([`${SITE}/servicos`, `${SITE}/servicos/`]);
+
 export default defineConfig({
-  site: "https://www.solutionplay.com.br",
+  site: SITE,
   integrations: [
     sitemap({
-      // /servicos é apenas um redirecionamento antigo — fica fora do sitemap.
-      filter: (page) => !page.includes("/servicos"),
+      filter: (page) => !SITEMAP_EXCLUDE.has(page),
       changefreq: "monthly",
       lastmod: new Date(),
     }),
