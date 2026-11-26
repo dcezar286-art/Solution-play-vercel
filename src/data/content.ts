@@ -23,6 +23,14 @@ export type BrandAddress = {
   mapsUrl?: string;
 };
 
+/**
+ * Conversão "Solicitar orçamento" do Google Ads: o send_to completo, no formato "AW-18440985753/RÓTULO".
+ * Onde achar: Google Ads → Metas → Conversões → Solicitar orçamento → Configuração da tag →
+ * "Instalar a tag você mesmo" → linha send_to do snippet do evento.
+ * Vazio = o site não envia nenhuma conversão (o restante da medição continua funcionando).
+ */
+const conversaoOrcamento = "" as string;
+
 export const brand = {
   name: "Solution Play",
   tagline: "TI para empresas em movimento",
@@ -47,11 +55,12 @@ export const brand = {
   /** ID do GA4. Ex.: "G-ABC123XYZ9" (GA4 → Administrador → Fluxos de dados). */
   ga4Id: "G-9BF37VJ9XX" as string,
   /** ID da conta do Google Ads. Ex.: "AW-123456789" (Ads → Metas → Conversões → Configurar tag). */
-  adsId: "" as string,
-  /** Conversões do Google Ads: cole o send_to completo de cada ação. Ex.: "AW-123456789/AbCdEfGhIj". */
+  adsId: "AW-18440985753" as string,
+  /** Conversões do Google Ads por canal (send_to completo), enviadas só com o consentimento aceito.
+      WhatsApp (botões e formulário) e telefone contam como a mesma conversão de contato; e-mail não conta. */
   adsConversions: {
-    whatsapp: "" as string,
-    phone: "" as string,
+    whatsapp: conversaoOrcamento,
+    phone: conversaoOrcamento,
     email: "" as string,
   },
 } as const;

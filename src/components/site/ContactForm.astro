@@ -75,8 +75,9 @@ import { brand, services } from "../../data/content";
       if (!valid()) return;
       const data = build();
       const params = { service: data.serviceId, position: "formulario" };
-      track("form_submit_whatsapp", params);
-      track("whatsapp_click", params, "whatsapp");
+      // Uma conversão por envio: vai no form_submit_whatsapp; o whatsapp_click do formulário fica só no GA4.
+      track("form_submit_whatsapp", params, "whatsapp");
+      track("whatsapp_click", params);
       window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(data.text)}`, "_blank", "noopener");
     });
 

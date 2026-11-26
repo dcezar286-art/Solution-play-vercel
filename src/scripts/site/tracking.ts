@@ -4,8 +4,12 @@
  * - Sem IDs em src/data/content.ts (brand.ga4Id / brand.adsId) → nada do Google é carregado.
  * - Com IDs: tudo começa "negado" e o gtag.js só é baixado depois que a página terminou de carregar.
  *   O aviso de cookies grava a escolha da pessoa (aceitar/recusar) e atualiza o consentimento.
- * - Eventos: whatsapp_click, phone_click, email_click, form_submit_whatsapp, form_submit_email,
- *   com os parâmetros service, page e position. Cada canal pode disparar uma conversão do Ads.
+ * - Eventos (só para o GA4): whatsapp_click, phone_click, email_click, form_submit_whatsapp,
+ *   form_submit_email, com os parâmetros service, page e position.
+ * - Conversões do Ads (brand.adsConversions): saem só depois que a pessoa aceita os cookies.
+ * - O vinculador de conversões do Google (cookies _gcl_*, com o gclid do anúncio) vem com o
+ *   config do Ads e só grava cookies com ad_storage aceito; com recusa, ads_data_redaction
+ *   tira os identificadores de clique dos envios.
  * - Origem da visita (gclid / utm_*) fica guardada na sessão do navegador e é anexada
  *   ao fim da mensagem do WhatsApp, para saber quais contatos vieram dos anúncios.
  */
@@ -102,11 +106,14 @@ const consentState = (c: Choice) => ({
   ad_personalization: c,
 });
 
-/** Envia um evento ao GA4 e, se configurada, a conversão correspondente ao Google Ads. */
+/** Escolha atual da pessoa no aviso de cookies (null = ainda não respondeu). */
+let consent: Choice | null = null;
+
+/** Envia um evento ao GA4 e, se configurada e com consentimento aceito, a conversão do Google Ads. */
 export function track(event: string, params: Params = {}, conversion?: ConversionKey) {
   if (!trackingEnabled) return;
-  gtag("event", event, { page: location.pathname, ...params });
-  const sendTo = conversion && brand.adsId ? brand.adsConversions[conversion] : "";
+  if (brand.ga4Id) gtag("event", event, { send_to: brand.ga4Id, page: location.pathname, ...params });
+  const sendTo = conversion && brand.adsId && consent === "granted" ? brand.adsConversions[conversion] : "";
   if (sendTo) gtag("event", "conversion", { send_to: sendTo });
 }
 
@@ -142,6 +149,7 @@ function setupConsentBanner(choice: Choice | null) {
       } catch {
         /* navegação privada: vale só para esta página */
       }
+      consent = c;
       gtag("consent", "update", consentState(c));
       if (c === "denied") clearGoogleCookies();
       banner.hidden = true;
@@ -161,6 +169,7 @@ function startGoogleTag() {
   gtag("consent", "default", { ...consentState("denied"), wait_for_update: 500 });
   gtag("set", "ads_data_redaction", true);
   const choice = readChoice();
+  consent = choice;
   if (choice === "granted") gtag("consent", "update", consentState("granted"));
   gtag("js", new Date());
   if (brand.ga4Id) gtag("config", brand.ga4Id);
