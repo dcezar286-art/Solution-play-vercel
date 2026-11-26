@@ -10,6 +10,8 @@
  * - O vinculador de conversões do Google (cookies _gcl_*, com o gclid do anúncio) vem com o
  *   config do Ads e só grava cookies com ad_storage aceito; com recusa, ads_data_redaction
  *   tira os identificadores de clique dos envios.
+ * - Sem remarketing: personalização de anúncios desligada (ad_personalization sempre negado e
+ *   allow_ad_personalization_signals false), mesmo para quem aceita.
  * - Origem da visita (gclid / utm_*) fica guardada na sessão do navegador e é anexada
  *   ao fim da mensagem do WhatsApp, para saber quais contatos vieram dos anúncios.
  */
@@ -99,11 +101,12 @@ function gtag(..._args: unknown[]) {
   window.dataLayer.push(arguments);
 }
 
+// Remarketing desligado: ad_personalization fica sempre negado, mesmo para quem aceita.
 const consentState = (c: Choice) => ({
   ad_storage: c,
   analytics_storage: c,
   ad_user_data: c,
-  ad_personalization: c,
+  ad_personalization: "denied" as Choice,
 });
 
 /** Escolha atual da pessoa no aviso de cookies (null = ainda não respondeu). */
@@ -168,6 +171,7 @@ function startGoogleTag() {
   window.dataLayer = window.dataLayer || [];
   gtag("consent", "default", { ...consentState("denied"), wait_for_update: 500 });
   gtag("set", "ads_data_redaction", true);
+  gtag("set", "allow_ad_personalization_signals", false);
   const choice = readChoice();
   consent = choice;
   if (choice === "granted") gtag("consent", "update", consentState("granted"));

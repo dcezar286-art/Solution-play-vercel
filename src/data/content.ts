@@ -29,7 +29,7 @@ export type BrandAddress = {
  * "Instalar a tag você mesmo" → linha send_to do snippet do evento.
  * Vazio = o site não envia nenhuma conversão (o restante da medição continua funcionando).
  */
-const conversaoOrcamento = "" as string;
+const conversaoOrcamento = "AW-18440985753/ghZpCI3msfIcEJm5rNlE" as string;
 
 export const brand = {
   name: "Solution Play",
