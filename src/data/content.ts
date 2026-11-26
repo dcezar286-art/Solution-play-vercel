@@ -3,17 +3,57 @@
  * Para mudar textos, serviços ou o número do WhatsApp, edite apenas este arquivo.
  */
 
+/** Cidades com atendimento presencial. Mude aqui e o site inteiro acompanha. */
+export const presencialCities = ["São Paulo (capital)", "Região do ABC", "Guarulhos", "Osasco", "Barueri"];
+export const presencialText = "São Paulo (capital), região do ABC, Guarulhos, Osasco e Barueri";
+
+/** Endereço da sede. Só aparece no site e no Google quando preenchido. */
+export type BrandAddress = {
+  /** Rua, número e complemento. Ex.: "Rua Exemplo, 123, sala 4 – Bairro" */
+  streetAddress: string;
+  /** Cidade. Ex.: "São Paulo" */
+  addressLocality: string;
+  /** Sigla do estado. Ex.: "SP" */
+  addressRegion: string;
+  /** CEP. Ex.: "01000-000" */
+  postalCode: string;
+  /** Coordenadas do local (Google Maps → clique com o botão direito no ponto). */
+  geo?: { latitude: number; longitude: number };
+  /** Link do perfil da empresa no Google Maps, se houver. */
+  mapsUrl?: string;
+};
+
 export const brand = {
   name: "Solution Play",
   tagline: "TI para empresas em movimento",
+  slogan: "Tecnologia que resolve. Seu negócio vai além.",
   whatsapp: "5511937415034",
   whatsappDisplay: "(11) 93741-5034",
+  /** Botão "Ligar" (formato internacional, sem espaços). */
+  phone: "+5511937415034",
+  phoneDisplay: "(11) 93741-5034",
+  /** Troque aqui quando o e-mail @solutionplay.com.br estiver ativo. É o único lugar a mudar. */
   email: "solutiontech1016@gmail.com",
   cnpj: "49.821.819/0001-09",
   siteUrl: "https://www.solutionplay.com.br",
   siteDisplay: "www.solutionplay.com.br",
-  area: "São Paulo e região metropolitana",
+  area: presencialText,
   hours: "Segunda a sexta, das 8h às 18h",
+  /** Endereço da sede. Deixe null enquanto não quiser publicar. */
+  address: null as BrandAddress | null,
+
+  /* ---- Medição (Google Analytics 4 e Google Ads) ----
+     Vazio = o site não carrega nenhum script do Google nem mostra o aviso de cookies. */
+  /** ID do GA4. Ex.: "G-ABC123XYZ9" (GA4 → Administrador → Fluxos de dados). */
+  ga4Id: "" as string,
+  /** ID da conta do Google Ads. Ex.: "AW-123456789" (Ads → Metas → Conversões → Configurar tag). */
+  adsId: "" as string,
+  /** Conversões do Google Ads: cole o send_to completo de cada ação. Ex.: "AW-123456789/AbCdEfGhIj". */
+  adsConversions: {
+    whatsapp: "" as string,
+    phone: "" as string,
+    email: "" as string,
+  },
 } as const;
 
 /** Monta o link do WhatsApp já com a mensagem escrita. */
@@ -21,10 +61,52 @@ export function whatsappLink(message = "Olá! Vim pelo site da Solution Play e g
   return `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
+export const phoneLink = `tel:${brand.phone}`;
+
+/* ---------------------------------------------------------------- */
+/* Prova social — tudo começa vazio e a seção fica oculta.           */
+/* Preencha só com dados reais e autorizados pelo cliente.           */
+/* ---------------------------------------------------------------- */
+
+export type ServiceKey = "ti" | "seguranca" | "noc" | "dev";
+/** Página atual: destaca o item do menu e identifica o serviço nos eventos de medição. */
+export type PageKey = "home" | ServiceKey | "blog" | "privacidade" | "outro";
+
+export type Testimonial = {
+  /** Texto do depoimento, nas palavras do cliente. */
+  quote: string;
+  name: string;
+  /** Cargo. Ex.: "Síndico", "Gerente administrativo" */
+  role?: string;
+  company?: string;
+  /** Página de serviço onde o depoimento aparece. Sem valor = aparece em todas. */
+  service?: ServiceKey;
+};
+export const testimonials: Testimonial[] = [];
+
+export type ClientLogo = {
+  name: string;
+  /** Arquivo em /public/clientes/. Ex.: "/clientes/empresa-x.svg" */
+  src: string;
+  width?: number;
+  height?: number;
+};
+export const clientLogos: ClientLogo[] = [];
+
+export type Stat = {
+  /** Número já formatado. Ex.: "10+", "250" */
+  value: string;
+  /** O que o número significa. Ex.: "anos de experiência" */
+  label: string;
+};
+export const stats: Stat[] = [];
+
 export type Service = {
-  id: string;
+  id: ServiceKey;
   icon: "server" | "camera" | "network" | "code";
   title: string;
+  /** Nome do serviço informado ao Google (JSON-LD). */
+  schemaName: string;
   short: string;
   audience: string;
   summary: string;
@@ -39,6 +121,7 @@ export const services: Service[] = [
     id: "ti",
     icon: "server",
     title: "Suporte de TI & Infraestrutura",
+    schemaName: "Suporte de TI e infraestrutura",
     short: "TI & Infraestrutura",
     audience: "Empresas de todos os tamanhos",
     summary: "Soluções corporativas, manutenção e gestão completa do seu ambiente de TI.",
@@ -57,6 +140,7 @@ export const services: Service[] = [
     id: "seguranca",
     icon: "camera",
     title: "Segurança Eletrônica",
+    schemaName: "Segurança eletrônica: CFTV, alarmes e controle de acesso",
     short: "Segurança Eletrônica",
     audience: "Empresas e condomínios",
     summary: "CFTV, alarmes e soluções de vigilância com proteção integral.",
@@ -73,6 +157,7 @@ export const services: Service[] = [
     id: "noc",
     icon: "network",
     title: "NOC & Redes para Provedores",
+    schemaName: "NOC e engenharia de redes para provedores",
     short: "NOC para Provedores",
     audience: "ISPs e operadoras",
     summary: "Gestão, monitoramento e alta disponibilidade para provedores de internet.",
@@ -88,6 +173,7 @@ export const services: Service[] = [
     id: "dev",
     icon: "code",
     title: "Desenvolvimento de Sistemas",
+    schemaName: "Desenvolvimento de sistemas sob medida",
     short: "Desenvolvimento",
     audience: "Sistemas sob medida em Python",
     summary: "Software feito para o jeito que a sua empresa trabalha.",
@@ -106,7 +192,7 @@ export const services: Service[] = [
 
 export const trust = [
   { icon: "clock", text: "Primeira resposta em até 4 horas úteis, de segunda a sexta." },
-  { icon: "map", text: "Atendimento remoto e presencial em São Paulo e região metropolitana." },
+  { icon: "map", text: `Atendimento presencial em ${presencialText}; remoto em todo o Brasil.` },
   { icon: "shield", text: "Só software original e licenciado. Nada de ativação pirata." },
   { icon: "badge", text: `Empresa registrada, CNPJ ${brand.cnpj}.` },
 ] as const;

@@ -1,7 +1,7 @@
 ---
-/** Barra fixa do WhatsApp — só aparece no celular, sempre ao alcance do polegar. */
+/** Barra fixa do celular: WhatsApp e "Ligar", sempre ao alcance do polegar. */
 import Icon from "./Icon.astro";
-import { brand, whatsappLink } from "../../data/content";
+import { brand, whatsappLink, phoneLink } from "../../data/content";
 
 interface Props {
   message?: string;
@@ -9,11 +9,11 @@ interface Props {
 const { message } = Astro.props;
 ---
 
-<div class="wa-bar" data-wa-bar>
+<div class="wa-bar" data-wa-bar data-track-zone="barra_fixa">
   <a class="btn btn--primary wa-bar__main" href={whatsappLink(message)} target="_blank" rel="noopener">
-    <Icon name="whatsapp" /> Chamar no WhatsApp
+    <Icon name="whatsapp" /> <span><span class="soft-xs">Chamar no </span>WhatsApp</span>
   </a>
-  <a class="wa-bar__alt" href={`mailto:${brand.email}`} aria-label="Enviar e-mail">
-    <Icon name="mail" />
+  <a class="wa-bar__call" href={phoneLink} aria-label={`Ligar para ${brand.phoneDisplay}`}>
+    <Icon name="phone" /> Ligar
   </a>
 </div>

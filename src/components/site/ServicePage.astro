@@ -1,77 +1,68 @@
 ---
 /**
- * Modelo das páginas de serviço (Suporte de TI, Segurança Eletrônica, NOC).
- * O conteúdo vem de src/data/servicePages.ts.
+ * Modelo das páginas de serviço e das subpáginas de SEO.
+ * O conteúdo vem de src/data/servicePages.ts; seções sem dados não aparecem.
  */
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import Testimonials from "./Testimonials.astro";
 import Icon from "./Icon.astro";
-import { brand, whatsappLink } from "../../data/content";
-import { servicePages, type ServicePageData } from "../../data/servicePages";
+import { brand, whatsappLink, phoneLink } from "../../data/content";
+import { servicePages, subPages, type ServicePageData } from "../../data/servicePages";
+import { serviceSchema, breadcrumbSchema, faqSchema } from "../../data/schema";
 
 interface Props {
   page: ServicePageData;
-  current: "ti" | "seguranca" | "noc";
 }
-const { page, current } = Astro.props;
+const { page } = Astro.props;
 const pageUrl = `${brand.siteUrl}${page.slug}`;
+const wa = whatsappLink(page.whatsappMessage);
 
-const related = [
-  ...Object.entries(servicePages)
-    .filter(([key]) => key !== current)
-    .map(([, p]) => ({ href: p.slug, name: p.name })),
-  { href: "/desenvolvimento/", name: "Desenvolvimento de sistemas" },
-];
+// Links no fim da página: subpáginas irmãs + página mãe, ou os outros serviços.
+const related = page.parent
+  ? [
+      { href: page.parent.href, name: page.parent.name },
+      ...Object.values(subPages)
+        .filter((p) => p.parent?.href === page.parent?.href && p.slug !== page.slug)
+        .map((p) => ({ href: p.slug, name: p.name })),
+    ]
+  : [
+      ...Object.values(servicePages)
+        .filter((p) => p.slug !== page.slug)
+        .map((p) => ({ href: p.slug, name: p.name })),
+      { href: "/desenvolvimento/", name: "Desenvolvimento de sistemas" },
+    ];
+
+const crumbs = [...(page.parent ? [{ name: page.parent.name, url: `${brand.siteUrl}${page.parent.href}` }] : []), { name: page.name, url: pageUrl }];
 
 const schema = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
+  serviceSchema({
     name: page.h1,
     serviceType: page.serviceType,
     url: pageUrl,
     description: page.description,
-    provider: { "@type": "ProfessionalService", name: brand.name, url: `${brand.siteUrl}/`, telephone: "+55 11 93741-5034" },
-    areaServed: page.areaServed ?? { "@type": "State", name: "São Paulo" },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: page.serviceType,
-      itemListElement: page.items.map((i) => ({
-        "@type": "Offer",
-        itemOffered: { "@type": "Service", name: i.title, description: i.desc },
-      })),
-    },
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Início", item: `${brand.siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: page.name, item: pageUrl },
-    ],
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: page.faq.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  },
+    areaServed: page.areaServed,
+    offers: page.items.map((i) => ({ name: i.title, description: i.desc })),
+  }),
+  breadcrumbSchema(crumbs),
+  faqSchema(page.faq),
 ];
 ---
 
-<SiteLayout title={page.title} description={page.description} current={current} whatsappMessage={page.whatsappMessage} schema={schema}>
-  <!-- Topo -->
-  <section class="dev-hero" data-scene="dev-hero" aria-labelledby="page-title">
+<SiteLayout title={page.title} description={page.description} current={page.service} whatsappMessage={page.whatsappMessage} schema={schema}>
+  <!-- Topo: título, chamada e ficha rápida -->
+  <section class="dev-hero page-hero" data-scene="dev-hero" data-track-zone="hero" aria-labelledby="page-title">
     <div class="wrap dev-hero__inner">
       <div>
-        <nav class="crumbs" aria-label="Você está em" data-intro style="--n:0"><a href="/">Início</a><span aria-hidden="true">/</span>{page.name}</nav>
+        <nav class="crumbs" aria-label="Você está em" data-intro style="--n:0">
+          <a href="/">Início</a><span aria-hidden="true">/</span>
+          {page.parent && (<><a href={page.parent.href}>{page.parent.name}</a><span aria-hidden="true">/</span></>)}
+          <span aria-current="page">{page.name}</span>
+        </nav>
         <h1 id="page-title" class="dev-hero__title" data-intro style="--n:0">{page.h1}</h1>
         <p class="hero__lead" data-intro style="--n:1">{page.lead}</p>
-        <div class="hero__actions" data-intro style="--n:2">
-          <a class="btn btn--primary" href={whatsappLink(page.whatsappMessage)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Pedir orçamento no WhatsApp</a>
-          <a class="text-link" href="#o-que-fazemos">Ver o que está incluso</a>
+        <div class="hero__actions page-actions" data-intro style="--n:2">
+          <a class="btn btn--primary" href={wa} target="_blank" rel="noopener"><Icon name="whatsapp" /> <span>Pedir orçamento<span class="soft-sm"> no WhatsApp</span></span></a>
+          <a class="btn btn--quiet" href={phoneLink} aria-label={`Ligar para ${brand.phoneDisplay}`}><Icon name="phone" /> Ligar</a>
         </div>
       </div>
 
@@ -88,11 +79,60 @@ const schema = [
     </div>
   </section>
 
-  <!-- O que fazemos -->
+  {
+    page.intro && (
+      <section class="section section--first" id="sobre" data-scene="dev-solucoes" aria-labelledby="intro-title">
+        <div class="wrap split">
+          <h2 id="intro-title">{page.intro.title}</h2>
+          <div class="split__body">
+            {page.intro.paragraphs.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.problems && (
+      <section class="section" id="problemas" data-scene="dev-solucoes" aria-labelledby="problemas-title">
+        <div class="wrap">
+          <header class="section-head">
+            <h2 id="problemas-title">Problemas que resolvemos</h2>
+          </header>
+          <div class="solution-grid">
+            {page.problems.map((p) => (
+              <article class="solution">
+                <h3>{p.title}</h3>
+                <p class="solution__desc">{p.desc}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.checklist && (
+      <section class="section" id="checklist" data-scene="dev-solucoes" aria-labelledby="checklist-title">
+        <div class="wrap split">
+          <div>
+            <h2 id="checklist-title">{page.checklist.title}</h2>
+            {page.checklist.intro && <p class="split__intro">{page.checklist.intro}</p>}
+          </div>
+          <ul class="checklist checklist--lg">
+            {page.checklist.list.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- O que está incluso -->
   <section class="section" id="o-que-fazemos" data-scene="dev-solucoes" aria-labelledby="itens-title">
     <div class="wrap">
       <header class="section-head">
-        <h2 id="itens-title">O que está incluso</h2>
+        <h2 id="itens-title">{page.itemsTitle ?? "O que está incluso"}</h2>
       </header>
       <div class="solution-grid">
         {
@@ -104,26 +144,80 @@ const schema = [
           ))
         }
       </div>
+      {
+        page.children && (
+          <nav class="children" aria-labelledby="children-title">
+            <h3 id="children-title">Serviços em detalhe</h3>
+            <ul>
+              {page.children.map((c) => (
+                <li>
+                  <a href={c.href}>
+                    <strong>{c.name}</strong>
+                    <span>{c.desc}</span>
+                    <Icon name="arrow" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
     </div>
   </section>
 
-  <!-- Para quem é -->
-  <section class="section" id="para-quem" data-scene="dev-stack" aria-labelledby="publico-title">
-    <div class="wrap stack">
-      <header class="section-head">
-        <h2 id="publico-title">Para quem é</h2>
-      </header>
-      <ul class="why__diff audience">
-        {page.audience.map((a) => <li>{a}</li>)}
-      </ul>
-    </div>
-  </section>
+  {
+    page.compare && (
+      <section class="section" id="comparativo" data-scene="dev-stack" aria-labelledby="compare-title">
+        <div class="wrap">
+          <header class="section-head">
+            <h2 id="compare-title">{page.compare.title}</h2>
+            {page.compare.intro && <p>{page.compare.intro}</p>}
+          </header>
+          <div class="compare" role="region" aria-labelledby="compare-title" tabindex="0">
+            <table>
+              <thead>
+                <tr>
+                  <td />
+                  <th scope="col">{page.compare.columns[0]}</th>
+                  <th scope="col">{page.compare.columns[1]}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {page.compare.rows.map((r) => (
+                  <tr>
+                    <th scope="row">{r.label}</th>
+                    <td>{r.a}</td>
+                    <td>{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.audience && (
+      <section class="section" id="para-quem" data-scene="dev-stack" aria-labelledby="publico-title">
+        <div class="wrap stack">
+          <header class="section-head">
+            <h2 id="publico-title">Para quem é</h2>
+          </header>
+          <ul class="why__diff audience">
+            {page.audience.map((a) => <li>{a}</li>)}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Como funciona (sequência real, por isso numerada) -->
   <section class="section" id="como-funciona" data-scene="dev-processo" aria-labelledby="passos-title">
     <div class="wrap">
       <header class="section-head">
-        <h2 id="passos-title">Como funciona</h2>
+        <h2 id="passos-title">{page.stepsTitle ?? "Como funciona"}</h2>
       </header>
       <ol class="process process--4">
         {
@@ -138,6 +232,52 @@ const schema = [
       </ol>
     </div>
   </section>
+
+  {
+    page.contract && (
+      <section class="section" id="contrato" data-scene="dev-processo" aria-labelledby="contrato-title">
+        <div class="wrap">
+          <header class="section-head">
+            <h2 id="contrato-title">Como é o contrato</h2>
+            <p>{page.contract.intro}</p>
+          </header>
+          <dl class="terms">
+            {page.contract.points.map((p) => (
+              <div>
+                <dt>{p.title}</dt>
+                <dd>{p.desc}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    page.regions && (
+      <section class="section" id="regioes" data-scene="dev-processo" aria-labelledby="regioes-title">
+        <div class="wrap split">
+          <div>
+            <h2 id="regioes-title">Regiões atendidas</h2>
+            <p class="split__intro">{page.regions.intro}</p>
+          </div>
+          <div>
+            <ul class="regions">
+              {page.regions.list.map((r) => (
+                <li>
+                  <Icon name="map" /> {r}
+                </li>
+              ))}
+            </ul>
+            {page.regions.note && <p class="regions__note">{page.regions.note}</p>}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <Testimonials scene="dev-processo" service={page.service} />
 
   <!-- Perguntas -->
   <section class="section" id="perguntas" data-scene="dev-faq" aria-labelledby="faq-title">
@@ -159,17 +299,20 @@ const schema = [
   </section>
 
   <!-- Chamada final + outros serviços -->
-  <section class="section" data-scene="dev-cta" aria-labelledby="cta-title">
+  <section class="section" data-scene="dev-cta" data-track-zone="cta_final" aria-labelledby="cta-title">
     <div class="wrap">
       <div class="cta-band">
         <div>
           <h2 id="cta-title">Vamos conversar sobre o seu caso?</h2>
           <p>Conte o que você precisa. A primeira resposta chega em até 4 horas úteis.</p>
         </div>
-        <a class="btn btn--primary btn--lg" href={whatsappLink(page.whatsappMessage)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Chamar no WhatsApp</a>
+        <div class="cta-band__actions">
+          <a class="btn btn--primary btn--lg" href={wa} target="_blank" rel="noopener"><Icon name="whatsapp" /> Pedir orçamento</a>
+          <a class="btn btn--quiet btn--lg" href={phoneLink}><Icon name="phone" /> Ligar {brand.phoneDisplay}</a>
+        </div>
       </div>
       <nav class="related" aria-labelledby="related-title">
-        <h2 id="related-title">Outros serviços da Solution Play</h2>
+        <h2 id="related-title">{page.parent ? `Mais sobre ${page.parent.name}` : "Outros serviços da Solution Play"}</h2>
         <ul>
           {related.map((r) => <li><a class="text-link" href={r.href}>{r.name}</a></li>)}
         </ul>

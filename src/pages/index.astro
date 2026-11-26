@@ -2,64 +2,25 @@
 import SiteLayout from "../layouts/SiteLayout.astro";
 import CubeStage from "../components/site/CubeStage.astro";
 import ContactForm from "../components/site/ContactForm.astro";
+import Testimonials from "../components/site/Testimonials.astro";
+import Stats from "../components/site/Stats.astro";
+import BlogTeaser from "../components/site/BlogTeaser.astro";
 import Icon from "../components/site/Icon.astro";
-import { brand, services, trust, differentiators, engagement, policies, whatsappLink } from "../data/content";
+import { brand, services, trust, differentiators, engagement, policies, whatsappLink, phoneLink } from "../data/content";
 import { siteSeo } from "../data/seo";
+import { businessSchema } from "../data/schema";
 
-const schema = {
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "@id": `${brand.siteUrl}/#empresa`,
-  name: brand.name,
-  url: `${brand.siteUrl}/`,
-  image: `${brand.siteUrl}/og-image.png`,
-  logo: `${brand.siteUrl}/apple-touch-icon.png`,
-  email: brand.email,
-  telephone: "+55 11 93741-5034",
-  taxID: brand.cnpj,
-  description: siteSeo.defaultDescription,
-  areaServed: [
-    { "@type": "City", name: "São Paulo" },
-    { "@type": "AdministrativeArea", name: "Região Metropolitana de São Paulo" },
-  ],
-  address: { "@type": "PostalAddress", addressRegion: "SP", addressCountry: "BR" },
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "08:00",
-      closes: "18:00",
-    },
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+55 11 93741-5034",
-    contactType: "customer service",
-    areaServed: "BR",
-    availableLanguage: "Portuguese",
-  },
-  hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Serviços Solution Play",
-    itemListElement: services.map((s) => ({
-      "@type": "Offer",
-      itemOffered: { "@type": "Service", name: s.title, description: s.summary },
-    })),
-  },
-};
+const schema = businessSchema();
 ---
 
 <SiteLayout title={siteSeo.defaultTitle} current="home" schema={schema}>
   <CubeStage />
 
   <!-- Início -->
-  <section class="hero" id="inicio" data-scene="hero" aria-labelledby="hero-title">
+  <section class="hero" id="inicio" data-scene="hero" data-track-zone="hero" aria-labelledby="hero-title">
     <div class="wrap">
-      <h1 id="hero-title" class="hero__title" data-intro style="--n:0">Suporte de TI, segurança eletrônica e sistemas para empresas em São Paulo</h1>
-      <p class="hero__lead" data-intro style="--n:1">
-        <strong class="hero__slogan">Tecnologia que resolve. Seu negócio vai além.</strong>
-        Cuidamos da TI, da segurança eletrônica e da rede da sua empresa, e desenvolvemos os sistemas que ela precisa para crescer.
-      </p>
+      <h1 id="hero-title" class="hero__title" data-intro style="--n:0">Tecnologia completa para empresas: <span class="block">TI, segurança eletrônica e sistemas sob medida</span></h1>
+      <p class="hero__lead" data-intro style="--n:1">Suporte de TI, segurança eletrônica e desenvolvimento de sistemas com base em São Paulo e atendimento em todo o Brasil.</p>
       <div class="hero__actions" data-intro style="--n:2">
         <a class="btn btn--primary" href={whatsappLink()} target="_blank" rel="noopener"><Icon name="whatsapp" /> Chamar no WhatsApp</a>
         <a class="text-link" href="#servicos">Ver os serviços</a>
@@ -82,7 +43,7 @@ const schema = {
   </section>
 
   <!-- Serviços -->
-  <section class="section" id="servicos" data-scene="servicos" aria-labelledby="servicos-title">
+  <section class="section" id="servicos" data-scene="servicos" data-track-zone="servicos" aria-labelledby="servicos-title">
     <div class="wrap">
       <header class="section-head">
         <h2 id="servicos-title">O que a Solution Play faz por você</h2>
@@ -92,7 +53,7 @@ const schema = {
       <div class="service-list">
         {
           services.map((s, i) => (
-            <article class:list={["service-row", { "is-open": i === 0 }]} id={s.id} data-card>
+            <article class:list={["service-row", { "is-open": i === 0 }]} id={s.id} data-card data-track-service={s.id}>
               <h3 class="service-row__h">
                 <button class="service-row__head" type="button" data-expand aria-expanded={i === 0 ? "true" : "false"} aria-controls={`inc-${s.id}`}>
                   <span class="service-row__icon"><Icon name={s.icon} /></span>
@@ -145,9 +106,13 @@ const schema = {
             ))
           }
         </ul>
+        <Stats />
       </div>
     </div>
   </section>
+
+  <!-- Clientes e depoimentos (só aparece quando houver dados em content.ts) -->
+  <Testimonials scene="base" />
 
   <!-- Como contratar -->
   <section class="section" id="atendimento" data-scene="atendimento" aria-labelledby="atendimento-title">
@@ -185,8 +150,11 @@ const schema = {
     </div>
   </section>
 
+  <!-- Blog (só aparece quando houver posts) -->
+  <BlogTeaser scene="atendimento" />
+
   <!-- Contato -->
-  <section class="section" id="contato" data-scene="contato" aria-labelledby="contato-title">
+  <section class="section" id="contato" data-scene="contato" data-track-zone="contato" aria-labelledby="contato-title">
     <div class="wrap contact">
       <div>
         <h2 id="contato-title">Fale com um especialista</h2>
@@ -196,6 +164,7 @@ const schema = {
           {brand.whatsappDisplay}
         </a>
         <ul class="contact__facts">
+          <li><Icon name="phone" /> <a href={phoneLink}>Ligar: {brand.phoneDisplay}</a></li>
           <li><Icon name="clock" /> {brand.hours}</li>
           <li><Icon name="mail" /> <a href={`mailto:${brand.email}`}>{brand.email}</a></li>
           <li><Icon name="map" /> {brand.area}</li>

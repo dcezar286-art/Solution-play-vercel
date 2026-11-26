@@ -1,10 +1,11 @@
 ---
 import BrandLogo from "../BrandLogo.astro";
 import Icon from "./Icon.astro";
-import { brand, whatsappLink } from "../../data/content";
+import { brand, whatsappLink, phoneLink, type PageKey } from "../../data/content";
+import { getPublishedPosts } from "../../data/blog";
 
 interface Props {
-  current?: "home" | "dev" | "ti" | "seguranca" | "noc";
+  current?: PageKey;
 }
 const { current = "home" } = Astro.props;
 
@@ -15,9 +16,12 @@ const links = [
   { href: "/desenvolvimento/", label: "Desenvolvimento", key: "dev" },
   { href: "/#contato", label: "Contato", key: "contato" },
 ];
+// O blog só entra no menu do celular quando houver posts publicados.
+const hasPosts = (await getPublishedPosts()).length > 0;
+const sheetLinks = hasPosts ? [...links.slice(0, 4), { href: "/blog/", label: "Blog", key: "blog" }, links[4]] : links;
 ---
 
-<header class="site-header" data-header>
+<header class="site-header" data-header data-track-zone="header">
   <div class="site-header__inner">
     <a class="brand" href="/" aria-label={`${brand.name}, página inicial`}>
       <BrandLogo class="brand__mark" width={34} height={34} loading="eager" alt="" />
@@ -38,8 +42,11 @@ const links = [
       </ul>
     </nav>
 
+    <a class="site-header__call" href={phoneLink} aria-label={`Ligar para ${brand.phoneDisplay}`}>
+      <Icon name="phone" /> <span>Ligar</span>
+    </a>
     <a class="btn btn--primary btn--sm site-header__cta" href={whatsappLink()} target="_blank" rel="noopener">
-      <Icon name="whatsapp" /> <span class="cta-long">Chamar no </span>WhatsApp
+      <Icon name="whatsapp" /> <span><span class="cta-long">Chamar no </span>WhatsApp</span>
     </a>
 
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-sheet" data-menu-toggle>
@@ -49,9 +56,12 @@ const links = [
   </div>
 </header>
 
-<div class="menu-sheet" id="menu-sheet" data-menu-sheet hidden>
+<div class="menu-sheet" id="menu-sheet" data-menu-sheet data-track-zone="menu" hidden>
   <ul>
-    {links.map((link) => <li><a href={link.href} data-menu-link>{link.label}</a></li>)}
+    {sheetLinks.map((link) => <li><a href={link.href} data-menu-link>{link.label}</a></li>)}
   </ul>
-  <p class="menu-sheet__meta">WhatsApp {brand.whatsappDisplay}<br />{brand.hours}</p>
+  <div class="menu-sheet__meta">
+    <a class="btn btn--quiet" href={phoneLink}><Icon name="phone" /> Ligar {brand.phoneDisplay}</a>
+    <p>{brand.hours}</p>
+  </div>
 </div>

@@ -1,33 +1,52 @@
 ---
+// Fonte hospedada no próprio site (sem Google Fonts): Archivo variável, eixos de largura e peso.
+import "@fontsource-variable/archivo/wdth.css";
+import archivoLatin from "@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url";
 import "../styles/site.css";
 import SiteHeader from "../components/site/SiteHeader.astro";
 import SiteFooter from "../components/site/SiteFooter.astro";
 import WhatsAppBar from "../components/site/WhatsAppBar.astro";
+import CookieBanner from "../components/site/CookieBanner.astro";
+import { brand, type PageKey, type ServiceKey } from "../data/content";
 import { siteSeo } from "../data/seo";
 
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
-  /** Página atual — destaca o item no menu. */
-  current?: "home" | "dev" | "ti" | "seguranca" | "noc";
+  /** "article" nos posts do blog. */
+  ogType?: "website" | "article";
+  /** Página atual: destaca o item no menu e vira o parâmetro "service" dos eventos. */
+  current?: PageKey;
+  /** Serviço enviado nos eventos de medição, quando difere de `current` (ex.: post do blog). */
+  service?: ServiceKey;
   /** Mensagem pronta usada pela barra fixa do WhatsApp. */
   whatsappMessage?: string;
   /** Dados estruturados (JSON-LD) específicos da página. */
   schema?: Record<string, unknown> | Record<string, unknown>[];
-  /** Carrega a fonte monoespaçada (usada só no bloco de código da página Dev). */
-  mono?: boolean;
   /** Páginas que não devem aparecer no Google (ex.: 404). */
   noindex?: boolean;
 }
 
-const { title, description = siteSeo.defaultDescription, ogImage, current = "home", whatsappMessage, schema, mono = false, noindex = false } = Astro.props;
-const fontUrl = `https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800${mono ? "&family=JetBrains+Mono:wght@400;500" : ""}&display=swap`;
+const {
+  title,
+  description = siteSeo.defaultDescription,
+  ogImage,
+  ogType = "website",
+  current = "home",
+  service: serviceProp,
+  whatsappMessage,
+  schema,
+  noindex = false,
+} = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, siteSeo.siteUrl).href;
-const ogImageUrl = ogImage ?? new URL("/og-image.png", siteSeo.siteUrl).href;
+const ogImageUrl = ogImage ? new URL(ogImage, siteSeo.siteUrl).href : new URL("/og-image.png", siteSeo.siteUrl).href;
 const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const serviceKeys = ["ti", "seguranca", "noc", "dev"];
+const service = serviceProp ?? (serviceKeys.includes(current) ? current : "geral");
+const trackingEnabled = Boolean(brand.ga4Id || brand.adsId);
 ---
 
 <!doctype html>
@@ -42,15 +61,15 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large"} />
     {noindex ? null : <link rel="canonical" href={canonicalUrl} />}
     {googleVerification ? <meta name="google-site-verification" content={googleVerification} /> : null}
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteSeo.siteName} />
     <meta property="og:locale" content={siteSeo.locale} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    {ogImage ? null : <meta property="og:image:width" content="1200" />}
+    {ogImage ? null : <meta property="og:image:height" content="630" />}
     <meta property="og:image:alt" content="Solution Play: suporte de TI, segurança eletrônica e sistemas em São Paulo" />
     <meta name="twitter:card" content={siteSeo.twitterCard} />
     <meta name="twitter:title" content={title} />
@@ -58,12 +77,10 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta name="twitter:image" content={ogImageUrl} />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href={fontUrl} />
+    <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
     {schemas.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
   </head>
-  <body data-page={current}>
+  <body data-page={current} data-service={service}>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <div class="ambient" aria-hidden="true"><div class="ambient__glow"></div><div class="ambient__grid"></div></div>
     <SiteHeader current={current} />
@@ -72,8 +89,10 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     </main>
     <SiteFooter />
     <WhatsAppBar message={whatsappMessage} />
+    {trackingEnabled && <CookieBanner />}
     <script>
       import "../scripts/site/pageMotion.ts";
+      import "../scripts/site/tracking.ts";
     </script>
   </body>
 </html>

@@ -1,0 +1,149 @@
+---
+/**
+ * Política de privacidade (LGPD — Lei 13.709/2018).
+ * Ao mudar o que o site coleta, atualize o texto e a data abaixo.
+ */
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { brand } from "../data/content";
+import { breadcrumbSchema } from "../data/schema";
+
+const updated = "26 de novembro de 2026";
+const title = "Política de Privacidade e Cookies (LGPD) | Solution Play";
+const description =
+  "Como a Solution Play trata dados pessoais no site: mensagens por WhatsApp e e-mail, cookies do Google Analytics e do Google Ads e seus direitos pela LGPD.";
+const trackingEnabled = Boolean(brand.ga4Id || brand.adsId);
+const schema = breadcrumbSchema([{ name: "Política de privacidade", url: `${brand.siteUrl}/politica-de-privacidade/` }]);
+---
+
+<SiteLayout title={title} description={description} current="privacidade" schema={schema}>
+  <article class="doc" data-scene="dev-hero" aria-labelledby="doc-title">
+    <div class="wrap">
+      <header class="doc__head">
+        <nav class="crumbs" aria-label="Você está em"><a href="/">Início</a><span aria-hidden="true">/</span>Política de privacidade</nav>
+        <h1 id="doc-title">Política de privacidade e cookies</h1>
+        <p class="doc__meta">Última atualização: {updated}</p>
+        <p class="doc__lead">
+          Este texto explica, em linguagem direta, quais dados pessoais o site {brand.siteDisplay} trata, por que, com quem eles são
+          compartilhados e como você exerce os seus direitos pela Lei Geral de Proteção de Dados (LGPD).
+        </p>
+      </header>
+
+      <div class="prose">
+        <h2>1. Quem é o responsável</h2>
+        <p>
+          O controlador dos dados é a <strong>{brand.name}</strong>, inscrita no CNPJ <strong>{brand.cnpj}</strong>. Para qualquer
+          assunto sobre privacidade, inclusive pedidos sobre os seus dados, o canal de atendimento é o e-mail
+          <a href={`mailto:${brand.email}`}>{brand.email}</a>.
+        </p>
+
+        <h2>2. Quais dados tratamos</h2>
+        <h3>O que você escreve e envia para a gente</h3>
+        <p>
+          O formulário do site não grava nem envia nada para servidores da {brand.name}: ele apenas monta a mensagem e abre o seu
+          WhatsApp ou o seu programa de e-mail. Só recebemos os dados quando <strong>você decide enviar</strong> a mensagem. Nesse
+          caso, recebemos o que você escreveu (nome, empresa, assunto e mensagem) e o seu número de WhatsApp ou endereço de e-mail.
+          O mesmo vale para quem chama pelos botões de WhatsApp, liga para o nosso telefone ou escreve para o nosso e-mail.
+        </p>
+        <h3>Cookies de medição (só com o seu consentimento)</h3>
+        <p>
+          Se você clicar em <strong>Aceitar</strong> no aviso de cookies, o site usa o <strong>Google Analytics 4</strong> e o
+          <strong>Google Ads</strong> para entender como as páginas são usadas e medir os resultados dos nossos anúncios. Essas
+          ferramentas registram, por exemplo, as páginas visitadas, cliques nos botões de contato (WhatsApp, telefone e e-mail), a origem
+          da visita (busca, anúncio ou link), o tipo de aparelho e de navegador, a região aproximada e identificadores de cookies.
+        </p>
+        <p>
+          Se você clicar em <strong>Recusar</strong> ou não responder, esses cookies não são gravados. O Google pode receber sinais
+          sem cookies e sem identificação, previstos no Modo de Consentimento do Google, apenas para estatísticas agregadas.
+        </p>
+        <h3>Origem da visita na mensagem do WhatsApp</h3>
+        <p>
+          Quando você chega ao site por um anúncio ou link de campanha, o endereço da página traz códigos como <code>gclid</code> ou
+          <code>utm_campaign</code>. O site guarda essa informação somente na sessão do seu navegador (ela é apagada ao fechar a aba)
+          e a acrescenta ao fim da mensagem do WhatsApp, por exemplo “(origem: Google Ads)”. Você vê esse texto antes de enviar e pode
+          apagá-lo.
+        </p>
+        <h3>Dados técnicos de acesso</h3>
+        <p>
+          Como em qualquer site, o provedor de hospedagem (Vercel) registra dados técnicos das requisições, como endereço IP, data e
+          hora e página acessada, para segurança e funcionamento. As fontes e demais arquivos do site são servidos pelo próprio
+          site, sem carregar recursos do Google Fonts.
+        </p>
+
+        <h2>3. Para que usamos e com qual base legal</h2>
+        <table>
+          <thead>
+            <tr><th scope="col">Finalidade</th><th scope="col">Base legal (LGPD, art. 7º)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Responder ao seu contato, montar propostas e prestar o serviço contratado</td><td>Procedimentos preliminares e execução de contrato (inciso V)</td></tr>
+            <tr><td>Medir o uso do site e o resultado dos anúncios com cookies</td><td>Consentimento (inciso I), que você pode retirar a qualquer momento</td></tr>
+            <tr><td>Saber de qual campanha veio o contato</td><td>Legítimo interesse (inciso IX), com a informação visível na mensagem</td></tr>
+            <tr><td>Segurança e funcionamento do site</td><td>Legítimo interesse (inciso IX)</td></tr>
+            <tr><td>Cumprir obrigações legais, fiscais e contábeis</td><td>Cumprimento de obrigação legal (inciso II)</td></tr>
+          </tbody>
+        </table>
+
+        <h2>4. Com quem compartilhamos</h2>
+        <p>Não vendemos dados pessoais. Eles passam apenas pelos serviços necessários para o site e o atendimento funcionarem:</p>
+        <ul>
+          <li><strong>Google</strong> (Analytics e Ads), nos termos descritos acima e só com o seu consentimento para cookies;</li>
+          <li><strong>WhatsApp (Meta)</strong> e o seu provedor de e-mail, quando você escolhe falar com a gente por eles;</li>
+          <li><strong>Vercel</strong>, empresa que hospeda o site;</li>
+          <li>autoridades públicas, quando houver obrigação legal ou ordem judicial.</li>
+        </ul>
+        <p>
+          Alguns desses fornecedores processam dados fora do Brasil. Nesses casos, a transferência segue as hipóteses do artigo 33 da
+          LGPD, como cláusulas contratuais e garantias oferecidas pelos próprios fornecedores.
+        </p>
+
+        <h2>5. Cookies usados</h2>
+        <table>
+          <thead>
+            <tr><th scope="col">Cookie</th><th scope="col">Ferramenta</th><th scope="col">Para que serve</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>_ga</code>, <code>_ga_*</code></td><td>Google Analytics 4</td><td>Distinguir visitas e sessões para estatísticas de uso</td></tr>
+            <tr><td><code>_gcl_*</code></td><td>Google Ads</td><td>Ligar um contato feito pelo site ao anúncio que trouxe a visita</td></tr>
+          </tbody>
+        </table>
+        <p>
+          A duração de cada cookie é definida pelo Google. A sua escolha no aviso de cookies fica guardada no próprio navegador
+          (armazenamento local, chave <code>sp_consent</code>) para não perguntarmos de novo a cada página.
+          {trackingEnabled ? " Para mudar a escolha, use o botão abaixo ou o link “Preferências de cookies” no rodapé." : " Você também pode apagar cookies e dados do site nas configurações do seu navegador."}
+        </p>
+        {trackingEnabled && <p><button class="btn btn--quiet" type="button" data-consent-open>Mudar minha escolha de cookies</button></p>}
+
+        <h2>6. Por quanto tempo guardamos</h2>
+        <p>
+          Mensagens e dados de contato ficam guardados pelo tempo necessário para o atendimento, a proposta e o contrato, e depois pelo
+          prazo exigido por obrigações legais. Os dados de medição seguem o prazo de retenção configurado na conta do Google Analytics,
+          e podem ser excluídos antes, a pedido.
+        </p>
+
+        <h2>7. Seus direitos</h2>
+        <p>Pela LGPD (art. 18), você pode pedir a qualquer momento:</p>
+        <ul>
+          <li>confirmação de que tratamos os seus dados e acesso a eles;</li>
+          <li>correção de dados incompletos, inexatos ou desatualizados;</li>
+          <li>anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desacordo com a lei;</li>
+          <li>portabilidade dos dados a outro fornecedor;</li>
+          <li>informação sobre com quem os dados foram compartilhados;</li>
+          <li>eliminação dos dados tratados com base no consentimento e a revogação desse consentimento.</li>
+        </ul>
+        <p>
+          Para isso, escreva para <a href={`mailto:${brand.email}`}>{brand.email}</a>. Você também pode reclamar à Autoridade Nacional
+          de Proteção de Dados (ANPD) pelo site <a href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a>.
+        </p>
+
+        <h2>8. Segurança</h2>
+        <p>
+          O site funciona apenas com conexão criptografada (HTTPS) e não guarda formulários em banco de dados: as mensagens chegam
+          somente pelos canais que você escolheu (WhatsApp, telefone ou e-mail).
+        </p>
+
+        <h2>9. Mudanças nesta política</h2>
+        <p>Se mudarmos a forma de tratar dados, esta página será atualizada e a data no topo será alterada.</p>
+      </div>
+    </div>
+  </article>
+</SiteLayout>

@@ -1,0 +1,54 @@
+---
+/**
+ * Clientes e depoimentos: faixa de logos + depoimentos.
+ * Alimentado por `clientLogos` e `testimonials` em content.ts; sem dados, a seção não aparece.
+ */
+import { testimonials, clientLogos, type ServiceKey } from "../../data/content";
+
+interface Props {
+  /** Nome da cena (data-scene) para o fundo/cubo reagirem como na seção vizinha. */
+  scene: string;
+  /** Em páginas de serviço: mostra os depoimentos desse serviço e os gerais. */
+  service?: ServiceKey;
+}
+const { scene, service } = Astro.props;
+const quotes = testimonials.filter((t) => !service || !t.service || t.service === service);
+const hasLogos = clientLogos.length > 0;
+const heading = quotes.length && hasLogos ? "Clientes e depoimentos" : quotes.length ? "Depoimentos" : "Clientes";
+---
+
+{
+  (quotes.length > 0 || hasLogos) && (
+    <section class="section" id="clientes" data-scene={scene} aria-labelledby="clientes-title">
+      <div class="wrap">
+        <header class="section-head">
+          <h2 id="clientes-title">{heading}</h2>
+        </header>
+        {hasLogos && (
+          <ul class="logo-strip" aria-label="Empresas atendidas">
+            {clientLogos.map((l) => (
+              <li>
+                <img src={l.src} alt={l.name} width={l.width ?? 160} height={l.height ?? 56} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+        )}
+        {quotes.length > 0 && (
+          <div class="quotes">
+            {quotes.map((t) => (
+              <figure class="quote">
+                <blockquote>
+                  <p>{t.quote}</p>
+                </blockquote>
+                <figcaption>
+                  <strong>{t.name}</strong>
+                  {(t.role || t.company) && <span>{[t.role, t.company].filter(Boolean).join(", ")}</span>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

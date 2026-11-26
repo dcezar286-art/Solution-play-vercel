@@ -1,17 +1,22 @@
 ---
 import BrandLogo from "../BrandLogo.astro";
-import { brand, whatsappLink } from "../../data/content";
+import { brand, whatsappLink, phoneLink } from "../../data/content";
+import { getPublishedPosts } from "../../data/blog";
+
 const year = new Date().getFullYear();
+const address = brand.address;
+const trackingEnabled = Boolean(brand.ga4Id || brand.adsId);
+const hasPosts = (await getPublishedPosts()).length > 0;
 ---
 
-<footer class="site-footer">
+<footer class="site-footer" data-track-zone="rodape">
   <div class="wrap site-footer__grid">
     <div>
       <a class="brand" href="/" aria-label={`${brand.name}, página inicial`}>
         <BrandLogo class="brand__mark" width={32} height={32} alt="" />
         <span class="brand__text">Solution <b>Play</b></span>
       </a>
-      <p class="site-footer__tag">TI, segurança eletrônica, redes e sistemas para empresas de São Paulo.</p>
+      <p class="site-footer__tag">{brand.slogan} TI, segurança eletrônica, redes e sistemas, com base em São Paulo e atendimento em todo o Brasil.</p>
     </div>
     <nav aria-label="Rodapé">
       <ul>
@@ -19,18 +24,35 @@ const year = new Date().getFullYear();
         <li><a href="/seguranca-eletronica/">Segurança eletrônica</a></li>
         <li><a href="/noc-provedores/">NOC para provedores</a></li>
         <li><a href="/desenvolvimento/">Desenvolvimento de sistemas</a></li>
+        {hasPosts && <li><a href="/blog/">Blog</a></li>}
         <li><a href="/#atendimento">Como contratar</a></li>
         <li><a href="/#contato">Contato</a></li>
       </ul>
     </nav>
     <ul class="site-footer__contact">
       <li><a href={whatsappLink()} target="_blank" rel="noopener">WhatsApp {brand.whatsappDisplay}</a></li>
+      <li><a href={phoneLink}>Ligar {brand.phoneDisplay}</a></li>
       <li><a href={`mailto:${brand.email}`}>{brand.email}</a></li>
       <li>{brand.hours}</li>
+      {
+        address && (
+          <li>
+            <address>
+              {address.streetAddress}
+              <br />
+              {address.addressLocality} – {address.addressRegion}, CEP {address.postalCode}
+            </address>
+            {address.mapsUrl && <a href={address.mapsUrl} target="_blank" rel="noopener">Ver no mapa</a>}
+          </li>
+        )
+      }
     </ul>
   </div>
   <div class="wrap site-footer__base">
-    <span>© {year} {brand.name}</span>
-    <span>CNPJ {brand.cnpj}</span>
+    <span>© {year} {brand.name} · CNPJ {brand.cnpj}</span>
+    <span class="site-footer__legal">
+      <a href="/politica-de-privacidade/">Política de privacidade</a>
+      {trackingEnabled && <button type="button" data-consent-open>Preferências de cookies</button>}
+    </span>
   </div>
 </footer>

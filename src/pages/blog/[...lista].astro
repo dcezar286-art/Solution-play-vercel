@@ -1,0 +1,65 @@
+---
+/**
+ * Lista do blog em /blog/. A página só é gerada quando existe pelo menos um post publicado;
+ * sem posts, /blog/ não existe (nada de página vazia no Google).
+ */
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { brand } from "../../data/content";
+import { breadcrumbSchema } from "../../data/schema";
+import { getPublishedPosts, postUrl, formatDate } from "../../data/blog";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.length ? [{ params: { lista: undefined } }] : [];
+}
+
+const posts = await getPublishedPosts();
+const title = "Blog: TI, Segurança Eletrônica e Sistemas | Solution Play";
+const description =
+  "Guias práticos sobre suporte de TI, CFTV, controle de acesso, redes e desenvolvimento de sistemas para empresas e condomínios, escritos pela Solution Play.";
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: `Blog da ${brand.name}`,
+    url: `${brand.siteUrl}/blog/`,
+    inLanguage: "pt-BR",
+    publisher: { "@id": `${brand.siteUrl}/#empresa` },
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.data.title,
+      url: `${brand.siteUrl}${postUrl(p)}`,
+      datePublished: p.data.pubDate.toISOString(),
+    })),
+  },
+  breadcrumbSchema([{ name: "Blog", url: `${brand.siteUrl}/blog/` }]),
+];
+---
+
+<SiteLayout title={title} description={description} current="blog" schema={schema}>
+  <section class="doc" data-scene="dev-hero" aria-labelledby="blog-title">
+    <div class="wrap">
+      <header class="doc__head">
+        <nav class="crumbs" aria-label="Você está em"><a href="/">Início</a><span aria-hidden="true">/</span>Blog</nav>
+        <h1 id="blog-title">Blog</h1>
+        <p class="doc__lead">Guias práticos de TI, segurança eletrônica e sistemas para quem cuida de uma empresa ou de um condomínio.</p>
+      </header>
+      <ul class="post-list" style="margin-top: 48px">
+        {
+          posts.map((p) => (
+            <li>
+              <a href={postUrl(p)}>
+                <time datetime={p.data.pubDate.toISOString()}>{formatDate(p.data.pubDate)}</time>
+                <strong>
+                  {p.data.title}
+                  {p.data.draft && <span class="draft-tag">Rascunho</span>}
+                </strong>
+                <span>{p.data.description}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</SiteLayout>

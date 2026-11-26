@@ -1,0 +1,35 @@
+---
+/** Últimos posts do blog na home. Sem posts publicados, nada aparece. */
+import { getPublishedPosts, postUrl, formatDate } from "../../data/blog";
+
+interface Props {
+  scene: string;
+}
+const { scene } = Astro.props;
+const posts = (await getPublishedPosts()).slice(0, 3);
+---
+
+{
+  posts.length > 0 && (
+    <section class="section" id="blog" data-scene={scene} aria-labelledby="blog-title">
+      <div class="wrap">
+        <header class="section-head">
+          <h2 id="blog-title">Do blog</h2>
+          <p>Guias práticos de TI, segurança eletrônica e sistemas para quem cuida de uma empresa.</p>
+        </header>
+        <ul class="post-list">
+          {posts.map((p) => (
+            <li>
+              <a href={postUrl(p)}>
+                <time datetime={p.data.pubDate.toISOString()}>{formatDate(p.data.pubDate)}</time>
+                <strong>{p.data.title}</strong>
+                <span>{p.data.description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="text-link post-list__all" href="/blog/">Ver todos os artigos</a>
+      </div>
+    </section>
+  )
+}

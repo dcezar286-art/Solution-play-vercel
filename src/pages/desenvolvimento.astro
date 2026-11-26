@@ -1,7 +1,10 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
+// Fonte monoespaçada só nesta página (bloco de código).
+import "@fontsource-variable/jetbrains-mono/wght.css";
 import Icon from "../components/site/Icon.astro";
-import { brand, devSolutions, devStack, devProcess, devFaq, whatsappLink } from "../data/content";
+import { brand, devSolutions, devStack, devProcess, devFaq, whatsappLink, phoneLink } from "../data/content";
+import { serviceSchema, breadcrumbSchema, faqSchema } from "../data/schema";
 
 const title = "Desenvolvimento de Sistemas em São Paulo | Solution Play";
 const description =
@@ -10,41 +13,19 @@ const waMessage = "Olá! Vim pela página de Desenvolvimento e quero conversar s
 const pageUrl = `${brand.siteUrl}/desenvolvimento/`;
 
 const schema = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
+  serviceSchema({
     name: "Desenvolvimento de sistemas sob medida",
     serviceType: "Desenvolvimento de software",
     url: pageUrl,
     description,
-    provider: { "@type": "ProfessionalService", name: brand.name, url: `${brand.siteUrl}/`, telephone: "+55 11 93741-5034" },
-    areaServed: { "@type": "State", name: "São Paulo" },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Soluções de desenvolvimento",
-      itemListElement: devSolutions.map((s) => ({
-        "@type": "Offer",
-        itemOffered: { "@type": "Service", name: s.title, description: s.desc },
-      })),
-    },
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Início", item: `${brand.siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: "Desenvolvimento", item: pageUrl },
+    areaServed: [
+      { "@type": "State", name: "São Paulo" },
+      { "@type": "Country", name: "Brasil" },
     ],
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: devFaq.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  },
+    offers: devSolutions.map((s) => ({ name: s.title, description: s.desc })),
+  }),
+  breadcrumbSchema([{ name: "Desenvolvimento", url: pageUrl }]),
+  faqSchema(devFaq),
 ];
 
 const codeLines = [
@@ -59,9 +40,9 @@ const codeLines = [
 ];
 ---
 
-<SiteLayout title={title} description={description} current="dev" whatsappMessage={waMessage} schema={schema} mono>
+<SiteLayout title={title} description={description} current="dev" whatsappMessage={waMessage} schema={schema}>
   <!-- Topo -->
-  <section class="dev-hero" data-scene="dev-hero" aria-labelledby="dev-title">
+  <section class="dev-hero" data-scene="dev-hero" data-track-zone="hero" aria-labelledby="dev-title">
     <div class="wrap dev-hero__inner">
       <div>
         <nav class="crumbs" aria-label="Você está em" data-intro style="--n:0"><a href="/">Início</a><span aria-hidden="true">/</span>Desenvolvimento</nav>
@@ -83,7 +64,7 @@ const codeLines = [
   </section>
 
   <!-- Soluções -->
-  <section class="section" id="solucoes" data-scene="dev-solucoes" aria-labelledby="solucoes-title">
+  <section class="section" id="solucoes" data-scene="dev-solucoes" data-track-zone="solucoes" aria-labelledby="solucoes-title">
     <div class="wrap">
       <header class="section-head">
         <h2 id="solucoes-title">O que desenvolvemos</h2>
@@ -177,14 +158,17 @@ const codeLines = [
   </section>
 
   <!-- Chamada final -->
-  <section class="section" data-scene="dev-cta" aria-labelledby="cta-title">
+  <section class="section" data-scene="dev-cta" data-track-zone="cta_final" aria-labelledby="cta-title">
     <div class="wrap">
       <div class="cta-band">
         <div>
           <h2 id="cta-title">Tem um processo que merece um sistema?</h2>
           <p>Conte a sua ideia. Numa primeira conversa já dá para entender o caminho, o prazo e o investimento.</p>
         </div>
-        <a class="btn btn--primary btn--lg" href={whatsappLink(waMessage)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Chamar no WhatsApp</a>
+        <div class="cta-band__actions">
+          <a class="btn btn--primary btn--lg" href={whatsappLink(waMessage)} target="_blank" rel="noopener"><Icon name="whatsapp" /> Chamar no WhatsApp</a>
+          <a class="btn btn--quiet btn--lg" href={phoneLink}><Icon name="phone" /> Ligar {brand.phoneDisplay}</a>
+        </div>
       </div>
     </div>
   </section>
