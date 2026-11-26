@@ -45,7 +45,7 @@ export const brand = {
   /* ---- Medição (Google Analytics 4 e Google Ads) ----
      Vazio = o site não carrega nenhum script do Google nem mostra o aviso de cookies. */
   /** ID do GA4. Ex.: "G-ABC123XYZ9" (GA4 → Administrador → Fluxos de dados). */
-  ga4Id: "" as string,
+  ga4Id: "G-9BF37VJ9XX" as string,
   /** ID da conta do Google Ads. Ex.: "AW-123456789" (Ads → Metas → Conversões → Configurar tag). */
   adsId: "" as string,
   /** Conversões do Google Ads: cole o send_to completo de cada ação. Ex.: "AW-123456789/AbCdEfGhIj". */

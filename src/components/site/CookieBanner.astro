@@ -2,13 +2,18 @@
 /**
  * Aviso de cookies (LGPD + Consent Mode v2). Só é incluído na página quando há
  * um ID do GA4 ou do Google Ads em src/data/content.ts. O comportamento está em tracking.ts.
+ * O texto cita só as ferramentas que estão ligadas.
  */
+import { brand } from "../../data/content";
+
+const tools = [brand.ga4Id && "do Google Analytics", brand.adsId && "do Google Ads"].filter(Boolean).join(" e ");
+const purpose = brand.adsId ? "saber como o site é usado e medir nossos anúncios" : "saber como o site é usado";
 ---
 
 <section class="consent" data-consent hidden aria-labelledby="consent-title">
   <p class="consent__title" id="consent-title">Cookies de medição</p>
   <p class="consent__text">
-    Com a sua permissão, usamos cookies do Google Analytics e do Google Ads para saber como o site é usado e medir nossos anúncios.
+    Com a sua permissão, usamos cookies {tools} para {purpose}.
     <a href="/politica-de-privacidade/">Política de privacidade</a>
   </p>
   <div class="consent__actions">
